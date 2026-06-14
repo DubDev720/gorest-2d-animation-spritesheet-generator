@@ -8,7 +8,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 dotenv.config({ path: ".env.local" });
 dotenv.config();
 
-const PROJECT_ROOT = "D:\\2d-animation-spritesheet-generator";
+const PROJECT_ROOT = process.cwd();
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 let latestGeneratedSprite: any = null;
