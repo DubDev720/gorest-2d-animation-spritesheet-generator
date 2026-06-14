@@ -4,6 +4,22 @@ A local browser workspace for building side-scrolling 2D game scenes, importing 
 
 The app is designed for fast visual iteration: open a scene, place the character and props, inspect every spritesheet used in that scene, tune metadata, preview movement, and save the finished setup.
 
+## Codex-Assisted Animation Agent
+
+The core idea is to vibe-code a no-manual-pipeline 2D animation agent without relying on a video generation model.
+
+Instead of manually operating a traditional animation stack, you can prompt Codex, upload a reference image, and let Codex call the local agent to produce a game-ready 2D spritesheet. The app then plays the animation directly from that spritesheet in a live preview, so the result can be checked immediately and used in a game engine.
+
+The workflow is broader than character animation:
+
+- Codex can generate or import spritesheets.
+- Codex can place animated sprites onto a background like a scene-compositing tool.
+- Codex can configure layers, metadata, trigger settings, scene state, and preview behavior.
+- Codex can revise the product framework itself while the tool evolves.
+- The browser becomes the visual result surface, while Codex handles setup, editing, and iteration.
+
+This is meant to reduce or skip the manual Spine-style workflow for early game prototyping: prompt, generate, composite, preview, adjust, and save.
+
 ## What You Can Do
 
 - Create and save multiple scenes.
@@ -11,8 +27,11 @@ The app is designed for fast visual iteration: open a scene, place the character
 - Drag, resize, scale, reorder, hide, and show scene layers.
 - Preview a playable side-scroller scene with character movement.
 - Import or generate 12-frame and 16-frame spritesheets.
+- Composite animated sprites directly onto scene backgrounds.
 - Open the `Spritesheets` page to see every animation clip used by the current scene.
 - Edit spritesheet metadata such as asset role, clip name, trigger type, game state, direction, loop mode, and tags.
+- Let Codex configure scenes, layers, assets, and animation metadata from prompts.
+- Let Codex modify the tool's product framework as the workflow changes.
 - Save reusable assets and scenes into the local game asset library.
 
 ## Quick Start
