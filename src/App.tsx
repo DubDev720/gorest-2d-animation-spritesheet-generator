@@ -8,12 +8,15 @@ import {
   Film,
   Keyboard,
   Layers,
+  Monitor,
   Map as MapIcon,
   MousePointer2,
   Pause,
   Play,
   Plus,
   Save,
+  Smartphone,
+  Tablet,
   Trash2,
   Upload,
 } from "lucide-react";
@@ -46,6 +49,15 @@ type ResizeState = {
 };
 type HeldDirection = "left" | "right" | null;
 type VehiclePhase = "approaching" | "ready" | "boarded";
+type ViewportPresetIcon = "phone" | "tablet" | "desktop";
+type ViewportPreset = {
+  id: string;
+  label: string;
+  width: number;
+  height: number;
+  icon: ViewportPresetIcon;
+  note: string;
+};
 type SceneSpritesheetEntry = {
   key: string;
   layer: SceneLayer;
@@ -147,11 +159,14 @@ const INTERACTION_PRESETS: Record<InteractionPreset, Partial<LayerInteractionSet
   },
 };
 
-const VIEWPORT_PRESETS = [
-  { id: "desktop", label: "Desktop", width: 1280, height: 720 },
-  { id: "ipad", label: "iPad", width: 1024, height: 768 },
-  { id: "iphone", label: "iPhone", width: 390, height: 844 },
-  { id: "wide", label: "Wide", width: 1440, height: 720 },
+const VIEWPORT_PRESETS: ViewportPreset[] = [
+  { id: "iphone-portrait", label: "Phone Portrait", width: 390, height: 844, icon: "phone", note: "9:19.5" },
+  { id: "phone-landscape", label: "Phone Wide", width: 844, height: 390, icon: "phone", note: "19.5:9" },
+  { id: "ipad", label: "iPad", width: 1024, height: 768, icon: "tablet", note: "4:3" },
+  { id: "ipad-wide", label: "iPad Wide", width: 1180, height: 820, icon: "tablet", note: "11-inch" },
+  { id: "desktop", label: "Desktop 720p", width: 1280, height: 720, icon: "desktop", note: "16:9" },
+  { id: "desktop-1080p", label: "Desktop 1080p", width: 1920, height: 1080, icon: "desktop", note: "16:9" },
+  { id: "wide", label: "Ultrawide", width: 1440, height: 720, icon: "desktop", note: "2:1" },
 ];
 
 const checkerStyle = {
@@ -261,6 +276,18 @@ function sceneViewportWidth(scene: GameScene) {
 
 function sceneViewportHeight(scene: GameScene) {
   return scene.viewportHeight || scene.height;
+}
+
+function formatViewportRatio(width: number, height: number) {
+  if (!width || !height) return "custom";
+  const ratio = width / height;
+  return ratio >= 1 ? `${ratio.toFixed(2)}:1` : `1:${(height / width).toFixed(2)}`;
+}
+
+function ViewportPresetIconView({ icon }: { icon: ViewportPresetIcon }) {
+  if (icon === "phone") return <Smartphone size={15} />;
+  if (icon === "tablet") return <Tablet size={15} />;
+  return <Monitor size={15} />;
 }
 
 function rgbaColor(hex: string, opacity: number) {
@@ -1243,6 +1270,8 @@ export default function App() {
   const selectedLayerShadow = selectedLayer?.shadow || NEON_CONTACT_SHADOW;
   const viewportWidth = sceneViewportWidth(scene);
   const viewportHeight = sceneViewportHeight(scene);
+  const selectedViewportPreset = VIEWPORT_PRESETS.find(preset => preset.id === scene.viewportPreset);
+  const viewportRatioLabel = formatViewportRatio(viewportWidth, viewportHeight);
   const cameraMax = Math.max(0, scene.width - viewportWidth);
   const stageScaleX = stageSize.width / Math.max(1, viewportWidth);
   const stageScaleY = stageSize.height / Math.max(1, viewportHeight);
@@ -3343,7 +3372,11 @@ export default function App() {
           )}
 
           <section>
-            <div className="section-title"><MapIcon size={17} /> Canvas Frame</div>
+            <div className="section-title"><Monitor size={17} /> Simulation Screen</div>
+            <div className="screen-frame-summary">
+              <strong>{Math.round(viewportWidth)} x {Math.round(viewportHeight)}</strong>
+              <span>{selectedViewportPreset?.label || "Custom"} / {viewportRatioLabel}</span>
+            </div>
             <div className="device-preset-grid">
               {VIEWPORT_PRESETS.map(preset => (
                 <button
@@ -3352,7 +3385,8 @@ export default function App() {
                   className={scene.viewportPreset === preset.id ? "active" : ""}
                   onClick={() => updateSceneFrame({ viewportWidth: preset.width, viewportHeight: preset.height, viewportPreset: preset.id })}
                 >
-                  {preset.label}
+                  <span className="device-preset-title"><ViewportPresetIconView icon={preset.icon} /> {preset.label}</span>
+                  <span className="device-preset-meta">{preset.width} x {preset.height} / {preset.note}</span>
                 </button>
               ))}
             </div>
