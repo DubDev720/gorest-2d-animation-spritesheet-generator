@@ -162,8 +162,12 @@ const INTERACTION_PRESETS: Record<InteractionPreset, Partial<LayerInteractionSet
 const VIEWPORT_PRESETS: ViewportPreset[] = [
   { id: "iphone-portrait", label: "Phone Portrait", width: 390, height: 844, icon: "phone", note: "9:19.5" },
   { id: "phone-landscape", label: "Phone Wide", width: 844, height: 390, icon: "phone", note: "19.5:9" },
-  { id: "ipad", label: "iPad", width: 1024, height: 768, icon: "tablet", note: "4:3" },
-  { id: "ipad-wide", label: "iPad Wide", width: 1180, height: 820, icon: "tablet", note: "11-inch" },
+  { id: "portrait-720p", label: "Portrait 720p", width: 720, height: 1280, icon: "phone", note: "9:16" },
+  { id: "portrait-1080p", label: "Portrait 1080p", width: 1080, height: 1920, icon: "phone", note: "9:16" },
+  { id: "ipad-portrait", label: "iPad Portrait", width: 768, height: 1024, icon: "tablet", note: "3:4" },
+  { id: "ipad-pro-portrait", label: "iPad Pro Portrait", width: 820, height: 1180, icon: "tablet", note: "11-inch" },
+  { id: "ipad", label: "iPad Wide", width: 1024, height: 768, icon: "tablet", note: "4:3" },
+  { id: "ipad-wide", label: "iPad Pro Wide", width: 1180, height: 820, icon: "tablet", note: "11-inch" },
   { id: "desktop", label: "Desktop 720p", width: 1280, height: 720, icon: "desktop", note: "16:9" },
   { id: "desktop-1080p", label: "Desktop 1080p", width: 1920, height: 1080, icon: "desktop", note: "16:9" },
   { id: "wide", label: "Ultrawide", width: 1440, height: 720, icon: "desktop", note: "2:1" },
@@ -342,6 +346,10 @@ function combineFilters(...filters: Array<string | undefined>) {
 
 function isSceneVisualLayer(layer: SceneLayer) {
   return layer.type === "sprite" || layer.type === "effect" || layer.type === "foreground";
+}
+
+function isTransformableSceneLayer(layer: SceneLayer) {
+  return layer.type === "background" || isSceneVisualLayer(layer);
 }
 
 function layerWorldBounds(layer: SceneLayer, asset?: GameAsset) {
@@ -1018,6 +1026,36 @@ function removeBuiltInSceneKitLayers(scene: GameScene): GameScene {
   };
 }
 
+function normalizeEditableScene(scene: GameScene): GameScene {
+  return {
+    ...scene,
+    layers: scene.layers.map(layer => {
+      if (layer.type !== "background") return layer;
+      const width = layer.width && layer.width > 0 ? layer.width : scene.width;
+      const height = layer.height && layer.height > 0 ? layer.height : scene.height;
+      const wasLegacyFullFrameBackground = !layer.width && !layer.height && layer.y === 0;
+      return {
+        ...layer,
+        locked: false,
+        x: Number.isFinite(layer.x) ? layer.x : 0,
+        y: wasLegacyFullFrameBackground ? height : (Number.isFinite(layer.y) ? layer.y : height),
+        scale: layer.scale || 1,
+        zIndex: layer.zIndex ?? 0,
+        opacity: layer.opacity ?? 1,
+        parallax: layer.parallax ?? 1,
+        width,
+        height,
+        fit: layer.fit || "stretch",
+        position: layer.position || "left center",
+      };
+    }),
+  };
+}
+
+function prepareSceneForEditor(scene: GameScene): GameScene {
+  return normalizeEditableScene(removeBuiltInSceneKitLayers(scene));
+}
+
 function sceneTimestampLabel(date = new Date()) {
   return date.toLocaleString("en-US", {
     month: "short",
@@ -1053,13 +1091,15 @@ function createDefaultScene(): GameScene {
         name: "Background",
         type: "background",
         visible: true,
-        locked: true,
+        locked: false,
         x: 0,
-        y: 0,
+        y: 720,
         scale: 1,
         zIndex: 0,
         opacity: 1,
         parallax: 1,
+        width: 3840,
+        height: 720,
         color: "#08070d",
         imageUrl: "/generated/chinese_side_scroller_station_extended_3840x720.png",
         fit: "stretch",
@@ -1210,7 +1250,7 @@ export default function App() {
   const [activeSprite, setActiveSprite] = useState<AnimationSprite>(PRESET_SPRITES[0]);
   const [assets, setAssets] = useState<GameAsset[]>([]);
   const [scenes, setScenes] = useState<GameScene[]>([]);
-  const [scene, setScene] = useState<GameScene>(() => removeBuiltInSceneKitLayers(createDefaultScene()));
+  const [scene, setScene] = useState<GameScene>(() => prepareSceneForEditor(createDefaultScene()));
   const [selectedLayerId, setSelectedLayerId] = useState<string>("layer_ground");
   const [tab, setTab] = useState<WorkspaceTab>("scenes");
   const [activeFrame, setActiveFrame] = useState(0);
@@ -1250,6 +1290,7 @@ export default function App() {
   const resizeRef = useRef<ResizeState | null>(null);
   const zoneDragRef = useRef<{ id: string; startPointerX: number; startPointerY: number; startOffsetX: number; startOffsetY: number } | null>(null);
   const zoneResizeRef = useRef<{ id: string; handle: ResizeHandle; anchorWorldX: number; anchorWorldY: number } | null>(null);
+  const stageShellRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const sceneStateRef = useRef<GameScene>(scene);
   const nearbyInteractionRef = useRef<any>(null);
@@ -1374,7 +1415,7 @@ export default function App() {
   useEffect(() => {
     const hasBuiltInSceneKitLayer = scene.layers.some(layer => layer.assetId && BUILT_IN_SCENE_KIT_ASSET_IDS.has(layer.assetId));
     if (!hasBuiltInSceneKitLayer) return;
-    setScene(prev => removeBuiltInSceneKitLayers(prev));
+    setScene(prev => prepareSceneForEditor(prev));
     setIsBackpackOpen(false);
   }, [scene.layers]);
 
@@ -1398,8 +1439,8 @@ export default function App() {
       if (Array.isArray(libraryData.assets)) setAssets(libraryData.assets);
       if (Array.isArray(libraryData.scenes) && libraryData.scenes.length) {
         const firstScene = libraryData.scenes[0];
-        setScenes(libraryData.scenes.map(removeBuiltInSceneKitLayers));
-        setScene(removeBuiltInSceneKitLayers(firstScene));
+        setScenes(libraryData.scenes.map(prepareSceneForEditor));
+        setScene(prepareSceneForEditor(firstScene));
         setSelectedLayerId("");
       }
     });
@@ -1409,10 +1450,23 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const element = stageRef.current;
+    const element = stageShellRef.current;
     if (!element) return;
     const updateSize = () => {
-      setStageSize({ width: element.clientWidth || viewportWidth, height: element.clientHeight || viewportHeight });
+      const shellWidth = element.clientWidth || viewportWidth;
+      const maxStageHeight = Math.max(320, window.innerHeight - 236);
+      const ratio = viewportWidth / Math.max(1, viewportHeight);
+      let width = shellWidth;
+      let height = width / Math.max(0.05, ratio);
+      if (height > maxStageHeight) {
+        height = maxStageHeight;
+        width = height * ratio;
+      }
+      const nextWidth = Math.max(180, Math.min(shellWidth, width));
+      setStageSize({
+        width: Math.round(nextWidth),
+        height: Math.round(Math.max(220, nextWidth / Math.max(0.05, ratio))),
+      });
     };
     updateSize();
     const observer = new ResizeObserver(updateSize);
@@ -1873,14 +1927,31 @@ export default function App() {
 
   const updateSceneFrame = (patch: Partial<Pick<GameScene, "viewportWidth" | "viewportHeight" | "viewportPreset">>) => {
     setScene(prev => {
-      const nextViewportWidth = Math.min(patch.viewportWidth || prev.viewportWidth || VIEWPORT_WIDTH, prev.width);
-      const nextViewportHeight = patch.viewportHeight || prev.viewportHeight || prev.height;
+      const requestedViewportWidth = patch.viewportWidth || prev.viewportWidth || VIEWPORT_WIDTH;
+      const requestedViewportHeight = patch.viewportHeight || prev.viewportHeight || prev.height;
+      const nextSceneWidth = Math.max(prev.width, requestedViewportWidth);
+      const nextSceneHeight = Math.max(prev.height, requestedViewportHeight);
+      const nextViewportWidth = Math.min(requestedViewportWidth, nextSceneWidth);
+      const nextViewportHeight = requestedViewportHeight;
       return {
         ...prev,
         ...patch,
+        width: nextSceneWidth,
+        height: nextSceneHeight,
         viewportWidth: nextViewportWidth,
         viewportHeight: nextViewportHeight,
-        cameraX: clamp(prev.cameraX, 0, Math.max(0, prev.width - nextViewportWidth)),
+        cameraX: clamp(prev.cameraX, 0, Math.max(0, nextSceneWidth - nextViewportWidth)),
+        layers: prev.layers.map(layer => {
+          if (layer.type !== "background") return layer;
+          const followsWorldWidth = !layer.width || Math.abs(layer.width - prev.width) <= 2;
+          const followsWorldHeight = !layer.height || Math.abs(layer.height - prev.height) <= 2;
+          return {
+            ...layer,
+            width: followsWorldWidth ? nextSceneWidth : layer.width,
+            height: followsWorldHeight ? nextSceneHeight : layer.height,
+            y: followsWorldHeight && Math.abs(layer.y - prev.height) <= 2 ? nextSceneHeight : layer.y,
+          };
+        }),
       };
     });
   };
@@ -2123,6 +2194,10 @@ export default function App() {
 
   const duplicateSelectedLayer = () => {
     if (!selectedLayer) return;
+    if (selectedLayer.type === "background") {
+      setNotice("Background uses a single editable layer for now. Resize or reposition it directly.");
+      return;
+    }
     const copy = {
       ...selectedLayer,
       id: `layer_copy_${Date.now()}`,
@@ -2137,6 +2212,10 @@ export default function App() {
 
   const removeSelectedLayer = () => {
     if (!selectedLayer || selectedLayer.locked) return;
+    if (selectedLayer.type === "background") {
+      setNotice("Background layers stay in the scene. Hide it or replace its image instead of deleting it.");
+      return;
+    }
     setScene(prev => ({ ...prev, layers: prev.layers.filter(layer => layer.id !== selectedLayer.id) }));
     setSelectedLayerId("");
   };
@@ -2145,7 +2224,7 @@ export default function App() {
     setError(null);
     try {
       const nextScene = {
-        ...removeBuiltInSceneKitLayers(sceneToSave),
+        ...prepareSceneForEditor(sceneToSave),
         savedTime: sceneToSave.savedTime || new Date().toISOString(),
         updatedTime: new Date().toISOString(),
       };
@@ -2156,8 +2235,8 @@ export default function App() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Failed to save scene");
-      setScenes(data.library.scenes.map(removeBuiltInSceneKitLayers));
-      setScene(removeBuiltInSceneKitLayers(data.scene));
+      setScenes(data.library.scenes.map(prepareSceneForEditor));
+      setScene(prepareSceneForEditor(data.scene));
       setSelectedLayerId("");
       setTab("scenes");
       setNotice(successMessage.replace("{name}", data.scene.name));
@@ -2173,7 +2252,7 @@ export default function App() {
   const saveCompletedScene = async () => {
     const now = new Date();
     const completedScene: GameScene = {
-      ...removeBuiltInSceneKitLayers(scene),
+      ...prepareSceneForEditor(scene),
       id: `scene_completed_${Date.now()}`,
       name: `${scene.name || "Scene"} - Complete ${sceneTimestampLabel(now)}`,
       savedTime: now.toISOString(),
@@ -2189,11 +2268,11 @@ export default function App() {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Failed to delete scene");
       const nextScenes = Array.isArray(data.library.scenes)
-        ? data.library.scenes.map(removeBuiltInSceneKitLayers)
+        ? data.library.scenes.map(prepareSceneForEditor)
         : [];
       setScenes(nextScenes);
       if (scene.id === sceneId) {
-        const fallbackScene = nextScenes[0] || removeBuiltInSceneKitLayers(createDefaultScene());
+        const fallbackScene = nextScenes[0] || prepareSceneForEditor(createDefaultScene());
         setScene(fallbackScene);
         setSelectedLayerId("");
       }
@@ -2208,7 +2287,7 @@ export default function App() {
 
   const startNewScene = () => {
     const now = new Date();
-    const base = removeBuiltInSceneKitLayers(createDefaultScene());
+    const base = prepareSceneForEditor(createDefaultScene());
     const playerLayers = scene.layers
       .filter(layer => {
         if (!layer.assetId || !isSceneVisualLayer(layer)) return false;
@@ -2243,7 +2322,7 @@ export default function App() {
   };
 
   const loadSavedScene = (savedScene: GameScene) => {
-    const cleanScene = removeBuiltInSceneKitLayers(savedScene);
+    const cleanScene = prepareSceneForEditor(savedScene);
     setScene(cleanScene);
     setSelectedLayerId("");
     setIsBackpackOpen(false);
@@ -2321,7 +2400,8 @@ export default function App() {
     event.stopPropagation();
     const rect = stageRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const pointerX = (event.clientX - rect.left) / stageScaleX + scene.cameraX;
+    const parallax = layer.parallax ?? 1;
+    const pointerX = (event.clientX - rect.left) / stageScaleX + scene.cameraX * parallax;
     const pointerY = (event.clientY - rect.top) / stageScaleY;
     dragRef.current = { id: layer.id, dx: pointerX - layer.x, dy: pointerY - layer.y };
     resizeRef.current = null;
@@ -2339,7 +2419,8 @@ export default function App() {
     event.stopPropagation();
     event.currentTarget.setPointerCapture?.(event.pointerId);
     dragRef.current = null;
-    const left = (layer.x - scene.cameraX) * stageScaleX;
+    const parallax = layer.parallax ?? 1;
+    const left = (layer.x - scene.cameraX * parallax) * stageScaleX;
     const width = assetWidth * layer.scale * spriteStageScale;
     const height = assetHeight * layer.scale * spriteStageScale;
     const bottom = layer.y * stageScaleY;
@@ -2475,9 +2556,11 @@ export default function App() {
       const nextScale = clampLayerScale(Math.max(scaleFromWidth, scaleFromHeight));
       const scaledWidth = resize.assetWidth * nextScale * spriteStageScale;
       const scaledHeight = resize.assetHeight * nextScale * spriteStageScale;
+      const layerSnapshot = sceneStateRef.current.layers.find(layer => layer.id === resize.id);
+      const parallax = layerSnapshot?.parallax ?? 1;
       const x = resize.handle === "nw" || resize.handle === "sw"
-        ? (resize.anchorScreenX - scaledWidth) / stageScaleX + scene.cameraX
-        : resize.anchorScreenX / stageScaleX + scene.cameraX;
+        ? (resize.anchorScreenX - scaledWidth) / stageScaleX + scene.cameraX * parallax
+        : resize.anchorScreenX / stageScaleX + scene.cameraX * parallax;
       const y = resize.handle === "nw" || resize.handle === "ne"
         ? resize.anchorScreenY / stageScaleY
         : (resize.anchorScreenY + scaledHeight) / stageScaleY;
@@ -2491,8 +2574,10 @@ export default function App() {
 
     const drag = dragRef.current;
     if (!drag) return;
+    const layerSnapshot = sceneStateRef.current.layers.find(layer => layer.id === drag.id);
+    const parallax = layerSnapshot?.parallax ?? 1;
     updateSceneLayer(drag.id, {
-      x: Math.round((event.clientX - rect.left) / stageScaleX + scene.cameraX - drag.dx),
+      x: Math.round((event.clientX - rect.left) / stageScaleX + scene.cameraX * parallax - drag.dx),
       y: Math.round((event.clientY - rect.top) / stageScaleY - drag.dy),
     });
   };
@@ -2778,43 +2863,89 @@ export default function App() {
 
             {tab === "scene" && (
               <div className="scene-editor">
-                <div
-                  ref={stageRef}
-                  className="side-scroller-stage"
-                  style={{ aspectRatio: `${viewportWidth} / ${viewportHeight}` }}
-                  onClick={event => {
-                    const target = event.target as HTMLElement;
-                    if (!target.closest(".scene-sprite")) clearSceneSelection();
-                  }}
-                  onPointerMove={stagePointerMove}
-                  onPointerUp={() => { dragRef.current = null; resizeRef.current = null; zoneDragRef.current = null; zoneResizeRef.current = null; }}
-                  onPointerLeave={() => { dragRef.current = null; resizeRef.current = null; zoneDragRef.current = null; zoneResizeRef.current = null; }}
-                >
-                  {backgroundLayer?.visible && backgroundLayer.imageUrl && (
-                    <div
-                      className="scene-image-background"
-                      style={{
-                        backgroundImage: `url("${backgroundLayer.imageUrl}")`,
-                        backgroundSize: backgroundSizeForFit(backgroundLayer.fit),
-                        backgroundRepeat: backgroundLayer.fit === "tile" ? "repeat" : "no-repeat",
-                        backgroundPosition: backgroundLayer.position || "center center",
-                        opacity: backgroundLayer.opacity,
-                        zIndex: backgroundLayer.zIndex,
-                        filter: sceneFilter(scene),
-                        left: -scene.cameraX * (backgroundLayer.parallax || 1) * stageScaleX,
-                        right: "auto",
-                        width: scene.width * stageScaleX,
-                        height: "100%",
-                      }}
-                    />
-                  )}
-                  {backgroundLayer?.visible && !backgroundLayer.imageUrl && (
-                    <>
-                      <div className="sky-band" style={{ background: backgroundLayer.color || undefined, opacity: backgroundLayer.opacity }} />
-                      <div className="mountain-band back" />
-                      <div className="mountain-band front" />
-                    </>
-                  )}
+                <div ref={stageShellRef} className="scene-stage-shell">
+                  <div
+                    ref={stageRef}
+                    className="side-scroller-stage"
+                    style={{ width: stageSize.width, height: stageSize.height, aspectRatio: `${viewportWidth} / ${viewportHeight}` }}
+                    onClick={event => {
+                      const target = event.target as HTMLElement;
+                      if (!target.closest(".scene-sprite") && !target.closest(".scene-background-transform")) clearSceneSelection();
+                    }}
+                    onPointerMove={stagePointerMove}
+                    onPointerUp={() => { dragRef.current = null; resizeRef.current = null; zoneDragRef.current = null; zoneResizeRef.current = null; }}
+                    onPointerLeave={() => { dragRef.current = null; resizeRef.current = null; zoneDragRef.current = null; zoneResizeRef.current = null; }}
+                  >
+                  {backgroundLayer?.visible && (() => {
+                    const baseWidth = backgroundLayer.width || scene.width;
+                    const baseHeight = backgroundLayer.height || scene.height;
+                    const width = baseWidth * backgroundLayer.scale * spriteStageScale;
+                    const height = baseHeight * backgroundLayer.scale * spriteStageScale;
+                    const left = (backgroundLayer.x - scene.cameraX * (backgroundLayer.parallax ?? 1)) * stageScaleX;
+                    const top = backgroundLayer.y * stageScaleY - height;
+                    return (
+                      <>
+                        <div
+                          className="scene-image-background"
+                          style={{
+                            left,
+                            top,
+                            width,
+                            height,
+                            opacity: backgroundLayer.opacity,
+                            zIndex: backgroundLayer.zIndex,
+                            filter: sceneFilter(scene),
+                            backgroundColor: backgroundLayer.color || "#08070d",
+                          }}
+                        >
+                          {backgroundLayer.imageUrl ? (
+                            <div
+                              className="scene-image-background-fill"
+                              style={{
+                                backgroundImage: `url("${backgroundLayer.imageUrl}")`,
+                                backgroundSize: backgroundSizeForFit(backgroundLayer.fit),
+                                backgroundRepeat: backgroundLayer.fit === "tile" ? "repeat" : "no-repeat",
+                                backgroundPosition: backgroundLayer.position || "center center",
+                              }}
+                            />
+                          ) : (
+                            <>
+                              <div className="sky-band" style={{ background: backgroundLayer.color || undefined, opacity: backgroundLayer.opacity }} />
+                              <div className="mountain-band back" />
+                              <div className="mountain-band front" />
+                            </>
+                          )}
+                        </div>
+                        {!backgroundLayer.locked && (
+                          <div
+                            className={backgroundLayer.id === selectedLayerId ? "scene-background-transform selected" : "scene-background-transform"}
+                            style={{
+                              left,
+                              top,
+                              width,
+                              height,
+                              zIndex: Math.max(backgroundLayer.zIndex + 2, 2),
+                            }}
+                            onPointerDown={event => stagePointerDown(event, backgroundLayer)}
+                            onClick={event => {
+                              event.stopPropagation();
+                              setSelectedLayerId(backgroundLayer.id);
+                            }}
+                          >
+                            {backgroundLayer.id === selectedLayerId && (
+                              <>
+                                <span className="scene-background-label">Background</span>
+                                <span className="resize-handle nw" title="Drag to resize background" onPointerDown={event => startLayerResize(event, backgroundLayer, baseWidth, baseHeight, "nw")} />
+                                <span className="resize-handle ne" title="Drag to resize background" onPointerDown={event => startLayerResize(event, backgroundLayer, baseWidth, baseHeight, "ne")} />
+                                <span className="resize-handle sw" title="Drag to resize background" onPointerDown={event => startLayerResize(event, backgroundLayer, baseWidth, baseHeight, "sw")} />
+                                <span className="resize-handle se" title="Drag to resize background" onPointerDown={event => startLayerResize(event, backgroundLayer, baseWidth, baseHeight, "se")} />
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
                   {backgroundLayer?.visible && sceneLight.preset !== "none" && (
                     <>
                       <div
@@ -3002,6 +3133,7 @@ export default function App() {
                       <img src="/generated/scene_kit_backpack_panel.png" alt="Open backpack inventory" draggable={false} />
                     </button>
                   )}
+                  </div>
                 </div>
                 <div className="scene-toolbar">
                   <input
@@ -3490,6 +3622,67 @@ export default function App() {
                 <label>Parallax {(selectedLayer.parallax ?? 1).toFixed(2)}</label>
                 <input type="range" min="0" max="1.25" step="0.01" value={selectedLayer.parallax ?? 1} onChange={event => updateSceneLayer(selectedLayer.id, { parallax: Number(event.target.value) })} disabled={selectedLayer.locked} />
                 <div className="control-hint">Use 1 for normal world objects. Use 0 for fixed HUD/UI layers.</div>
+                {selectedLayer.type === "background" && (
+                  <>
+                    <div className="two-col">
+                      <div>
+                        <label>Source Width</label>
+                        <input
+                          type="number"
+                          min="1"
+                          value={Math.round(selectedLayer.width || scene.width)}
+                          onChange={event => updateSceneLayer(selectedLayer.id, { width: Math.max(1, Number(event.target.value)) })}
+                          disabled={selectedLayer.locked}
+                        />
+                      </div>
+                      <div>
+                        <label>Source Height</label>
+                        <input
+                          type="number"
+                          min="1"
+                          value={Math.round(selectedLayer.height || scene.height)}
+                          onChange={event => updateSceneLayer(selectedLayer.id, { height: Math.max(1, Number(event.target.value)) })}
+                          disabled={selectedLayer.locked}
+                        />
+                      </div>
+                    </div>
+                    <label>Background Fit</label>
+                    <select
+                      value={selectedLayer.fit || "stretch"}
+                      onChange={event => updateSceneLayer(selectedLayer.id, { fit: event.target.value as SceneLayer["fit"] })}
+                      disabled={selectedLayer.locked}
+                    >
+                      <option value="stretch">Stretch to layer box</option>
+                      <option value="cover">Cover layer box</option>
+                      <option value="contain">Contain layer box</option>
+                      <option value="tile">Tile</option>
+                    </select>
+                    <label>Background Position</label>
+                    <input
+                      value={selectedLayer.position || "left center"}
+                      onChange={event => updateSceneLayer(selectedLayer.id, { position: event.target.value })}
+                      placeholder="left center / center center / 40% 50%"
+                      disabled={selectedLayer.locked}
+                    />
+                    <button
+                      type="button"
+                      className="ghost-button full"
+                      onClick={() => updateSceneLayer(selectedLayer.id, {
+                        x: 0,
+                        y: scene.height,
+                        width: scene.width,
+                        height: scene.height,
+                        scale: 1,
+                        fit: "stretch",
+                        position: "left center",
+                      })}
+                      disabled={selectedLayer.locked}
+                    >
+                      Fill Scene World
+                    </button>
+                    <div className="control-hint">Select the background layer, then drag the box or pull any corner handle to frame it like other objects.</div>
+                  </>
+                )}
                 {!selectedLayer.locked && <div className="control-hint">You can also drag the selected layer's corner handles on the canvas to resize proportionally.</div>}
                 {isSceneVisualLayer(selectedLayer) && !selectedLayer.locked && (
                   <div className="interaction-controls">

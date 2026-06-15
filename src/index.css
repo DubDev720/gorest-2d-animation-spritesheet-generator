@@ -240,10 +240,20 @@ input:focus, select:focus, textarea:focus { border-color: #2f7ab8; box-shadow: 0
 }
 
 .scene-editor { padding-top: 14px; display: grid; gap: 12px; }
+.scene-stage-shell {
+  width: 100%;
+  min-height: 320px;
+  max-height: max(320px, calc(100vh - 236px));
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: auto;
+  padding: 4px;
+}
 .side-scroller-stage {
   position: relative;
-  width: 100%;
-  max-height: calc(100vh - 236px);
+  flex: 0 0 auto;
+  max-width: 100%;
   min-height: 0;
   overflow: hidden;
   border: 1px solid #b9c6d4;
@@ -258,7 +268,46 @@ input:focus, select:focus, textarea:focus { border-color: #2f7ab8; box-shadow: 0
   bottom: auto;
   height: 100%;
   background-color: #08070d;
+  overflow: hidden;
   pointer-events: none;
+}
+.scene-image-background-fill {
+  position: absolute;
+  inset: 0;
+}
+.scene-background-transform {
+  position: absolute;
+  border: 1px dashed transparent;
+  outline: 1px solid transparent;
+  outline-offset: 2px;
+  cursor: grab;
+  touch-action: none;
+  pointer-events: auto;
+}
+.scene-background-transform.selected {
+  border-color: #2973b7;
+  outline-color: rgba(255, 255, 255, .72);
+  box-shadow: 0 0 0 9999px rgba(41, 115, 183, .015);
+}
+.scene-background-transform:active {
+  cursor: grabbing;
+}
+.scene-background-label {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  min-height: 22px;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 999px;
+  background: rgba(16, 27, 40, .78);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 850;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .65);
 }
 .scene-lighting-overlay {
   position: absolute;
