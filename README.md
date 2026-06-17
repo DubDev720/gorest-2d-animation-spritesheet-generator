@@ -23,6 +23,9 @@ This is meant to reduce or skip the manual Spine-style workflow for early game p
 ## What You Can Do
 
 - Create and save multiple scenes.
+- Arrange scene cards on the `2D Canvas` as a scrollable freeform flow board.
+- Use scene-card shortcuts on the `2D Canvas`: `Ctrl+C`, `Ctrl+V`, `Ctrl+D`, `Ctrl+X`, `Delete`, `Backspace`, `Ctrl+Z`, and `Ctrl+Y`.
+- Right-click scene cards for copy, cut, paste, duplicate, and delete actions.
 - Place backgrounds, characters, props, UI elements, and animated sprites as editable layers.
 - Drag, resize, scale, reorder, hide, and show scene layers.
 - Preview a playable side-scroller scene with character movement.
@@ -101,7 +104,7 @@ Then open `http://localhost:3001`.
 This project is organized around a game-scene authoring workflow rather than a single character animation tool. A typical production pass looks like this:
 
 1. Start from the `Scenes` tab.
-   Create a new scene, duplicate an existing one, delete test scenes, or open a saved scene from the scene library.
+   Create a new scene, duplicate an existing one, delete test scenes, or open a saved scene from the scene library. The `2D Canvas` view works as a freeform scene-flow board, so cards can be moved, resized, copied, pasted, duplicated, cut, deleted, and undone independently from layer edits inside an individual scene.
 
 2. Build the scene base in the `Scene` tab.
    Add a background first, then place the player character, props, UI objects, foreground objects, animated props, and effects as separate editable layers.
@@ -167,6 +170,10 @@ The editor supports a scene-size mindset instead of only a single image-size min
 - Position the background inside the viewport to test what the player sees first.
 - Keep gameplay objects in world coordinates so the player can move through a larger scene.
 - Use foreground and background layers to create depth while keeping the game readable.
+
+## Included Scene Flow Example
+
+The current sample library includes a horror Shinto shrine entrance scene for a side-scroller prototype. It uses a wide shrine-gate background with a foreground incense burner, a talking Wei Yang close-up spritesheet, and editable layer metadata so the scene can be adjusted directly in the browser.
 
 ## Spritesheet Page
 

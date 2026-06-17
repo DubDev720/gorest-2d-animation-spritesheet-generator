@@ -1,6 +1,7 @@
-import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent, type DragEvent, type PointerEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type ChangeEvent, type DragEvent, type MouseEvent, type PointerEvent } from "react";
 import {
   CheckCircle2,
+  Clipboard,
   Copy,
   Download,
   Eye,
@@ -8,6 +9,7 @@ import {
   Film,
   Keyboard,
   Layers,
+  Lock,
   Monitor,
   Map as MapIcon,
   MousePointer2,
@@ -15,12 +17,16 @@ import {
   Play,
   Plus,
   Save,
+  Scissors,
   Smartphone,
   Tablet,
   Trash2,
+  Unlock,
   Upload,
+  X,
 } from "lucide-react";
 import { PRESET_SPRITES } from "./presets";
+import { buildSceneFlowNodes, SceneFlowCanvas, type SceneFlowNode } from "./features/scene-flow";
 import {
   ActionBinding,
   ActionTriggerType,
@@ -39,6 +45,7 @@ import {
 type WorkspaceTab = "scenes" | "scene" | "spritesheets" | "preview" | "frames" | "sheet" | "blueprint";
 type BackgroundMode = "checker" | "dark" | "light" | "green";
 type ResizeHandle = "nw" | "ne" | "sw" | "se";
+type ScenePanelResizeHandle = "layers" | "inspector";
 type ResizeState = {
   id: string;
   handle: ResizeHandle;
@@ -46,6 +53,23 @@ type ResizeState = {
   anchorScreenY: number;
   assetWidth: number;
   assetHeight: number;
+};
+type ScenePanelResizeState = {
+  handle: ScenePanelResizeHandle;
+  startX: number;
+  startLayerWidth: number;
+  startInspectorWidth: number;
+};
+type SceneContextMenuTarget = "layer" | "interaction-zone";
+type SceneContextMenuState = {
+  x: number;
+  y: number;
+  layerId: string;
+  target: SceneContextMenuTarget;
+};
+type SceneLayerClipboard = {
+  layer: SceneLayer;
+  sourceSceneId: string;
 };
 type HeldDirection = "left" | "right" | null;
 type VehiclePhase = "approaching" | "ready" | "boarded";
@@ -240,6 +264,14 @@ function safeName(name: string) {
   return name.replace(/[^a-z0-9\u4e00-\u9fa5]+/gi, "_").replace(/^_+|_+$/g, "").toLowerCase() || "sprite";
 }
 
+function escapeHtmlAttribute(value: string) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 function splitTags(tagsText: string) {
   return tagsText.split(/[,\s]+/).map(tag => tag.trim()).filter(Boolean);
 }
@@ -286,6 +318,22 @@ function formatViewportRatio(width: number, height: number) {
   if (!width || !height) return "custom";
   const ratio = width / height;
   return ratio >= 1 ? `${ratio.toFixed(2)}:1` : `1:${(height / width).toFixed(2)}`;
+}
+
+function spriteFrameTotal(sprite?: AnimationSprite) {
+  return sprite?.frames.length || sprite?.frameCount || 0;
+}
+
+function spriteGridColumns(sprite?: AnimationSprite) {
+  if (!sprite) return 1;
+  if (sprite.gridColumns && sprite.gridColumns > 0) return Math.round(sprite.gridColumns);
+  const [frameWidth] = getFrameSize(sprite);
+  const sheetWidth = sprite.sheetSize?.[0] || frameWidth;
+  return Math.max(1, Math.round(sheetWidth / Math.max(1, frameWidth)));
+}
+
+function spriteGridRows(sprite?: AnimationSprite) {
+  return Math.max(1, Math.ceil(Math.max(1, spriteFrameTotal(sprite)) / spriteGridColumns(sprite)));
 }
 
 function ViewportPresetIconView({ icon }: { icon: ViewportPresetIcon }) {
@@ -1193,6 +1241,26 @@ function spriteFrame(sprite: AnimationSprite, frameIndex: number) {
   return frames[frameIndex % Math.max(1, frames.length)] || frames[0] || "";
 }
 
+function cssImageUrl(url: string) {
+  return `url("${url.replace(/["\\]/g, "\\$&")}")`;
+}
+
+function spritesheetFrameThumbStyle(sprite: AnimationSprite, frameIndex: number): CSSProperties | undefined {
+  const source = sprite.rawSpritesheetPng || sprite.spritesheetPng;
+  if (!source) return undefined;
+  const columns = spriteGridColumns(sprite);
+  const rows = spriteGridRows(sprite);
+  const column = frameIndex % columns;
+  const row = Math.floor(frameIndex / columns);
+  const x = columns <= 1 ? 0 : (column / (columns - 1)) * 100;
+  const y = rows <= 1 ? 0 : (row / (rows - 1)) * 100;
+  return {
+    backgroundImage: cssImageUrl(source),
+    backgroundPosition: `${x}% ${y}%`,
+    backgroundSize: `${columns * 100}% ${rows * 100}%`,
+  };
+}
+
 function buildSpritesheetFrames(
   dataUrl: string,
   sheetWidth: number,
@@ -1245,6 +1313,22 @@ function clipButtonText(clip: AnimationClip) {
   return clip.actionName === "idle" ? "Idle" : clip.name;
 }
 
+const SCENE_HISTORY_LIMIT = 80;
+
+function cloneSceneForHistory(scene: GameScene) {
+  if (typeof structuredClone === "function") return structuredClone(scene);
+  return JSON.parse(JSON.stringify(scene)) as GameScene;
+}
+
+function cloneSceneLayer(layer: SceneLayer) {
+  if (typeof structuredClone === "function") return structuredClone(layer);
+  return JSON.parse(JSON.stringify(layer)) as SceneLayer;
+}
+
+function sceneHistoryKey(scene: GameScene) {
+  return JSON.stringify(scene);
+}
+
 export default function App() {
   const [sprites, setSprites] = useState<AnimationSprite[]>(PRESET_SPRITES);
   const [activeSprite, setActiveSprite] = useState<AnimationSprite>(PRESET_SPRITES[0]);
@@ -1252,6 +1336,7 @@ export default function App() {
   const [scenes, setScenes] = useState<GameScene[]>([]);
   const [scene, setScene] = useState<GameScene>(() => prepareSceneForEditor(createDefaultScene()));
   const [selectedLayerId, setSelectedLayerId] = useState<string>("layer_ground");
+  const [selectedInteractionZoneLayerId, setSelectedInteractionZoneLayerId] = useState<string | null>(null);
   const [tab, setTab] = useState<WorkspaceTab>("scenes");
   const [activeFrame, setActiveFrame] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -1280,7 +1365,14 @@ export default function App() {
   const [importTagsText, setImportTagsText] = useState("imported, spritesheet");
   const [importLoop, setImportLoop] = useState(true);
   const [draggedLayerId, setDraggedLayerId] = useState<string | null>(null);
+  const [layerDropTargetId, setLayerDropTargetId] = useState<string | null>(null);
   const [expandedSpritesheetKey, setExpandedSpritesheetKey] = useState<string | null>(null);
+  const [scenePanelWidths, setScenePanelWidths] = useState({ layers: 120, inspector: 220 });
+  const [stageShellSize, setStageShellSize] = useState({ width: 0, height: 0 });
+  const [sceneControlsHeight, setSceneControlsHeight] = useState(0);
+  const [sceneContextMenu, setSceneContextMenu] = useState<SceneContextMenuState | null>(null);
+  const [sceneClipboard, setSceneClipboard] = useState<SceneLayerClipboard | null>(null);
+  const [isLayerLibraryOpen, setIsLayerLibraryOpen] = useState(false);
   const [interactionToast, setInteractionToast] = useState("");
   const [isBackpackOpen, setIsBackpackOpen] = useState(false);
   const [vehiclePhase, setVehiclePhase] = useState<VehiclePhase>("approaching");
@@ -1288,14 +1380,22 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const dragRef = useRef<{ id: string; dx: number; dy: number } | null>(null);
   const resizeRef = useRef<ResizeState | null>(null);
+  const scenePanelResizeRef = useRef<ScenePanelResizeState | null>(null);
+  const layerDragRef = useRef<string | null>(null);
   const zoneDragRef = useRef<{ id: string; startPointerX: number; startPointerY: number; startOffsetX: number; startOffsetY: number } | null>(null);
   const zoneResizeRef = useRef<{ id: string; handle: ResizeHandle; anchorWorldX: number; anchorWorldY: number } | null>(null);
   const stageShellRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
+  const sceneGlobalControlsRef = useRef<HTMLDivElement | null>(null);
   const sceneStateRef = useRef<GameScene>(scene);
+  const selectedLayerIdRef = useRef(selectedLayerId);
+  const sceneHistoryPastRef = useRef<GameScene[]>([]);
+  const sceneHistoryFutureRef = useRef<GameScene[]>([]);
+  const sceneHistoryLastRef = useRef<GameScene | null>(null);
+  const sceneHistoryNavigationRef = useRef(false);
+  const scenePasteCountRef = useRef(0);
   const nearbyInteractionRef = useRef<any>(null);
   const triggerNearbyInteractionRef = useRef<(entry?: any) => void>(() => {});
-  const [stageSize, setStageSize] = useState({ width: 1280, height: 720 });
 
   const frames = activeSprite.frames || [];
   const activeSpriteFrameIndex = frames.length ? activeFrame % frames.length : 0;
@@ -1306,17 +1406,38 @@ export default function App() {
   const selectedLayer = scene.layers.find(layer => layer.id === selectedLayerId);
   const backgroundLayer = scene.layers.find(layer => layer.type === "background");
   const groundLayer = scene.layers.find(layer => layer.type === "ground");
+
+  useEffect(() => {
+    if (selectedLayer || !scene.layers.length) return;
+    const topLayer = [...scene.layers].sort((a, b) => b.zIndex - a.zIndex)[0];
+    if (topLayer) setSelectedLayerId(topLayer.id);
+  }, [scene.layers, selectedLayer]);
   const sceneLight = sceneLighting(scene);
   const selectedLayerLight = selectedLayer?.lighting || NEON_LAYER_LIGHTING;
   const selectedLayerShadow = selectedLayer?.shadow || NEON_CONTACT_SHADOW;
   const viewportWidth = sceneViewportWidth(scene);
   const viewportHeight = sceneViewportHeight(scene);
+  const stageFitScale = (() => {
+    if (!stageShellSize.width || !stageShellSize.height) return 1;
+    const availableWidth = Math.max(180, stageShellSize.width - 28);
+    const controlsSpace = sceneControlsHeight ? sceneControlsHeight + 32 : 112;
+    const availableHeight = Math.max(180, stageShellSize.height - controlsSpace);
+    return Math.min(1, availableWidth / Math.max(1, viewportWidth), availableHeight / Math.max(1, viewportHeight));
+  })();
+  const stageSize = {
+    width: Math.max(1, Math.round(viewportWidth * stageFitScale)),
+    height: Math.max(1, Math.round(viewportHeight * stageFitScale)),
+  };
   const selectedViewportPreset = VIEWPORT_PRESETS.find(preset => preset.id === scene.viewportPreset);
   const viewportRatioLabel = formatViewportRatio(viewportWidth, viewportHeight);
   const cameraMax = Math.max(0, scene.width - viewportWidth);
   const stageScaleX = stageSize.width / Math.max(1, viewportWidth);
   const stageScaleY = stageSize.height / Math.max(1, viewportHeight);
   const spriteStageScale = Math.min(stageScaleX, stageScaleY);
+  const compactScenePanels = stageShellSize.width > 0 && stageShellSize.width < 340;
+  const sceneLayerPanelWidth = compactScenePanels ? Math.min(scenePanelWidths.layers, 84) : scenePanelWidths.layers;
+  const sceneInspectorPanelWidth = compactScenePanels ? Math.min(scenePanelWidths.inspector, 148) : scenePanelWidths.inspector;
+  const sceneCenterMinWidth = compactScenePanels ? 220 : 180;
 
   const allAssets = useMemo(() => {
     return [...SCENE_KIT_ASSETS, ...assets];
@@ -1325,6 +1446,26 @@ export default function App() {
   const assetById = useMemo(() => {
     return new Map(allAssets.map(asset => [asset.id, asset]));
   }, [allAssets]);
+
+  const layerLibraryAssets = useMemo(() => {
+    return assets.filter(asset => Boolean(resolveAssetSprite(asset)?.frames.length));
+  }, [assets]);
+
+  const selectedInteractionZoneLayer = selectedInteractionZoneLayerId
+    ? scene.layers.find(layer => layer.id === selectedInteractionZoneLayerId)
+    : undefined;
+  const selectedInteractionZoneAsset = selectedInteractionZoneLayer?.assetId
+    ? assetById.get(selectedInteractionZoneLayer.assetId)
+    : undefined;
+  const selectedInteractionZoneSettings = selectedInteractionZoneLayer
+    ? layerInteractionSettings(selectedInteractionZoneLayer, selectedInteractionZoneAsset)
+    : null;
+
+  useEffect(() => {
+    if (!selectedInteractionZoneLayerId) return;
+    if (scene.layers.some(layer => layer.id === selectedInteractionZoneLayerId && layer.interaction?.enabled)) return;
+    setSelectedInteractionZoneLayerId(null);
+  }, [scene.layers, selectedInteractionZoneLayerId]);
 
   const sceneSpritesheetEntries = useMemo<SceneSpritesheetEntry[]>(() => {
     return scene.layers
@@ -1352,8 +1493,25 @@ export default function App() {
   const selectedLayerAsset = selectedLayer?.assetId ? assetById.get(selectedLayer.assetId) : undefined;
   const selectedLayerClip = resolveAssetClip(selectedLayerAsset, selectedLayer);
   const selectedLayerInteraction = selectedLayer ? layerInteractionSettings(selectedLayer, selectedLayerAsset) : null;
-  const currentSceneIsSaved = scenes.some(savedScene => savedScene.id === scene.id);
-  const savedSceneCards = scenes.filter(savedScene => savedScene.id !== scene.id);
+  const selectedLayerSprite = resolveAssetSprite(selectedLayerAsset, selectedLayer);
+  const selectedAssetEditable = Boolean(selectedLayerAsset && assets.some(asset => asset.id === selectedLayerAsset.id));
+  const selectedLayerSpriteFrameIndex = selectedLayerSprite?.frames.length ? activeFrame % selectedLayerSprite.frames.length : 0;
+  const selectedLayerFrameSize = selectedLayerSprite ? getFrameSize(selectedLayerSprite) : [0, 0];
+  const selectedLayerSpriteFrameCount = spriteFrameTotal(selectedLayerSprite);
+  const selectedLayerSpriteColumns = spriteGridColumns(selectedLayerSprite);
+  const selectedLayerSpriteRows = spriteGridRows(selectedLayerSprite);
+  const selectedLayerSpriteSheetSize = selectedLayerSprite?.sheetSize || selectedLayerFrameSize;
+  const selectedLayerSpriteSource = selectedLayerSprite?.rawSpritesheetPng || selectedLayerSprite?.spritesheetPng || "";
+  const selectedLayerClipFps = Math.round(selectedLayerClip?.fps || selectedLayerSprite?.fps || fps);
+  const selectedLayerSpriteEditableGrid = Boolean(selectedAssetEditable && selectedLayerSpriteSource && selectedLayerSprite?.sheetSize?.length);
+  const selectedLayerIsAvatar = selectedLayerAsset?.role === "player" || selectedLayerAsset?.role === "npc";
+  const savedSceneCards = useMemo(() => scenes.filter(savedScene => savedScene.id !== scene.id), [scene.id, scenes]);
+  const hasVisibleBackgroundImage = Boolean(backgroundLayer?.visible && backgroundLayer.imageUrl);
+  const sceneFlowNodes = useMemo(() => buildSceneFlowNodes({
+    currentScene: scene,
+    currentBackground: backgroundLayer,
+    savedScenes: savedSceneCards,
+  }), [backgroundLayer, savedSceneCards, scene]);
   const sceneFrameCount = useMemo(() => {
     return scene.layers.reduce((maxFrameCount, layer) => {
       if (!layer.visible || !isSceneVisualLayer(layer)) return maxFrameCount;
@@ -1409,6 +1567,123 @@ export default function App() {
   }, [scene]);
 
   useEffect(() => {
+    selectedLayerIdRef.current = selectedLayerId;
+  }, [selectedLayerId]);
+
+  useEffect(() => {
+    const previousScene = sceneHistoryLastRef.current;
+    const nextSnapshot = cloneSceneForHistory(scene);
+    const isAutomaticSceneMotion = isPlaying || Boolean(heldDirection);
+
+    if (!previousScene) {
+      sceneHistoryLastRef.current = nextSnapshot;
+      return;
+    }
+
+    if (previousScene.id !== scene.id) {
+      sceneHistoryPastRef.current = [];
+      sceneHistoryFutureRef.current = [];
+      sceneHistoryLastRef.current = nextSnapshot;
+      sceneHistoryNavigationRef.current = false;
+      return;
+    }
+
+    if (sceneHistoryNavigationRef.current) {
+      sceneHistoryNavigationRef.current = false;
+      sceneHistoryLastRef.current = nextSnapshot;
+      return;
+    }
+
+    if (sceneHistoryKey(previousScene) === sceneHistoryKey(scene)) {
+      sceneHistoryLastRef.current = nextSnapshot;
+      return;
+    }
+
+    if (!isAutomaticSceneMotion) {
+      sceneHistoryPastRef.current = [...sceneHistoryPastRef.current, previousScene].slice(-SCENE_HISTORY_LIMIT);
+      sceneHistoryFutureRef.current = [];
+    }
+    sceneHistoryLastRef.current = nextSnapshot;
+  }, [heldDirection, isPlaying, scene]);
+
+  useEffect(() => {
+    if (!sceneContextMenu) return;
+    const closeMenu = () => setSceneContextMenu(null);
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMenu();
+    };
+    window.addEventListener("pointerdown", closeMenu);
+    window.addEventListener("scroll", closeMenu, true);
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      window.removeEventListener("pointerdown", closeMenu);
+      window.removeEventListener("scroll", closeMenu, true);
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [sceneContextMenu]);
+
+  useEffect(() => {
+    const element = stageShellRef.current;
+    const controls = sceneGlobalControlsRef.current;
+    if (!element) return;
+    const updateStageShellSize = () => {
+      setStageShellSize({
+        width: element.clientWidth,
+        height: element.clientHeight,
+      });
+      setSceneControlsHeight(controls?.offsetHeight || 0);
+    };
+    updateStageShellSize();
+    const observer = new ResizeObserver(updateStageShellSize);
+    observer.observe(element);
+    if (controls) observer.observe(controls);
+    window.addEventListener("resize", updateStageShellSize);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateStageShellSize);
+    };
+  }, [tab, scenePanelWidths.layers, scenePanelWidths.inspector]);
+
+  useEffect(() => {
+    const handleMove = (event: globalThis.PointerEvent) => {
+      if (layerDragRef.current) {
+        const targetLayerId = document
+          .elementFromPoint(event.clientX, event.clientY)
+          ?.closest<HTMLElement>("[data-layer-row-id]")
+          ?.dataset.layerRowId;
+        setLayerDropTargetId(targetLayerId && targetLayerId !== layerDragRef.current ? targetLayerId : null);
+      }
+
+      const resize = scenePanelResizeRef.current;
+      if (!resize) return;
+      const deltaX = event.clientX - resize.startX;
+      setScenePanelWidths({
+        layers: resize.handle === "layers"
+          ? clamp(resize.startLayerWidth + deltaX, 88, 260)
+          : resize.startLayerWidth,
+        inspector: resize.handle === "inspector"
+          ? clamp(resize.startInspectorWidth - deltaX, 150, 360)
+          : resize.startInspectorWidth,
+      });
+    };
+    const handleUp = (event: globalThis.PointerEvent) => {
+      if (layerDragRef.current) {
+        finishLayerPointerReorder(event.clientX, event.clientY);
+      }
+      scenePanelResizeRef.current = null;
+      document.body.classList.remove("resizing-scene-panels");
+    };
+    window.addEventListener("pointermove", handleMove);
+    window.addEventListener("pointerup", handleUp);
+    window.addEventListener("pointercancel", handleUp);
+    return () => {
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+      window.removeEventListener("pointercancel", handleUp);
+    };
+  }, []);
+
+  useEffect(() => {
     nearbyInteractionRef.current = nearbyInteraction;
   }, [nearbyInteraction]);
 
@@ -1450,42 +1725,13 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const element = stageShellRef.current;
-    if (!element) return;
-    const updateSize = () => {
-      const shellWidth = element.clientWidth || viewportWidth;
-      const maxStageHeight = Math.max(320, window.innerHeight - 236);
-      const ratio = viewportWidth / Math.max(1, viewportHeight);
-      let width = shellWidth;
-      let height = width / Math.max(0.05, ratio);
-      if (height > maxStageHeight) {
-        height = maxStageHeight;
-        width = height * ratio;
-      }
-      const nextWidth = Math.max(180, Math.min(shellWidth, width));
-      setStageSize({
-        width: Math.round(nextWidth),
-        height: Math.round(Math.max(220, nextWidth / Math.max(0.05, ratio))),
-      });
-    };
-    updateSize();
-    const observer = new ResizeObserver(updateSize);
-    observer.observe(element);
-    window.addEventListener("resize", updateSize);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", updateSize);
-    };
-  }, [viewportWidth, viewportHeight, tab]);
-
-  useEffect(() => {
     const playbackFrameCount = Math.max(1, sceneFrameCount);
     if ((!isPlaying && !sceneHasAutoPlayingLayer) || playbackFrameCount <= 1) return;
     const id = window.setInterval(() => {
       setActiveFrame(prev => (prev + 1) % playbackFrameCount);
-    }, 1000 / Math.max(1, fps));
+    }, 1000 / Math.max(1, selectedLayerClipFps));
     return () => window.clearInterval(id);
-  }, [isPlaying, sceneHasAutoPlayingLayer, sceneFrameCount, fps, activeSprite.id]);
+  }, [isPlaying, sceneHasAutoPlayingLayer, sceneFrameCount, selectedLayerClipFps, activeSprite.id]);
 
   useEffect(() => {
     setActiveFrame(0);
@@ -1852,6 +2098,86 @@ export default function App() {
     }));
   };
 
+  const replaceSpriteInAsset = (asset: GameAsset, spriteId: string, nextSprite: AnimationSprite): GameAsset => {
+    const animations = asset.animations?.map(clip => (
+      clip.sprite.id === spriteId ? { ...clip, sprite: nextSprite } : clip
+    ));
+    return {
+      ...asset,
+      sprite: asset.sprite.id === spriteId ? nextSprite : asset.sprite,
+      animations,
+      updatedTime: new Date().toISOString(),
+    };
+  };
+
+  const updateSelectedSpriteMetadata = (patch: Partial<AnimationSprite>) => {
+    if (!selectedLayerAsset || !selectedLayerSprite) return;
+    if (!selectedAssetEditable) {
+      setNotice("Built-in spritesheet metadata is read-only. Import or save a copy before editing it.");
+      return;
+    }
+    const nextSprite = { ...selectedLayerSprite, ...patch };
+    setAssets(prev => prev.map(asset => (
+      asset.id === selectedLayerAsset.id ? replaceSpriteInAsset(asset, selectedLayerSprite.id, nextSprite) : asset
+    )));
+    if (activeSprite.id === selectedLayerSprite.id) setActiveSprite(nextSprite);
+  };
+
+  const updateSelectedSpritesheetFps = (nextValue: number) => {
+    const nextFps = Math.max(1, Math.round(nextValue));
+    setFps(nextFps);
+    if (!selectedLayerAsset || !selectedAssetEditable) return;
+    if (selectedLayerClip) {
+      updateAssetClipMetadata(selectedLayerAsset.id, selectedLayerClip.id, { fps: nextFps });
+      return;
+    }
+    updateSelectedSpriteMetadata({ fps: nextFps });
+  };
+
+  const rebuildSelectedSpritesheetGrid = (patch: {
+    frameWidth?: number;
+    frameHeight?: number;
+    frameCount?: number;
+    columns?: number;
+  }) => {
+    if (!selectedLayerAsset || !selectedLayerSprite) return;
+    if (!selectedLayerSpriteEditableGrid) {
+      setNotice("Only imported spritesheet images can rebuild their frame grid here.");
+      return;
+    }
+    const source = selectedLayerSpriteSource;
+    const [currentFrameWidth, currentFrameHeight] = selectedLayerFrameSize;
+    const [sheetWidth, sheetHeight] = selectedLayerSpriteSheetSize;
+    const frameWidth = Math.max(1, Math.round(patch.frameWidth ?? currentFrameWidth));
+    const frameHeight = Math.max(1, Math.round(patch.frameHeight ?? currentFrameHeight));
+    const frameCount = Math.max(1, Math.round(patch.frameCount ?? selectedLayerSpriteFrameCount));
+    const columns = Math.max(1, Math.round(patch.columns ?? selectedLayerSpriteColumns));
+    const rows = Math.max(1, Math.ceil(frameCount / columns));
+
+    if (columns * frameWidth > sheetWidth + 1 || rows * frameHeight > sheetHeight + 1) {
+      setNotice("Frame grid is larger than the spritesheet image. Reduce frame size, frame count, or columns.");
+      return;
+    }
+
+    const nextSprite: AnimationSprite = {
+      ...selectedLayerSprite,
+      frameCount,
+      frames: buildSpritesheetFrames(source, sheetWidth, sheetHeight, frameWidth, frameHeight, frameCount, columns),
+      frameSize: [frameWidth, frameHeight],
+      sheetSize: [sheetWidth, sheetHeight],
+      gridColumns: columns,
+      adaptiveFramePolicy: `${columns} columns, ${rows} rows, ${frameCount} active frames.`,
+      updatedTime: new Date().toISOString(),
+    } as AnimationSprite;
+
+    setAssets(prev => prev.map(asset => (
+      asset.id === selectedLayerAsset.id ? replaceSpriteInAsset(asset, selectedLayerSprite.id, nextSprite) : asset
+    )));
+    if (activeSprite.id === selectedLayerSprite.id) setActiveSprite(nextSprite);
+    setActiveFrame(prev => Math.min(prev, frameCount - 1));
+    setNotice(`Updated spritesheet grid: ${frameCount} frames / ${frameWidth} x ${frameHeight}.`);
+  };
+
   const saveAssetMetadata = async (assetId: string) => {
     const asset = assets.find(item => item.id === assetId);
     if (!asset) {
@@ -1895,12 +2221,24 @@ export default function App() {
     });
   };
 
+  const updateLayerInteraction = (layerId: string, patch: Partial<LayerInteractionSettings>) => {
+    setScene(prev => ({
+      ...prev,
+      layers: prev.layers.map(layer => {
+        if (layer.id !== layerId || layer.locked || !isSceneVisualLayer(layer)) return layer;
+        const asset = layer.assetId ? assetById.get(layer.assetId) : undefined;
+        const base = layerInteractionSettings(layer, asset) || DEFAULT_INTERACTION_SETTINGS;
+        return {
+          ...layer,
+          interaction: { ...base, ...layer.interaction, ...patch },
+        };
+      }),
+    }));
+  };
+
   const updateSelectedLayerInteraction = (patch: Partial<LayerInteractionSettings>) => {
     if (!selectedLayer || selectedLayer.locked || !isSceneVisualLayer(selectedLayer)) return;
-    const base = layerInteractionSettings(selectedLayer, selectedLayerAsset) || DEFAULT_INTERACTION_SETTINGS;
-    updateSceneLayer(selectedLayer.id, {
-      interaction: { ...base, ...selectedLayer.interaction, ...patch },
-    });
+    updateLayerInteraction(selectedLayer.id, patch);
   };
 
   const applyInteractionPreset = (preset: InteractionPreset) => {
@@ -2011,8 +2349,93 @@ export default function App() {
     };
     setScene(prev => ({ ...prev, layers: [...prev.layers, layer] }));
     setSelectedLayerId(layer.id);
+    setSelectedInteractionZoneLayerId(null);
+    if (assetSprite) {
+      setActiveSprite(assetSprite);
+      setActiveFrame(0);
+    }
+    setIsLayerLibraryOpen(false);
     setTab("scene");
     setNotice(`Inserted layer: ${asset.name}`);
+  };
+
+  const handleLayerImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.currentTarget.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("Choose an image file to add as a static object.");
+      return;
+    }
+
+    setError(null);
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result || "");
+      const image = new Image();
+      image.onload = async () => {
+        const now = new Date().toISOString();
+        const baseName = file.name.replace(/\.[^.]+$/, "") || "Uploaded Object";
+        const width = Math.max(1, image.naturalWidth || image.width || 256);
+        const height = Math.max(1, image.naturalHeight || image.height || 256);
+        const safeBase = safeName(baseName);
+        const sprite: AnimationSprite = {
+          id: `sprite_static_${safeBase}_${Date.now()}`,
+          characterName: baseName,
+          description: `Uploaded static object from ${file.name}.`,
+          frameCount: 1,
+          style: "Uploaded static object",
+          frames: [`<img src="${dataUrl}" alt="${escapeHtmlAttribute(baseName)}" draggable="false" />`],
+          createdTime: now,
+          isPreset: false,
+          spritesheetPng: dataUrl,
+          rawSpritesheetPng: dataUrl,
+          frameSize: [width, height],
+          sheetSize: [width, height],
+          generationMode: "uploaded-static-object",
+          proportionPolicy: "Uploaded static object keeps its original pixel ratio and can be resized as a scene layer.",
+        };
+        const binding: ActionBinding = {
+          actionName: "static",
+          triggerType: "auto",
+          triggerValue: "auto",
+          gameState: `static.${safeBase}`,
+          notes: "Static object uploaded from the Layer panel.",
+        };
+        const asset: GameAsset = {
+          id: `asset_static_${safeBase}_${Date.now()}`,
+          name: baseName,
+          role: "prop",
+          confirmed: true,
+          savedTime: now,
+          updatedTime: now,
+          sprite,
+          binding,
+          tags: ["uploaded", "static-object"],
+        };
+
+        try {
+          const response = await fetch("/api/game-library/assets", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ asset }),
+          });
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.error || "Failed to save uploaded object");
+          const savedAsset = data.library.assets.find((item: GameAsset) => item.id === asset.id) || asset;
+          setAssets(data.library.assets);
+          setSprites(prev => [sprite, ...prev.filter(item => item.id !== sprite.id)]);
+          insertAssetLayer(savedAsset);
+          setNotice(`Uploaded and inserted: ${savedAsset.name}`);
+        } catch (err: any) {
+          setError(err.message || "Failed to save uploaded object");
+        }
+      };
+      image.onerror = () => setError("Could not read the uploaded image size.");
+      image.src = dataUrl;
+    };
+    reader.onerror = () => setError("Could not read the uploaded image.");
+    reader.readAsDataURL(file);
   };
 
   const insertActiveSprite = () => {
@@ -2057,6 +2480,32 @@ export default function App() {
         layers: prev.layers.map(layer => ({ ...layer, zIndex: nextZ.get(layer.id) ?? layer.zIndex })),
       };
     });
+  };
+
+  const finishLayerPointerReorder = (clientX: number, clientY: number) => {
+    const sourceLayerId = layerDragRef.current;
+    if (!sourceLayerId) return;
+    const targetLayerId = document
+      .elementFromPoint(clientX, clientY)
+      ?.closest<HTMLElement>("[data-layer-row-id]")
+      ?.dataset.layerRowId;
+    if (targetLayerId) reorderLayerStack(sourceLayerId, targetLayerId);
+    layerDragRef.current = null;
+    setDraggedLayerId(null);
+    setLayerDropTargetId(null);
+  };
+
+  const startScenePanelResize = (event: PointerEvent<HTMLButtonElement>, handle: ScenePanelResizeHandle) => {
+    event.preventDefault();
+    event.stopPropagation();
+    scenePanelResizeRef.current = {
+      handle,
+      startX: event.clientX,
+      startLayerWidth: scenePanelWidths.layers,
+      startInspectorWidth: scenePanelWidths.inspector,
+    };
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    document.body.classList.add("resizing-scene-panels");
   };
 
   const inferImportedFrameSize = (sheetSize = importSheetSize, columns = importColumns, frameCount = importFrameCount) => {
@@ -2141,6 +2590,8 @@ export default function App() {
       createdTime: now,
       isPreset: false,
       spritesheetPng: importSheetDataUrl,
+      fps,
+      gridColumns: columns,
       frameSize: [frameWidth, frameHeight],
       sheetSize: [sheetWidth, sheetHeight],
       generationMode: "uploaded-spritesheet",
@@ -2155,6 +2606,7 @@ export default function App() {
       sprite,
       binding,
       loop: importLoop,
+      fps,
     };
     const asset: GameAsset = {
       id: `asset_${safeName(assetName)}_${safeName(actionName)}_${Date.now()}`,
@@ -2192,33 +2644,324 @@ export default function App() {
     }
   };
 
-  const duplicateSelectedLayer = () => {
-    if (!selectedLayer) return;
-    if (selectedLayer.type === "background") {
-      setNotice("Background uses a single editable layer for now. Resize or reposition it directly.");
+  const buildLayerInstance = (sourceLayer: SceneLayer, label: "copy" | "paste", offsetIndex: number, zIndex: number): SceneLayer => {
+    const layer = cloneSceneLayer(sourceLayer);
+    return {
+      ...layer,
+      id: `layer_${label}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      name: `${layer.name} ${label}`,
+      visible: true,
+      locked: false,
+      x: Number((layer.x + offsetIndex * 36).toFixed(2)),
+      y: Number((layer.y + offsetIndex * 24).toFixed(2)),
+      zIndex,
+    };
+  };
+
+  const copyLayerToSceneClipboard = (layerId = selectedLayerIdRef.current) => {
+    const layer = sceneStateRef.current.layers.find(item => item.id === layerId);
+    if (!layer || !isTransformableSceneLayer(layer)) {
+      setNotice("Select an item or background to copy.");
+      setSceneContextMenu(null);
+      return false;
+    }
+    setSceneClipboard({ layer: cloneSceneLayer(layer), sourceSceneId: sceneStateRef.current.id });
+    scenePasteCountRef.current = 0;
+    setSceneContextMenu(null);
+    setNotice(`Copied: ${layer.name}`);
+    return true;
+  };
+
+  const cutLayerToSceneClipboard = (layerId = selectedLayerIdRef.current) => {
+    const layer = sceneStateRef.current.layers.find(item => item.id === layerId);
+    if (!layer || !isTransformableSceneLayer(layer)) {
+      setNotice("Select an item to cut.");
+      setSceneContextMenu(null);
       return;
     }
-    const copy = {
-      ...selectedLayer,
-      id: `layer_copy_${Date.now()}`,
-      name: `${selectedLayer.name} copy`,
-      x: selectedLayer.x + 36,
-      y: selectedLayer.y,
-      zIndex: selectedLayer.zIndex + 1,
-    };
+    if (layer.locked) {
+      setNotice("Unlock the layer before cutting it.");
+      setSceneContextMenu(null);
+      return;
+    }
+    if (layer.type === "background") {
+      setNotice("Background cannot be cut. Copy it, then paste into another scene to replace background settings.");
+      setSceneContextMenu(null);
+      return;
+    }
+    setSceneClipboard({ layer: cloneSceneLayer(layer), sourceSceneId: sceneStateRef.current.id });
+    scenePasteCountRef.current = 0;
+    setScene(prev => ({ ...prev, layers: prev.layers.filter(item => item.id !== layer.id) }));
+    setSelectedLayerId("");
+    setSelectedInteractionZoneLayerId(null);
+    setSceneContextMenu(null);
+    setNotice(`Cut: ${layer.name}`);
+  };
+
+  const pasteLayerFromSceneClipboard = () => {
+    if (!sceneClipboard) {
+      setNotice("Nothing to paste.");
+      setSceneContextMenu(null);
+      return;
+    }
+
+    const sourceLayer = cloneSceneLayer(sceneClipboard.layer);
+    if (sourceLayer.type === "background") {
+      const targetBackground = sceneStateRef.current.layers.find(layer => layer.type === "background");
+      if (!targetBackground) {
+        setNotice("No background layer is available in this scene.");
+        setSceneContextMenu(null);
+        return;
+      }
+      if (targetBackground.locked) {
+        setNotice("Unlock the background before pasting background settings.");
+        setSceneContextMenu(null);
+        return;
+      }
+      const replacement: SceneLayer = {
+        ...sourceLayer,
+        id: targetBackground.id,
+        name: targetBackground.name,
+        type: "background",
+        locked: targetBackground.locked,
+        visible: true,
+        zIndex: targetBackground.zIndex,
+      };
+      setScene(prev => ({
+        ...prev,
+        layers: prev.layers.map(layer => layer.id === targetBackground.id ? replacement : layer),
+      }));
+      setSelectedLayerId(targetBackground.id);
+      setSelectedInteractionZoneLayerId(null);
+      setSceneContextMenu(null);
+      setNotice(`Pasted background settings from ${sourceLayer.name}.`);
+      return;
+    }
+
+    const offsetIndex = scenePasteCountRef.current + 1;
+    const maxZ = Math.max(...sceneStateRef.current.layers.map(layer => layer.zIndex), sourceLayer.zIndex);
+    const pastedLayer = buildLayerInstance(sourceLayer, "paste", offsetIndex, maxZ + 1);
+    scenePasteCountRef.current = offsetIndex;
+    setScene(prev => ({ ...prev, layers: [...prev.layers, pastedLayer] }));
+    setSelectedLayerId(pastedLayer.id);
+    setSelectedInteractionZoneLayerId(null);
+    setSceneContextMenu(null);
+    setNotice(`Pasted: ${sourceLayer.name}`);
+  };
+
+  const duplicateSceneLayer = (layerId = selectedLayerIdRef.current) => {
+    const layer = sceneStateRef.current.layers.find(item => item.id === layerId);
+    if (!layer || !isTransformableSceneLayer(layer)) {
+      setNotice("Select an item to duplicate.");
+      setSceneContextMenu(null);
+      return;
+    }
+    if (layer.locked) {
+      setNotice("Unlock the layer before duplicating it.");
+      setSceneContextMenu(null);
+      return;
+    }
+    if (layer.type === "background") {
+      setNotice("Background uses a single editable layer. Copy and paste it into another scene to reuse settings.");
+      setSceneContextMenu(null);
+      return;
+    }
+    const maxZ = Math.max(...sceneStateRef.current.layers.map(item => item.zIndex), layer.zIndex);
+    const copy = buildLayerInstance(layer, "copy", 1, maxZ + 1);
     setScene(prev => ({ ...prev, layers: [...prev.layers, copy] }));
     setSelectedLayerId(copy.id);
+    setSelectedInteractionZoneLayerId(null);
+    setSceneContextMenu(null);
+    setNotice(`Duplicated: ${layer.name}`);
+  };
+
+  const duplicateSelectedLayer = () => duplicateSceneLayer(selectedLayerId);
+
+  const openSceneLayerContextMenu = (
+    event: MouseEvent<HTMLElement>,
+    layer: SceneLayer,
+    target: SceneContextMenuTarget = "layer",
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setSelectedLayerId(layer.id);
+    setSelectedInteractionZoneLayerId(target === "interaction-zone" ? layer.id : null);
+    const layerAsset = layer.assetId ? assetById.get(layer.assetId) : undefined;
+    const layerSprite = resolveAssetSprite(layerAsset, layer);
+    if (layerSprite) {
+      setActiveSprite(layerSprite);
+      setActiveFrame(0);
+    }
+    setSceneContextMenu({ x: event.clientX, y: event.clientY, layerId: layer.id, target });
+  };
+
+  const deleteSceneObject = (layerId: string, target: SceneContextMenuTarget) => {
+    const layer = sceneStateRef.current.layers.find(item => item.id === layerId);
+    if (!layer) return;
+    if (target !== "interaction-zone" && layer.type === "background") {
+      const hadBackgroundImage = Boolean(layer.imageUrl);
+      setScene(prev => ({
+        ...prev,
+        background: "none",
+        layers: prev.layers.map(item => item.id === layerId
+          ? {
+            ...item,
+            name: "Black Background",
+            visible: true,
+            imageUrl: undefined,
+            color: "#000000",
+            opacity: 1,
+            fit: "stretch",
+            position: "center center",
+          }
+          : item),
+      }));
+      setSelectedLayerId(layerId);
+      setSelectedInteractionZoneLayerId(null);
+      setSceneContextMenu(null);
+      setNotice(hadBackgroundImage ? "Deleted background image. Scene now uses the default black background." : "Background is already empty.");
+      return;
+    }
+    if (layer.locked) {
+      setNotice("Unlock the layer before deleting it.");
+      setSceneContextMenu(null);
+      return;
+    }
+    if (target === "interaction-zone") {
+      setScene(prev => ({
+        ...prev,
+        layers: prev.layers.map(item => item.id === layerId
+          ? { ...item, interaction: item.interaction ? { ...item.interaction, enabled: false } : item.interaction }
+          : item),
+      }));
+      setSelectedInteractionZoneLayerId(null);
+      setSceneContextMenu(null);
+      setNotice(`Deleted interaction zone: ${layer.name}`);
+      return;
+    }
+    setScene(prev => ({ ...prev, layers: prev.layers.filter(item => item.id !== layerId) }));
+    setSelectedLayerId("");
+    setSelectedInteractionZoneLayerId(null);
+    setSceneContextMenu(null);
+    setNotice(`Deleted layer: ${layer.name}`);
   };
 
   const removeSelectedLayer = () => {
-    if (!selectedLayer || selectedLayer.locked) return;
-    if (selectedLayer.type === "background") {
-      setNotice("Background layers stay in the scene. Hide it or replace its image instead of deleting it.");
+    if (!selectedLayer) return;
+    deleteSceneObject(selectedLayer.id, selectedInteractionZoneLayerId === selectedLayer.id ? "interaction-zone" : "layer");
+  };
+
+  const isEditingTextTarget = (target: EventTarget | null) => {
+    if (!(target instanceof HTMLElement)) return false;
+    const tagName = target.tagName.toLowerCase();
+    return target.isContentEditable || tagName === "input" || tagName === "textarea" || tagName === "select";
+  };
+
+  const restoreSceneFromHistory = (nextScene: GameScene, message: string) => {
+    const selectedId = selectedLayerIdRef.current;
+    const selectedLayerStillExists = selectedId && nextScene.layers.some(layer => layer.id === selectedId);
+    const fallbackLayer = [...nextScene.layers].sort((a, b) => b.zIndex - a.zIndex)[0];
+
+    sceneHistoryNavigationRef.current = true;
+    setScene(cloneSceneForHistory(nextScene));
+    setSelectedLayerId(selectedLayerStillExists ? selectedId : fallbackLayer?.id || "");
+    setSelectedInteractionZoneLayerId(null);
+    setSceneContextMenu(null);
+    setNotice(message);
+  };
+
+  const undoSceneChange = () => {
+    const previousScene = sceneHistoryPastRef.current[sceneHistoryPastRef.current.length - 1];
+    if (!previousScene) {
+      setNotice("Nothing to undo.");
       return;
     }
-    setScene(prev => ({ ...prev, layers: prev.layers.filter(layer => layer.id !== selectedLayer.id) }));
-    setSelectedLayerId("");
+    sceneHistoryPastRef.current = sceneHistoryPastRef.current.slice(0, -1);
+    sceneHistoryFutureRef.current = [
+      cloneSceneForHistory(sceneStateRef.current),
+      ...sceneHistoryFutureRef.current,
+    ].slice(0, SCENE_HISTORY_LIMIT);
+    restoreSceneFromHistory(previousScene, "Undo");
   };
+
+  const redoSceneChange = () => {
+    const nextScene = sceneHistoryFutureRef.current[0];
+    if (!nextScene) {
+      setNotice("Nothing to redo.");
+      return;
+    }
+    sceneHistoryFutureRef.current = sceneHistoryFutureRef.current.slice(1);
+    sceneHistoryPastRef.current = [
+      ...sceneHistoryPastRef.current,
+      cloneSceneForHistory(sceneStateRef.current),
+    ].slice(-SCENE_HISTORY_LIMIT);
+    restoreSceneFromHistory(nextScene, "Redo");
+  };
+
+  useEffect(() => {
+    const onHistoryKey = (event: KeyboardEvent) => {
+      if (tab !== "scene") return;
+      if (event.repeat || isEditingTextTarget(event.target)) return;
+      const key = event.key.toLowerCase();
+      const modifierPressed = event.ctrlKey || event.metaKey;
+      const isUndo = modifierPressed && key === "z" && !event.shiftKey;
+      const isRedo = modifierPressed && (key === "y" || (key === "z" && event.shiftKey));
+      if (!isUndo && !isRedo) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (isUndo) {
+        undoSceneChange();
+        return;
+      }
+      redoSceneChange();
+    };
+
+    window.addEventListener("keydown", onHistoryKey, true);
+    return () => window.removeEventListener("keydown", onHistoryKey, true);
+  }, [tab]);
+
+  useEffect(() => {
+    const onClipboardKey = (event: KeyboardEvent) => {
+      if (tab !== "scene") return;
+      if (event.repeat || isEditingTextTarget(event.target)) return;
+      if (!(event.ctrlKey || event.metaKey) || event.altKey || event.shiftKey) return;
+      const key = event.key.toLowerCase();
+      if (!["c", "x", "v", "d"].includes(key)) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      if (key === "c") {
+        copyLayerToSceneClipboard();
+        return;
+      }
+      if (key === "x") {
+        cutLayerToSceneClipboard();
+        return;
+      }
+      if (key === "v") {
+        pasteLayerFromSceneClipboard();
+        return;
+      }
+      duplicateSceneLayer();
+    };
+
+    window.addEventListener("keydown", onClipboardKey, true);
+    return () => window.removeEventListener("keydown", onClipboardKey, true);
+  }, [sceneClipboard, tab]);
+
+  useEffect(() => {
+    const onDeleteKey = (event: KeyboardEvent) => {
+      if (tab !== "scene") return;
+      if (event.repeat || (event.key !== "Backspace" && event.key !== "Delete")) return;
+      if (isEditingTextTarget(event.target)) return;
+      if (!selectedLayerId) return;
+      event.preventDefault();
+      event.stopPropagation();
+      deleteSceneObject(selectedLayerId, selectedInteractionZoneLayerId === selectedLayerId ? "interaction-zone" : "layer");
+    };
+    window.addEventListener("keydown", onDeleteKey, true);
+    return () => window.removeEventListener("keydown", onDeleteKey, true);
+  }, [selectedInteractionZoneLayerId, selectedLayerId, tab]);
 
   const persistScene = async (sceneToSave: GameScene, successMessage: string) => {
     setError(null);
@@ -2283,6 +3026,75 @@ export default function App() {
     } catch (err: any) {
       setError(err.message || "Failed to delete scene");
     }
+  };
+
+  const uniqueCopiedSceneName = (sourceName: string) => {
+    const baseName = `${sourceName || "Scene"} Copy`;
+    const usedNames = new Set([scene.name, ...scenes.map(savedScene => savedScene.name)].filter(Boolean));
+    if (!usedNames.has(baseName)) return baseName;
+    let copyIndex = 2;
+    while (usedNames.has(`${baseName} ${copyIndex}`)) copyIndex += 1;
+    return `${baseName} ${copyIndex}`;
+  };
+
+  const saveSceneCopy = async (sourceScene: GameScene, successPrefix: string) => {
+    setError(null);
+    try {
+      const now = new Date().toISOString();
+      const cleanSource = prepareSceneForEditor(sourceScene);
+      const sceneCopy: GameScene = {
+        ...cloneSceneForHistory(cleanSource),
+        id: `scene_copy_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        name: uniqueCopiedSceneName(cleanSource.name),
+        savedTime: now,
+        updatedTime: now,
+      };
+      const response = await fetch("/api/game-library/scenes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ scene: sceneCopy }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to save scene copy");
+      setScenes(data.library.scenes.map(prepareSceneForEditor));
+      setTab("scenes");
+      setNotice(`${successPrefix}: ${data.scene.name}`);
+    } catch (err: any) {
+      setError(err.message || "Failed to save scene copy");
+    }
+  };
+
+  const duplicateSceneNode = async (node: SceneFlowNode) => {
+    if (!node.scene || node.isPlaceholder) {
+      setNotice("Select a scene to duplicate.");
+      return;
+    }
+    await saveSceneCopy(node.scene, "Scene duplicated");
+  };
+
+  const pasteSceneNode = async (sourceScene: GameScene) => {
+    await saveSceneCopy(sourceScene, "Scene pasted");
+  };
+
+  const deleteSceneNode = async (node: SceneFlowNode) => {
+    if (!node.scene || node.isPlaceholder) {
+      setNotice("Select a scene to delete.");
+      return;
+    }
+    const isSavedScene = scenes.some(savedScene => savedScene.id === node.scene?.id);
+    if (!isSavedScene) {
+      if (node.isCurrent) {
+        const fallbackScene = scenes[0] || prepareSceneForEditor(createDefaultScene());
+        setScene(fallbackScene);
+        setSelectedLayerId("");
+        setTab("scenes");
+        setNotice("Current draft scene cleared.");
+        return;
+      }
+      setNotice("This scene has not been saved yet.");
+      return;
+    }
+    await deleteScene(node.scene.id);
   };
 
   const startNewScene = () => {
@@ -2362,6 +3174,37 @@ export default function App() {
     }
   };
 
+  const downloadSelectedSceneItem = () => {
+    if (!selectedLayer) {
+      setNotice("Select an item first.");
+      return;
+    }
+
+    if (selectedLayer.type === "background" && selectedLayer.imageUrl) {
+      downloadUrl(selectedLayer.imageUrl, `item_${safeName(selectedLayer.name)}.png`);
+      return;
+    }
+
+    const asset = selectedLayer.assetId ? assetById.get(selectedLayer.assetId) : undefined;
+    const sprite = resolveAssetSprite(asset, selectedLayer);
+    if (!asset || !sprite) {
+      downloadJson(selectedLayer, `item_${safeName(selectedLayer.name)}.json`);
+      return;
+    }
+
+    const pngUrl = sprite.spritesheetPng || sprite.rawSpritesheetPng;
+    if (pngUrl) {
+      downloadUrl(pngUrl, `item_${safeName(selectedLayer.name)}_spritesheet.png`);
+      return;
+    }
+
+    const frameSvg = spriteFrame(sprite, activeFrame);
+    downloadDataUrl(
+      `data:image/svg+xml;charset=utf-8,${encodeURIComponent(frameSvg)}`,
+      `item_${safeName(selectedLayer.name)}_frame.svg`
+    );
+  };
+
   const triggerMouseAction = () => {
     const matched = assets
       .map(asset => {
@@ -2392,6 +3235,7 @@ export default function App() {
     zoneDragRef.current = null;
     zoneResizeRef.current = null;
     setSelectedLayerId("");
+    setSelectedInteractionZoneLayerId(null);
     setIsPlaying(false);
   };
 
@@ -2406,6 +3250,7 @@ export default function App() {
     dragRef.current = { id: layer.id, dx: pointerX - layer.x, dy: pointerY - layer.y };
     resizeRef.current = null;
     setSelectedLayerId(layer.id);
+    setSelectedInteractionZoneLayerId(null);
   };
 
   const startLayerResize = (
@@ -2437,6 +3282,7 @@ export default function App() {
       assetHeight,
     };
     setSelectedLayerId(layer.id);
+    setSelectedInteractionZoneLayerId(null);
   };
 
   const startInteractionZoneDrag = (event: PointerEvent<HTMLDivElement>, layer: SceneLayer, interaction: LayerInteractionSettings) => {
@@ -2459,6 +3305,7 @@ export default function App() {
       startOffsetY: interaction.zoneOffsetY || 0,
     };
     setSelectedLayerId(layer.id);
+    setSelectedInteractionZoneLayerId(layer.id);
   };
 
   const startInteractionZoneResize = (
@@ -2482,6 +3329,7 @@ export default function App() {
       anchorWorldY: handle === "nw" || handle === "ne" ? zone.bottom : zone.top,
     };
     setSelectedLayerId(layer.id);
+    setSelectedInteractionZoneLayerId(layer.id);
   };
 
   const stagePointerMove = (event: PointerEvent<HTMLDivElement>) => {
@@ -2603,7 +3451,7 @@ export default function App() {
   const bgClass = bgMode === "checker" ? "preview-bg checker" : `preview-bg ${bgMode}`;
 
   return (
-    <div className="blueprint-app">
+    <div className={`blueprint-app ${tab === "scenes" || tab === "scene" ? "core-mode" : ""}`}>
       <header className="topbar">
         <div>
           <p className="eyebrow">2D Side-Scroller Asset Studio</p>
@@ -2622,8 +3470,8 @@ export default function App() {
         </div>
       </header>
 
-      <main className="game-workspace">
-        <aside className="panel left-panel">
+      <main className={`game-workspace ${tab === "scenes" || tab === "scene" ? "simple-workspace" : ""}`}>
+        <aside className="panel left-panel utility-panel">
           <section>
             <div className="section-title"><Film size={17} /> Current Action</div>
             <div className="asset-preview-card">
@@ -2631,7 +3479,7 @@ export default function App() {
                 <div dangerouslySetInnerHTML={{ __html: spriteFrame(activeSprite, activeFrame) }} />
               </div>
               <strong>{activeSprite.characterName}</strong>
-              <span>{activeSprite.frames.length} frames · {frameW} x {frameH}</span>
+              <span>{activeSprite.frames.length} frames / {frameW} x {frameH}</span>
             </div>
 
             <label>Action Name</label>
@@ -2675,7 +3523,7 @@ export default function App() {
             <input type="file" accept="image/png,image/webp,image/jpeg" onChange={handleImportFile} />
             {importSheetSize && (
               <div className="import-summary">
-                {importFileName || "Uploaded image"} · {importSheetSize[0]} x {importSheetSize[1]}px
+                {importFileName || "Uploaded image"} / {importSheetSize[0]} x {importSheetSize[1]}px
               </div>
             )}
 
@@ -2774,108 +3622,272 @@ export default function App() {
                 <p className="eyebrow">Scene Composer</p>
                 <h2>{tab === "scenes" ? "Scene Library" : tab === "spritesheets" ? "Scene Spritesheets" : scene.name}</h2>
               </div>
-              <div className="tabs">
-                <button className={tab === "scenes" ? "active" : ""} onClick={() => setTab("scenes")}><MapIcon size={15} /> Scenes</button>
-                <button className={tab === "scene" ? "active" : ""} onClick={() => setTab("scene")}><MapIcon size={15} /> Scene</button>
-                <button className={tab === "spritesheets" ? "active" : ""} onClick={() => setTab("spritesheets")}><Film size={15} /> Spritesheets</button>
-                <button className={tab === "preview" ? "active" : ""} onClick={() => setTab("preview")}><Play size={15} /> Action</button>
-                <button className={tab === "frames" ? "active" : ""} onClick={() => setTab("frames")}>Frames</button>
-                <button className={tab === "sheet" ? "active" : ""} onClick={async () => { setTab("sheet"); if (!activeSprite.spritesheetPng && !sheetDataUrl) await compileSheet(); }}>Sheet</button>
-                <button className={tab === "blueprint" ? "active" : ""} onClick={() => setTab("blueprint")}>Blueprint</button>
+              <div className="workspace-tabs">
+                <div className="tabs primary-tabs">
+                  <button className={tab === "scenes" ? "active" : ""} onClick={() => setTab("scenes")}><MapIcon size={15} /> 2D Canvas</button>
+                  <button className={tab === "scene" ? "active" : ""} onClick={() => setTab("scene")}><MapIcon size={15} /> 2D Scene</button>
+                  {tab === "scene" && (
+                    <div className="scene-size-controls" aria-label="2D Scene screen size">
+                      <Monitor size={15} />
+                      <select
+                        aria-label="Screen size preset"
+                        value={scene.viewportPreset}
+                        onChange={event => {
+                          const preset = VIEWPORT_PRESETS.find(item => item.id === event.target.value);
+                          if (preset) updateSceneFrame({ viewportWidth: preset.width, viewportHeight: preset.height, viewportPreset: preset.id });
+                        }}
+                      >
+                        <option value="custom">Custom</option>
+                        {VIEWPORT_PRESETS.map(preset => (
+                          <option key={preset.id} value={preset.id}>
+                            {preset.label} / {preset.width} x {preset.height}
+                          </option>
+                        ))}
+                      </select>
+                      <input aria-label="Screen width" type="number" min="240" value={Math.round(viewportWidth)} onChange={event => updateSceneFrame({ viewportWidth: Number(event.target.value), viewportPreset: "custom" })} />
+                      <span>x</span>
+                      <input aria-label="Screen height" type="number" min="240" value={Math.round(viewportHeight)} onChange={event => updateSceneFrame({ viewportHeight: Number(event.target.value), viewportPreset: "custom" })} />
+                    </div>
+                  )}
+                </div>
+                <div className="tabs advanced-tabs">
+                  <button className={tab === "spritesheets" ? "active" : ""} onClick={() => setTab("spritesheets")}><Film size={15} /> Spritesheets</button>
+                  <button className={tab === "preview" ? "active" : ""} onClick={() => setTab("preview")}><Play size={15} /> Action</button>
+                  <button className={tab === "frames" ? "active" : ""} onClick={() => setTab("frames")}>Frames</button>
+                  <button className={tab === "sheet" ? "active" : ""} onClick={async () => { setTab("sheet"); if (!activeSprite.spritesheetPng && !sheetDataUrl) await compileSheet(); }}>Sheet</button>
+                  <button className={tab === "blueprint" ? "active" : ""} onClick={() => setTab("blueprint")}>Blueprint</button>
+                </div>
               </div>
             </div>
 
             {tab === "scenes" && (
-              <div className="scene-library">
-                <div className="scene-library-header">
-                  <div>
-                    <p className="eyebrow">Scene Library</p>
-                    <h3>Saved Scenes</h3>
-                  </div>
-                  <div className="scene-library-actions">
-                    <button type="button" className="primary-button" onClick={saveCompletedScene}><CheckCircle2 size={16} /> Save Current Complete</button>
-                    <button type="button" className="ghost-button" onClick={startNewScene}><Plus size={16} /> New Scene</button>
-                  </div>
-                </div>
-
-                <div className="scene-card-grid">
-                  <article className="scene-card active">
-                    <button type="button" className="scene-card-preview" onClick={() => setTab("scene")}>
-                      <div
-                        className="scene-card-bg"
-                        style={{
-                          backgroundImage: backgroundLayer?.imageUrl ? `url(${backgroundLayer.imageUrl})` : undefined,
-                          backgroundColor: backgroundLayer?.color || "#08070d",
-                        }}
-                      />
-                      <span>Editing</span>
-                    </button>
-                    <div className="scene-card-body">
-                      <strong>{scene.name}</strong>
-                      <small>{scene.layers.length} layers / current draft</small>
-                      <div className="scene-card-actions">
-                        <button type="button" onClick={() => setTab("scene")}>Edit Scene</button>
-                        <button type="button" onClick={saveCompletedScene}>Save Complete</button>
-                        {currentSceneIsSaved && (
-                          <button type="button" className="danger-button" onClick={() => deleteScene(scene.id)}>Delete</button>
-                        )}
-                      </div>
-                    </div>
-                  </article>
-
-                  {savedSceneCards.map(savedScene => {
-                    const savedBackground = savedScene.layers?.find(layer => layer.type === "background");
-                    const isOpen = savedScene.id === scene.id;
-                    return (
-                      <article key={savedScene.id} className={isOpen ? "scene-card active" : "scene-card"}>
-                        <button type="button" className="scene-card-preview" onClick={() => loadSavedScene(savedScene)}>
-                          <div
-                            className="scene-card-bg"
-                            style={{
-                              backgroundImage: savedBackground?.imageUrl ? `url(${savedBackground.imageUrl})` : undefined,
-                              backgroundColor: savedBackground?.color || "#08070d",
-                            }}
-                          />
-                          <span>{isOpen ? "Open" : "Saved"}</span>
-                        </button>
-                        <div className="scene-card-body">
-                          <strong>{savedScene.name}</strong>
-                          <small>{savedScene.layers?.length || 0} layers / {savedScene.updatedTime ? sceneTimestampLabel(new Date(savedScene.updatedTime)) : "unsaved"}</small>
-                          <div className="scene-card-actions">
-                            <button type="button" onClick={() => loadSavedScene(savedScene)}>Edit Scene</button>
-                            <button type="button" onClick={() => downloadJson(savedScene, `scene_${safeName(savedScene.name)}.json`)}>Export</button>
-                            <button type="button" className="danger-button" onClick={() => deleteScene(savedScene.id)}>Delete</button>
-                          </div>
-                        </div>
-                      </article>
-                    );
-                  })}
-
-                  {!savedSceneCards.length && (
-                    <div className="scene-library-empty">
-                      <strong>No saved scenes yet.</strong>
-                      <span>Use Save Current Complete to store this scene, then create another one.</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+              <SceneFlowCanvas
+                nodes={sceneFlowNodes}
+                onCreateScene={() => {
+                  startNewScene();
+                  setTab("scene");
+                }}
+                onDeleteScene={deleteSceneNode}
+                onDuplicateScene={duplicateSceneNode}
+                onOpenScene={node => {
+                  if (node.isPlaceholder) {
+                    startNewScene();
+                    setTab("scene");
+                    return;
+                  }
+                  if (node.scene && !node.isCurrent) loadSavedScene(node.scene);
+                  setTab("scene");
+                }}
+                onPasteScene={pasteSceneNode}
+                onSaveCurrent={saveCompletedScene}
+                onStatus={setNotice}
+              />
             )}
 
             {tab === "scene" && (
               <div className="scene-editor">
-                <div ref={stageShellRef} className="scene-stage-shell">
+                <div
+                  className="scene-wireframe"
+                  style={{
+                    gridTemplateColumns: `${sceneLayerPanelWidth}px 8px minmax(${sceneCenterMinWidth}px, 1fr) 8px ${sceneInspectorPanelWidth}px`,
+                  }}
+                >
+                  <aside className="scene-mini-panel layer-rail">
+                    <div className="mini-panel-title layer-panel-title">
+                      <b>Layer</b>
+                      <div className="layer-panel-title-actions">
+                        <button
+                          type="button"
+                          className={isLayerLibraryOpen ? "mini-add-layer-button active" : "mini-add-layer-button"}
+                          title="Add layer"
+                          aria-label="Add layer"
+                          onClick={() => setIsLayerLibraryOpen(value => !value)}
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+                    </div>
+                    {isLayerLibraryOpen && (
+                      <div className="layer-add-popover" role="dialog" aria-label="Add asset">
+                        <div className="layer-add-popover-header">
+                          <strong>Add Asset</strong>
+                          <button
+                            type="button"
+                            className="icon-button"
+                            aria-label="Close add asset"
+                            onClick={() => setIsLayerLibraryOpen(false)}
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                        <div className="layer-add-popover-actions">
+                          <label className="layer-upload-button">
+                            <Upload size={13} />
+                            <span>Upload Image</span>
+                            <input type="file" accept="image/*" onChange={handleLayerImageUpload} />
+                          </label>
+                        </div>
+                        <div className="layer-asset-grid">
+                          {layerLibraryAssets.length ? layerLibraryAssets.map(asset => {
+                            const previewSprite = resolveAssetSprite(asset);
+                            if (!previewSprite) return null;
+                            return (
+                              <button
+                                key={asset.id}
+                                type="button"
+                                className="layer-asset-option"
+                                title={asset.name}
+                                onClick={() => insertAssetLayer(asset)}
+                              >
+                                <span className="layer-asset-thumb">
+                                  <span dangerouslySetInnerHTML={{ __html: spriteFrame(previewSprite, 0) }} />
+                                </span>
+                                <strong>{asset.name}</strong>
+                              </button>
+                            );
+                          }) : (
+                            <div className="layer-add-empty">No assets yet</div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    <div className="mini-layer-list">
+                      {scene.layers
+                        .slice()
+                        .sort((a, b) => b.zIndex - a.zIndex)
+                        .map(layer => {
+                          const canDragLayer = !layer.locked;
+                          return (
+                            <button
+                              key={layer.id}
+                              type="button"
+                              data-layer-row-id={layer.id}
+                              className={[
+                                layer.id === selectedLayerId ? "active" : "",
+                                draggedLayerId === layer.id ? "dragging" : "",
+                                layerDropTargetId === layer.id ? "drop-target" : "",
+                                !layer.visible ? "not-visible" : "",
+                                !canDragLayer ? "locked" : "",
+                              ].filter(Boolean).join(" ")}
+                              onClick={() => {
+                                setSelectedLayerId(layer.id);
+                                setSelectedInteractionZoneLayerId(null);
+                                const layerAsset = layer.assetId ? assetById.get(layer.assetId) : undefined;
+                                const layerSprite = resolveAssetSprite(layerAsset, layer);
+                                if (layerSprite) setActiveSprite(layerSprite);
+                              }}
+                              onContextMenu={event => {
+                                openSceneLayerContextMenu(event, layer);
+                              }}
+                              onPointerDown={event => {
+                                if (!canDragLayer || event.button !== 0) return;
+                                setSelectedLayerId(layer.id);
+                                setSelectedInteractionZoneLayerId(null);
+                                const layerAsset = layer.assetId ? assetById.get(layer.assetId) : undefined;
+                                const layerSprite = resolveAssetSprite(layerAsset, layer);
+                                if (layerSprite) {
+                                  setActiveSprite(layerSprite);
+                                  setActiveFrame(0);
+                                }
+                                layerDragRef.current = layer.id;
+                                setDraggedLayerId(layer.id);
+                              }}
+                              onPointerUp={event => finishLayerPointerReorder(event.clientX, event.clientY)}
+                              onPointerCancel={() => {
+                                layerDragRef.current = null;
+                                setDraggedLayerId(null);
+                                setLayerDropTargetId(null);
+                              }}
+                              title={canDragLayer ? `${layer.name} / drag to reorder depth` : `${layer.name} / locked`}
+                            >
+                              <span className="mini-layer-grip" aria-hidden="true">{canDragLayer ? "::" : "--"}</span>
+                              <span
+                                className="mini-layer-visibility"
+                                role="button"
+                                tabIndex={0}
+                                title={layer.visible ? "Hide layer" : "Show layer"}
+                                onPointerDown={event => {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                }}
+                                onClick={event => {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  updateSceneLayer(layer.id, { visible: !layer.visible });
+                                }}
+                                onKeyDown={event => {
+                                  if (event.key !== "Enter" && event.key !== " ") return;
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  updateSceneLayer(layer.id, { visible: !layer.visible });
+                                }}
+                              >
+                                {layer.visible ? <Eye size={13} /> : <EyeOff size={13} />}
+                              </span>
+                              <span
+                                className="mini-layer-lock"
+                                role="button"
+                                tabIndex={0}
+                                title={layer.locked ? "Unlock layer" : "Lock layer"}
+                                aria-label={layer.locked ? `Unlock ${layer.name}` : `Lock ${layer.name}`}
+                                onPointerDown={event => {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                }}
+                                onClick={event => {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  updateSceneLayer(layer.id, { locked: !layer.locked });
+                                }}
+                                onKeyDown={event => {
+                                  if (event.key !== "Enter" && event.key !== " ") return;
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                  updateSceneLayer(layer.id, { locked: !layer.locked });
+                                }}
+                              >
+                                {layer.locked ? <Lock size={13} /> : <Unlock size={13} />}
+                              </span>
+                              <strong>{layer.name}</strong>
+                            </button>
+                          );
+                        })}
+                    </div>
+                  </aside>
+                  <button
+                    type="button"
+                    className="scene-resizer left"
+                    aria-label="Resize layer panel"
+                    title="Drag to resize Layers"
+                    onPointerDown={event => startScenePanelResize(event, "layers")}
+                  />
                   <div
-                    ref={stageRef}
-                    className="side-scroller-stage"
-                    style={{ width: stageSize.width, height: stageSize.height, aspectRatio: `${viewportWidth} / ${viewportHeight}` }}
-                    onClick={event => {
-                      const target = event.target as HTMLElement;
-                      if (!target.closest(".scene-sprite") && !target.closest(".scene-background-transform")) clearSceneSelection();
-                    }}
-                    onPointerMove={stagePointerMove}
-                    onPointerUp={() => { dragRef.current = null; resizeRef.current = null; zoneDragRef.current = null; zoneResizeRef.current = null; }}
-                    onPointerLeave={() => { dragRef.current = null; resizeRef.current = null; zoneDragRef.current = null; zoneResizeRef.current = null; }}
+                    ref={stageShellRef}
+                    className="scene-stage-shell"
+                    style={{ ["--scene-global-controls-space" as string]: `${sceneControlsHeight ? sceneControlsHeight + 28 : 98}px` }}
                   >
+                    <div
+                      ref={stageRef}
+                      className="side-scroller-stage"
+                      style={{
+                        width: stageSize.width,
+                        height: stageSize.height,
+                        aspectRatio: `${viewportWidth} / ${viewportHeight}`,
+                        background: hasVisibleBackgroundImage ? undefined : "#000",
+                      }}
+                      onClick={event => {
+                        const target = event.target as HTMLElement;
+                        if (!target.closest(".scene-sprite") && !target.closest(".scene-background-transform") && !target.closest(".interaction-zone-outline")) clearSceneSelection();
+                      }}
+                      onContextMenu={event => {
+                        const target = event.target as HTMLElement;
+                        if (target.closest(".scene-sprite") || target.closest(".scene-background-transform") || target.closest(".interaction-zone-outline")) return;
+                        if (backgroundLayer) openSceneLayerContextMenu(event, backgroundLayer);
+                      }}
+                      onPointerMove={stagePointerMove}
+                      onPointerUp={() => { dragRef.current = null; resizeRef.current = null; zoneDragRef.current = null; zoneResizeRef.current = null; }}
+                      onPointerLeave={() => { dragRef.current = null; resizeRef.current = null; zoneDragRef.current = null; zoneResizeRef.current = null; }}
+                    >
                   {backgroundLayer?.visible && (() => {
                     const baseWidth = backgroundLayer.width || scene.width;
                     const baseHeight = backgroundLayer.height || scene.height;
@@ -2895,7 +3907,7 @@ export default function App() {
                             opacity: backgroundLayer.opacity,
                             zIndex: backgroundLayer.zIndex,
                             filter: sceneFilter(scene),
-                            backgroundColor: backgroundLayer.color || "#08070d",
+                            backgroundColor: backgroundLayer.imageUrl ? (backgroundLayer.color || "#08070d") : "#000",
                           }}
                         >
                           {backgroundLayer.imageUrl ? (
@@ -2908,13 +3920,7 @@ export default function App() {
                                 backgroundPosition: backgroundLayer.position || "center center",
                               }}
                             />
-                          ) : (
-                            <>
-                              <div className="sky-band" style={{ background: backgroundLayer.color || undefined, opacity: backgroundLayer.opacity }} />
-                              <div className="mountain-band back" />
-                              <div className="mountain-band front" />
-                            </>
-                          )}
+                          ) : null}
                         </div>
                         {!backgroundLayer.locked && (
                           <div
@@ -2930,7 +3936,9 @@ export default function App() {
                             onClick={event => {
                               event.stopPropagation();
                               setSelectedLayerId(backgroundLayer.id);
+                              setSelectedInteractionZoneLayerId(null);
                             }}
+                            onContextMenu={event => openSceneLayerContextMenu(event, backgroundLayer)}
                           >
                             {backgroundLayer.id === selectedLayerId && (
                               <>
@@ -3014,19 +4022,19 @@ export default function App() {
                               zIndex: layer.zIndex,
                               opacity: hotspotOpacity,
                             }}
-                            onPointerDown={event => stagePointerDown(event, layer)}
+                            onPointerDown={event => {
+                              stagePointerDown(event, layer);
+                              setActiveSprite(layerSprite);
+                              setActiveFrame(0);
+                            }}
                             onClick={event => {
                               event.stopPropagation();
                               setSelectedLayerId(layer.id);
-                              if (asset.id === "asset_scene_backpack_ui") {
-                                setIsBackpackOpen(value => !value);
-                                setNotice("Backpack inventory toggled.");
-                              }
-                              if (mouseClip) updateSceneLayer(layer.id, { activeAnimationId: mouseClip.id });
-                              setActiveSprite(mouseClip?.sprite || layerSprite);
+                              setActiveSprite(layerSprite);
                               setActiveFrame(0);
-                              setIsPlaying(true);
-                              if (mouseClip) setNotice(`Mouse triggered action: ${mouseClip.name}`);
+                            }}
+                            onContextMenu={event => {
+                              openSceneLayerContextMenu(event, layer);
                             }}
                           >
                             <div
@@ -3034,8 +4042,9 @@ export default function App() {
                               style={{ filter: sceneLayerRenderFilter(scene, layer, asset) }}
                               dangerouslySetInnerHTML={{ __html: frame }}
                             />
-                          {layer.id === selectedLayerId && (
+                          {layer.id === selectedLayerId && selectedInteractionZoneLayerId !== layer.id && (
                             <>
+                              <span className="scene-selection-label">{layer.name}</span>
                               <span
                                 className="resize-handle nw"
                                 title="Drag to resize"
@@ -3059,9 +4068,9 @@ export default function App() {
                             </>
                           )}
                           </div>
-                          {layer.id === selectedLayerId && zone && interaction?.enabled && (
+                          {zone && interaction?.enabled && (
                             <div
-                              className="interaction-zone-outline"
+                              className={`interaction-zone-outline ${selectedInteractionZoneLayerId === layer.id ? "selected" : ""} ${selectedLayerId === layer.id ? "owner-selected" : ""}`}
                               style={{
                                 left: (zone.left - scene.cameraX * (layer.parallax ?? 1)) * stageScaleX,
                                 top: zone.top * stageScaleY,
@@ -3070,25 +4079,38 @@ export default function App() {
                                 zIndex: layer.zIndex + 5,
                               }}
                               onPointerDown={event => startInteractionZoneDrag(event, layer, interaction)}
-                              onClick={event => event.stopPropagation()}
+                              onClick={event => {
+                                event.stopPropagation();
+                                setSelectedLayerId(layer.id);
+                                setSelectedInteractionZoneLayerId(layer.id);
+                                setActiveSprite(layerSprite);
+                                setActiveFrame(0);
+                              }}
+                              onContextMenu={event => {
+                                openSceneLayerContextMenu(event, layer, "interaction-zone");
+                              }}
                             >
-                              <span>Interaction Zone</span>
-                              <i
-                                className="interaction-zone-handle nw"
-                                onPointerDown={event => startInteractionZoneResize(event, layer, asset, interaction, "nw")}
-                              />
-                              <i
-                                className="interaction-zone-handle ne"
-                                onPointerDown={event => startInteractionZoneResize(event, layer, asset, interaction, "ne")}
-                              />
-                              <i
-                                className="interaction-zone-handle sw"
-                                onPointerDown={event => startInteractionZoneResize(event, layer, asset, interaction, "sw")}
-                              />
-                              <i
-                                className="interaction-zone-handle se"
-                                onPointerDown={event => startInteractionZoneResize(event, layer, asset, interaction, "se")}
-                              />
+                              {selectedInteractionZoneLayerId === layer.id && (
+                                <>
+                                  <span>Interaction Zone</span>
+                                  <i
+                                    className="interaction-zone-handle nw"
+                                    onPointerDown={event => startInteractionZoneResize(event, layer, asset, interaction, "nw")}
+                                  />
+                                  <i
+                                    className="interaction-zone-handle ne"
+                                    onPointerDown={event => startInteractionZoneResize(event, layer, asset, interaction, "ne")}
+                                  />
+                                  <i
+                                    className="interaction-zone-handle sw"
+                                    onPointerDown={event => startInteractionZoneResize(event, layer, asset, interaction, "sw")}
+                                  />
+                                  <i
+                                    className="interaction-zone-handle se"
+                                    onPointerDown={event => startInteractionZoneResize(event, layer, asset, interaction, "se")}
+                                  />
+                                </>
+                              )}
                             </div>
                           )}
                         </Fragment>
@@ -3133,7 +4155,433 @@ export default function App() {
                       <img src="/generated/scene_kit_backpack_panel.png" alt="Open backpack inventory" draggable={false} />
                     </button>
                   )}
+                    </div>
+                    <div ref={sceneGlobalControlsRef} className="scene-global-controls" aria-label="Scene global controls">
+                      <label>
+                        <span>Camera X {Math.round(scene.cameraX)} / {cameraMax}</span>
+                        <input type="range" min="0" max={cameraMax} step="1" value={scene.cameraX} onChange={event => setScene(prev => ({ ...prev, cameraX: Number(event.target.value) }))} />
+                      </label>
+                      <label>
+                        <span>Global Brightness {sceneLight.brightness.toFixed(2)}</span>
+                        <input type="range" min="0.45" max="1.35" step="0.01" value={sceneLight.brightness} onChange={event => updateSceneLighting({ brightness: Number(event.target.value) })} />
+                      </label>
+                      <label>
+                        <span>Magenta Ambience {Math.round(sceneLight.ambience * 100)}%</span>
+                        <input type="range" min="0" max="1" step="0.01" value={sceneLight.ambience} onChange={event => updateSceneLighting({ ambience: Number(event.target.value) })} />
+                      </label>
+                      <label>
+                        <span>Glow {sceneLight.glow.toFixed(2)}</span>
+                        <input type="range" min="0.5" max="1.8" step="0.01" value={sceneLight.glow} onChange={event => updateSceneLighting({ glow: Number(event.target.value) })} />
+                      </label>
+                      <label>
+                        <span>Vignette {Math.round(sceneLight.vignette * 100)}%</span>
+                        <input type="range" min="0" max="1" step="0.01" value={sceneLight.vignette} onChange={event => updateSceneLighting({ vignette: Number(event.target.value) })} />
+                      </label>
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    className="scene-resizer right"
+                    aria-label="Resize inspector panel"
+                    title="Drag to resize Inspector"
+                    onPointerDown={event => startScenePanelResize(event, "inspector")}
+                  />
+                  <aside className="scene-mini-panel inspector-rail">
+                    <div className="compact-inspector">
+                      <strong>
+                        {selectedInteractionZoneLayer
+                          ? "Interaction Zone"
+                          : selectedLayer ? (selectedLayerIsAvatar ? "Avatar Inspector" : "Item Inspector") : scene.name}
+                      </strong>
+                      <span>
+                        {selectedInteractionZoneLayer
+                          ? `Owner: ${selectedInteractionZoneLayer.name}`
+                          : selectedLayer ? `${selectedLayer.name} / ${selectedLayerAsset ? roleLabels[selectedLayerAsset.role] : selectedLayer.type} / z${selectedLayer.zIndex}` : `${scene.layers.length} layers`}
+                      </span>
+                      <button
+                        type="button"
+                        className="inspector-primary-action"
+                        onClick={downloadSelectedSceneItem}
+                        disabled={!selectedLayer}
+                      >
+                        <Download size={15} /> Download Selected Item
+                      </button>
+                      {selectedLayer && (
+                        <button
+                          type="button"
+                          className="inspector-secondary-action"
+                          onClick={() => updateSceneLayer(selectedLayer.id, { locked: !selectedLayer.locked })}
+                        >
+                          {selectedLayer.locked ? <Unlock size={15} /> : <Lock size={15} />}
+                          {selectedLayer.locked ? "Unlock Layer" : "Lock Layer"}
+                        </button>
+                      )}
+                      {selectedLayer && (
+                        <>
+                          <div className="compact-inspector-section">
+                            <em>Transform</em>
+                            <label>Scale {selectedLayer.scale.toFixed(2)}</label>
+                            <input type="range" min="0.05" max="2.5" step="0.01" value={selectedLayer.scale} onChange={event => updateSceneLayer(selectedLayer.id, { scale: Number(event.target.value) })} disabled={selectedLayer.locked || selectedInteractionZoneLayerId === selectedLayer.id} />
+                            <label>Opacity {Math.round(selectedLayer.opacity * 100)}%</label>
+                            <input type="range" min="0.1" max="1" step="0.01" value={selectedLayer.opacity} onChange={event => updateSceneLayer(selectedLayer.id, { opacity: Number(event.target.value) })} disabled={selectedLayer.locked || selectedInteractionZoneLayerId === selectedLayer.id} />
+                          </div>
+
+                          {selectedInteractionZoneLayer && selectedInteractionZoneSettings && (
+                            <div className="compact-inspector-section interaction-zone-inspector">
+                              <em>Interaction Zone</em>
+                              <label>Zone X {selectedInteractionZoneSettings.zoneOffsetX || 0}px</label>
+                              <input type="range" min="-520" max="520" step="1" value={selectedInteractionZoneSettings.zoneOffsetX || 0} onChange={event => updateLayerInteraction(selectedInteractionZoneLayer.id, { zoneOffsetX: Number(event.target.value) })} disabled={selectedInteractionZoneLayer.locked} />
+                              <label>Zone Y {selectedInteractionZoneSettings.zoneOffsetY || 0}px</label>
+                              <input type="range" min="-360" max="360" step="1" value={selectedInteractionZoneSettings.zoneOffsetY || 0} onChange={event => updateLayerInteraction(selectedInteractionZoneLayer.id, { zoneOffsetY: Number(event.target.value) })} disabled={selectedInteractionZoneLayer.locked} />
+                              <div className="compact-dual-fields">
+                                <label>
+                                  Width
+                                  <input type="number" min="24" value={Math.round(selectedInteractionZoneSettings.zoneWidth || layerWorldBounds(selectedInteractionZoneLayer, selectedInteractionZoneAsset).width || 160)} onChange={event => updateLayerInteraction(selectedInteractionZoneLayer.id, { zoneWidth: Number(event.target.value) })} disabled={selectedInteractionZoneLayer.locked} />
+                                </label>
+                                <label>
+                                  Height
+                                  <input type="number" min="24" value={Math.round(selectedInteractionZoneSettings.zoneHeight || layerWorldBounds(selectedInteractionZoneLayer, selectedInteractionZoneAsset).height || 120)} onChange={event => updateLayerInteraction(selectedInteractionZoneLayer.id, { zoneHeight: Number(event.target.value) })} disabled={selectedInteractionZoneLayer.locked} />
+                                </label>
+                              </div>
+                              <span>Drag the zone directly on the scene to place it independently.</span>
+                            </div>
+                          )}
+
+                          {isSceneVisualLayer(selectedLayer) && selectedLayerIsAvatar && (
+                            <div className="compact-inspector-section avatar-inspector-section">
+                              <em>Avatar</em>
+                              <label>Walk Speed {walkSpeed}px/s</label>
+                              <input type="range" min="40" max="260" step="5" value={walkSpeed} onChange={event => setWalkSpeed(Number(event.target.value))} disabled={selectedLayer.locked} />
+                              <label className="compact-toggle">
+                                <input type="checkbox" checked={isPlaying} onChange={event => setIsPlaying(event.target.checked)} />
+                                Preview animation
+                              </label>
+                            </div>
+                          )}
+
+                          {isSceneVisualLayer(selectedLayer) && !selectedLayerIsAvatar && (
+                            <div className="compact-inspector-section item-inspector-section">
+                              <em>Item</em>
+                              <label>Layer Type</label>
+                              <select value={selectedLayer.type} onChange={event => updateSceneLayer(selectedLayer.id, { type: event.target.value as SceneLayer["type"] })} disabled={selectedLayer.locked}>
+                                <option value="sprite">Sprite</option>
+                                <option value="effect">Effect</option>
+                                <option value="foreground">Foreground</option>
+                                <option value="background">Background</option>
+                              </select>
+                              <label>Parallax {(selectedLayer.parallax ?? 1).toFixed(2)}</label>
+                              <input type="range" min="0" max="1.25" step="0.01" value={selectedLayer.parallax ?? 1} onChange={event => updateSceneLayer(selectedLayer.id, { parallax: Number(event.target.value) })} disabled={selectedLayer.locked} />
+                            </div>
+                          )}
+
+                          {isSceneVisualLayer(selectedLayer) && selectedLayerSprite && (
+                            <div className="compact-inspector-section spritesheet-inspector-section">
+                              <div className="spritesheet-section-heading">
+                                <em>Spritesheet</em>
+                                <button
+                                  type="button"
+                                  onClick={() => selectedLayerAsset && saveAssetMetadata(selectedLayerAsset.id)}
+                                  disabled={!selectedLayerAsset || !selectedAssetEditable}
+                                >
+                                  <Save size={13} /> Save
+                                </button>
+                              </div>
+
+                              <div className="spritesheet-param-grid">
+                                <span>Frames <strong>{selectedLayerSpriteFrameCount}</strong></span>
+                                <span>Frame <strong>{selectedLayerFrameSize[0]} x {selectedLayerFrameSize[1]}</strong></span>
+                                <span>Sheet <strong>{selectedLayerSpriteSheetSize.join(" x ") || "SVG"}</strong></span>
+                                <span>Grid <strong>{selectedLayerSpriteColumns} x {selectedLayerSpriteRows}</strong></span>
+                              </div>
+
+                              <div className="spritesheet-preview-controls">
+                                <button type="button" onClick={() => { setIsPlaying(value => !value); setActiveSprite(selectedLayerSprite); }}>
+                                  {isPlaying ? <Pause size={13} /> : <Play size={13} />} {isPlaying ? "Pause" : "Play"}
+                                </button>
+                                <button type="button" onClick={() => { setActiveSprite(selectedLayerSprite); setActiveFrame(0); setIsPlaying(true); }}>
+                                  Restart
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={!selectedLayerSpriteSource}
+                                  onClick={() => selectedLayerSpriteSource && downloadUrl(selectedLayerSpriteSource, `spritesheet_${safeName(selectedLayerSprite.characterName)}.png`)}
+                                >
+                                  <Download size={13} /> PNG
+                                </button>
+                              </div>
+
+                              <label>Preview FPS {selectedLayerClipFps}</label>
+                              <input
+                                type="range"
+                                min="1"
+                                max="60"
+                                step="1"
+                                value={selectedLayerClipFps}
+                                onChange={event => updateSelectedSpritesheetFps(Number(event.target.value))}
+                              />
+
+                              {selectedLayerSprite.frames.length ? (
+                                <>
+                                  <label>Current Frame {selectedLayerSpriteFrameIndex + 1} / {selectedLayerSpriteFrameCount}</label>
+                                  <input
+                                    type="range"
+                                    min="0"
+                                    max={Math.max(0, selectedLayerSprite.frames.length - 1)}
+                                    step="1"
+                                    value={selectedLayerSpriteFrameIndex}
+                                    onChange={event => {
+                                      setIsPlaying(false);
+                                      setActiveFrame(Number(event.target.value));
+                                    }}
+                                  />
+                                  <div className="spritesheet-frame-strip">
+                                    {selectedLayerSprite.frames.slice(0, 24).map((frame, frameIndex) => {
+                                      const frameThumbStyle = spritesheetFrameThumbStyle(selectedLayerSprite, frameIndex);
+                                      return (
+                                        <button
+                                          key={`${selectedLayerSprite.id}_${frameIndex}`}
+                                          type="button"
+                                          className={frameIndex === selectedLayerSpriteFrameIndex ? "active" : ""}
+                                          style={{ aspectRatio: `${selectedLayerFrameSize[0]} / ${selectedLayerFrameSize[1]}` }}
+                                          onClick={() => {
+                                            setIsPlaying(false);
+                                            setActiveSprite(selectedLayerSprite);
+                                            setActiveFrame(frameIndex);
+                                          }}
+                                          title={`Frame ${frameIndex + 1}`}
+                                        >
+                                          {frameThumbStyle ? (
+                                            <span className="spritesheet-frame-thumb" style={frameThumbStyle} />
+                                          ) : (
+                                            <span dangerouslySetInnerHTML={{ __html: frame }} />
+                                          )}
+                                        </button>
+                                      );
+                                    })}
+                                    {selectedLayerSprite.frames.length > 24 && <i>+{selectedLayerSprite.frames.length - 24}</i>}
+                                  </div>
+                                </>
+                              ) : null}
+
+                              {selectedLayerAsset && (
+                                <>
+                                  <div className="compact-dual-fields">
+                                    <label>
+                                      Asset Name
+                                      <input
+                                        value={selectedLayerAsset.name}
+                                        disabled={!selectedAssetEditable}
+                                        onChange={event => updateAssetMetadata(selectedLayerAsset.id, { name: event.target.value })}
+                                      />
+                                    </label>
+                                    <label>
+                                      Role
+                                      <select
+                                        value={selectedLayerAsset.role}
+                                        disabled={!selectedAssetEditable}
+                                        onChange={event => updateAssetMetadata(selectedLayerAsset.id, { role: event.target.value as AssetRole })}
+                                      >
+                                        {Object.entries(roleLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                                      </select>
+                                    </label>
+                                  </div>
+                                  <label>Sprite Name</label>
+                                  <input
+                                    value={selectedLayerSprite.characterName}
+                                    disabled={!selectedAssetEditable}
+                                    onChange={event => updateSelectedSpriteMetadata({ characterName: event.target.value })}
+                                  />
+                                </>
+                              )}
+
+                              {selectedLayerAsset?.animations?.length ? (
+                                <>
+                                  <label>Clip</label>
+                                  <div className="spritesheet-clip-buttons">
+                                    {selectedLayerAsset.animations.map(clip => (
+                                      <button
+                                        key={clip.id}
+                                        type="button"
+                                        className={clip.id === selectedLayerClip?.id ? "active" : ""}
+                                        onClick={() => setLayerAnimation(selectedLayer.id, clip)}
+                                      >
+                                        {clipButtonText(clip)}
+                                      </button>
+                                    ))}
+                                  </div>
+                                  <select
+                                    value={selectedLayer.activeAnimationId || selectedLayerAsset.defaultAnimationId || selectedLayerClip?.id || ""}
+                                    onChange={event => {
+                                      const clip = selectedLayerAsset.animations?.find(item => item.id === event.target.value);
+                                      if (clip) setLayerAnimation(selectedLayer.id, clip);
+                                    }}
+                                  >
+                                    {selectedLayerAsset.animations.map(clip => (
+                                      <option key={clip.id} value={clip.id}>{clipButtonText(clip)}</option>
+                                    ))}
+                                  </select>
+                                  {selectedLayerClip && (
+                                    <>
+                                      <label>Clip Name</label>
+                                      <input
+                                        value={selectedLayerClip.name}
+                                        disabled={!selectedAssetEditable}
+                                        onChange={event => updateAssetClipMetadata(selectedLayerAsset.id, selectedLayerClip.id, { name: event.target.value })}
+                                      />
+                                      <div className="compact-dual-fields">
+                                        <label>
+                                          Action
+                                          <input
+                                            value={selectedLayerClip.actionName}
+                                            disabled={!selectedAssetEditable}
+                                            onChange={event => updateAssetClipMetadata(selectedLayerAsset.id, selectedLayerClip.id, { actionName: event.target.value }, { actionName: event.target.value })}
+                                          />
+                                        </label>
+                                        <label>
+                                          Direction
+                                          <select
+                                            value={selectedLayerClip.direction}
+                                            disabled={!selectedAssetEditable}
+                                            onChange={event => updateAssetClipMetadata(selectedLayerAsset.id, selectedLayerClip.id, { direction: event.target.value as AnimationClip["direction"] })}
+                                          >
+                                            <option value="none">None</option>
+                                            <option value="left">Left</option>
+                                            <option value="right">Right</option>
+                                          </select>
+                                        </label>
+                                      </div>
+                                      <div className="compact-dual-fields">
+                                        <label>
+                                          Trigger
+                                          <select
+                                            value={selectedLayerClip.binding?.triggerType || selectedLayerAsset.binding.triggerType}
+                                            disabled={!selectedAssetEditable}
+                                            onChange={event => updateAssetClipMetadata(selectedLayerAsset.id, selectedLayerClip.id, {}, { triggerType: event.target.value as ActionTriggerType })}
+                                          >
+                                            {Object.entries(triggerLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                                          </select>
+                                        </label>
+                                        <label>
+                                          Value
+                                          <input
+                                            value={selectedLayerClip.binding?.triggerValue || selectedLayerAsset.binding.triggerValue}
+                                            disabled={!selectedAssetEditable}
+                                            onChange={event => updateAssetClipMetadata(selectedLayerAsset.id, selectedLayerClip.id, {}, { triggerValue: event.target.value })}
+                                          />
+                                        </label>
+                                      </div>
+                                      <label>Game State</label>
+                                      <input
+                                        value={selectedLayerClip.binding?.gameState || selectedLayerAsset.binding.gameState}
+                                        disabled={!selectedAssetEditable}
+                                        onChange={event => updateAssetClipMetadata(selectedLayerAsset.id, selectedLayerClip.id, {}, { gameState: event.target.value })}
+                                      />
+                                      <label className="compact-toggle">
+                                        <input
+                                          type="checkbox"
+                                          checked={selectedLayerClip.loop}
+                                          disabled={!selectedAssetEditable}
+                                          onChange={event => updateAssetClipMetadata(selectedLayerAsset.id, selectedLayerClip.id, { loop: event.target.checked })}
+                                        />
+                                        Loop clip
+                                      </label>
+                                      <button
+                                        type="button"
+                                        className="inspector-secondary-action"
+                                        disabled={!selectedAssetEditable}
+                                        onClick={() => updateAssetMetadata(selectedLayerAsset.id, { defaultAnimationId: selectedLayerClip.id })}
+                                      >
+                                        Set As Default Clip
+                                      </button>
+                                    </>
+                                  )}
+                                </>
+                              ) : (
+                                <span>Static sprite object: one frame, no animation clip.</span>
+                              )}
+
+                              <div className="spritesheet-grid-editor">
+                                <em>Frame Grid</em>
+                                <div className="compact-dual-fields">
+                                  <label>
+                                    Frame W
+                                    <input
+                                      type="number"
+                                      min="1"
+                                      value={selectedLayerFrameSize[0]}
+                                      disabled={!selectedLayerSpriteEditableGrid}
+                                      onChange={event => rebuildSelectedSpritesheetGrid({ frameWidth: Number(event.target.value) })}
+                                    />
+                                  </label>
+                                  <label>
+                                    Frame H
+                                    <input
+                                      type="number"
+                                      min="1"
+                                      value={selectedLayerFrameSize[1]}
+                                      disabled={!selectedLayerSpriteEditableGrid}
+                                      onChange={event => rebuildSelectedSpritesheetGrid({ frameHeight: Number(event.target.value) })}
+                                    />
+                                  </label>
+                                </div>
+                                <div className="compact-dual-fields">
+                                  <label>
+                                    Frames
+                                    <input
+                                      type="number"
+                                      min="1"
+                                      value={selectedLayerSpriteFrameCount}
+                                      disabled={!selectedLayerSpriteEditableGrid}
+                                      onChange={event => rebuildSelectedSpritesheetGrid({ frameCount: Number(event.target.value) })}
+                                    />
+                                  </label>
+                                  <label>
+                                    Columns
+                                    <input
+                                      type="number"
+                                      min="1"
+                                      value={selectedLayerSpriteColumns}
+                                      disabled={!selectedLayerSpriteEditableGrid}
+                                      onChange={event => rebuildSelectedSpritesheetGrid({ columns: Number(event.target.value) })}
+                                    />
+                                  </label>
+                                </div>
+                                <span>
+                                  {selectedLayerSpriteEditableGrid
+                                    ? `Source ${selectedLayerSpriteSheetSize[0]} x ${selectedLayerSpriteSheetSize[1]} / ${selectedLayerSpriteRows} rows`
+                                    : selectedAssetEditable ? "Static images and SVG assets do not need grid slicing." : "Read-only asset. Import a copy to edit grid slicing."}
+                                </span>
+                              </div>
+
+                              {!selectedAssetEditable && (
+                                <span>Built-in spritesheet metadata is read-only. Imported assets can edit these values.</span>
+                              )}
+                            </div>
+                          )}
+
+                          {isSceneVisualLayer(selectedLayer) && !selectedLayer.locked && (
+                            <div className="compact-inspector-section">
+                              <em>Lighting</em>
+                              <div className="compact-action-row">
+                                <button type="button" onClick={applyNeonLightingToSelectedLayer}>Neon</button>
+                                <button type="button" onClick={clearLightingFromSelectedLayer}>Off</button>
+                              </div>
+                              <label>Brightness {selectedLayerLight.brightness.toFixed(2)}</label>
+                              <input type="range" min="0.25" max="1.35" step="0.01" value={selectedLayerLight.brightness} onChange={event => updateSelectedLayerLighting({ brightness: Number(event.target.value), preset: "neon-station" })} />
+                              <label>Contrast {selectedLayerLight.contrast.toFixed(2)}</label>
+                              <input type="range" min="0.55" max="1.55" step="0.01" value={selectedLayerLight.contrast} onChange={event => updateSelectedLayerLighting({ contrast: Number(event.target.value), preset: "neon-station" })} />
+                              <label>Saturation {selectedLayerLight.saturate.toFixed(2)}</label>
+                              <input type="range" min="0.25" max="1.5" step="0.01" value={selectedLayerLight.saturate} onChange={event => updateSelectedLayerLighting({ saturate: Number(event.target.value), preset: "neon-station" })} />
+                              <label>Edge Light {Math.round(selectedLayerLight.edgeLightOpacity * 100)}%</label>
+                              <input type="range" min="0" max="0.75" step="0.01" value={selectedLayerLight.edgeLightOpacity} onChange={event => updateSelectedLayerLighting({ edgeLightOpacity: Number(event.target.value), preset: "neon-station" })} />
+                              <label>Contact Shadow {Math.round(selectedLayerShadow.opacity * 100)}%</label>
+                              <input type="range" min="0" max="1" step="0.01" value={selectedLayerShadow.opacity} onChange={event => updateSelectedLayerShadow({ opacity: Number(event.target.value), enabled: Number(event.target.value) > 0 })} />
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </aside>
                 </div>
                 <div className="scene-toolbar">
                   <input
@@ -3431,7 +4879,7 @@ export default function App() {
               <div className="sheet-panel">
                 {sheetDataUrl ? (
                   <>
-                    <div className="sheet-info">{activeSprite.sheetSize?.join(" x ") || `${frameW * sheetColumns} x ${frameH * Math.ceil(activeSprite.frames.length / sheetColumns)}`} · frame {frameW} x {frameH}px · {activeSprite.frames.length} frames</div>
+                    <div className="sheet-info">{activeSprite.sheetSize?.join(" x ") || `${frameW * sheetColumns} x ${frameH * Math.ceil(activeSprite.frames.length / sheetColumns)}`} / frame {frameW} x {frameH}px / {activeSprite.frames.length} frames</div>
                     <img src={sheetDataUrl} alt="spritesheet" />
                   </>
                 ) : <button onClick={compileSheet}>Generate Sheet Preview</button>}
@@ -3441,7 +4889,7 @@ export default function App() {
             {tab === "blueprint" && (
               <div className="source-panel">
                 <div><strong>Asset Library:</strong> {assets.length} confirmed assets, {scenes.length} saved scenes.</div>
-                <div><strong>Current Action:</strong> {activeSprite.characterName} · {activeSprite.frames.length} frames · {frameW} x {frameH}</div>
+                <div><strong>Current Action:</strong> {activeSprite.characterName} / {activeSprite.frames.length} frames / {frameW} x {frameH}</div>
                 <div><strong>Action Binding:</strong> {triggerLabels[binding.triggerType]} / {binding.triggerValue} / {binding.gameState}</div>
                 <div><strong>Layer Rules:</strong> Background, ground, character, effects, and foreground are separated into layers; character and effect layers can be dragged, resized, sorted, and hidden.</div>
                 <div><strong>Save Path:</strong> D:\2d-animation-spritesheet-generator\public\generated\game_asset_library.json</div>
@@ -3451,7 +4899,7 @@ export default function App() {
           </div>
         </section>
 
-        <aside className="panel right-panel">
+        <aside className="panel right-panel utility-panel">
           <section>
             <div className="section-title"><Film size={17} /> Motion Speed</div>
             <div className="layer-controls">
@@ -3568,6 +5016,7 @@ export default function App() {
                       className={`${layer.id === selectedLayerId ? "layer-row active" : "layer-row"} ${draggedLayerId === layer.id ? "dragging" : ""}`}
                       onClick={() => {
                         setSelectedLayerId(layer.id);
+                        setSelectedInteractionZoneLayerId(null);
                         const layerAsset = layer.assetId ? assetById.get(layer.assetId) : undefined;
                         const layerSprite = resolveAssetSprite(layerAsset, layer);
                         if (layerSprite) setActiveSprite(layerSprite);
@@ -3926,7 +5375,7 @@ export default function App() {
                     </button>
                     <div>
                       <strong>{asset.name}</strong>
-                      <span>{roleLabels[asset.role]} · {asset.animations?.length || 1} clips · {triggerLabels[asset.binding.triggerType]} {asset.binding.triggerValue}</span>
+                      <span>{roleLabels[asset.role]} / {asset.animations?.length || 1} clips / {triggerLabels[asset.binding.triggerType]} {asset.binding.triggerValue}</span>
                       <div className="asset-actions">
                         <button onClick={() => insertAssetLayer(asset)}><Plus size={13} /> Insert</button>
                         <button onClick={() => setActiveSprite(previewSprite)}><Play size={13} /> Preview</button>
@@ -3953,6 +5402,91 @@ export default function App() {
           </section>
         </aside>
       </main>
+      {sceneContextMenu && (() => {
+        const menuLayer = scene.layers.find(layer => layer.id === sceneContextMenu.layerId);
+        const isZoneMenu = sceneContextMenu.target === "interaction-zone";
+        const isEditableLayerMenu = Boolean(menuLayer && !isZoneMenu && isTransformableSceneLayer(menuLayer));
+        const isBackgroundMenu = Boolean(menuLayer && !isZoneMenu && menuLayer.type === "background");
+        const currentBackgroundLayer = scene.layers.find(layer => layer.type === "background");
+        const pasteNeedsUnlockedBackground = sceneClipboard?.layer.type === "background" && currentBackgroundLayer?.locked;
+        const copyDisabled = !isEditableLayerMenu;
+        const cutDisabled = !isEditableLayerMenu || Boolean(menuLayer?.locked) || menuLayer?.type === "background";
+        const pasteDisabled = !sceneClipboard || Boolean(pasteNeedsUnlockedBackground);
+        const duplicateDisabled = !isEditableLayerMenu || Boolean(menuLayer?.locked) || menuLayer?.type === "background";
+        const deleteDisabled = !menuLayer || (Boolean(menuLayer.locked) && !isBackgroundMenu);
+        const contextHint = (() => {
+          if (isZoneMenu) return "Select the owner item for copy, cut, paste, and duplicate.";
+          if (!menuLayer) return "No scene object selected.";
+          if (!isTransformableSceneLayer(menuLayer)) return "This layer cannot be copied or duplicated.";
+          if (menuLayer.type === "background") return "Delete clears the image and keeps the default black scene background.";
+          if (menuLayer.locked) return "Unlock before cutting, duplicating, or deleting.";
+          if (!sceneClipboard) return "Copy or cut an item before pasting.";
+          return "";
+        })();
+        return (
+          <div
+            className="scene-context-menu"
+            style={{ left: sceneContextMenu.x, top: sceneContextMenu.y }}
+            role="menu"
+            onPointerDown={event => {
+              event.preventDefault();
+              event.stopPropagation();
+            }}
+            onContextMenu={event => {
+              event.preventDefault();
+              event.stopPropagation();
+            }}
+          >
+            <div className="scene-context-menu-title">
+              {isZoneMenu ? "Interaction Zone" : menuLayer?.name || "Scene Object"}
+            </div>
+            <button
+              type="button"
+              role="menuitem"
+              disabled={copyDisabled}
+              onClick={() => menuLayer && copyLayerToSceneClipboard(menuLayer.id)}
+            >
+              <Copy size={14} /> Copy <kbd>Ctrl C</kbd>
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              disabled={cutDisabled}
+              onClick={() => menuLayer && cutLayerToSceneClipboard(menuLayer.id)}
+            >
+              <Scissors size={14} /> Cut <kbd>Ctrl X</kbd>
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              disabled={pasteDisabled}
+              onClick={pasteLayerFromSceneClipboard}
+            >
+              <Clipboard size={14} /> Paste <kbd>Ctrl V</kbd>
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              disabled={duplicateDisabled}
+              onClick={() => menuLayer && duplicateSceneLayer(menuLayer.id)}
+            >
+              <Copy size={14} /> Duplicate <kbd>Ctrl D</kbd>
+            </button>
+            <div className="scene-context-menu-separator" />
+            <button
+              type="button"
+              role="menuitem"
+              disabled={deleteDisabled}
+              onClick={() => deleteSceneObject(sceneContextMenu.layerId, sceneContextMenu.target)}
+            >
+              <Trash2 size={14} /> {isZoneMenu ? "Delete Interaction Zone" : "Delete"}
+            </button>
+            {contextHint && (
+              <span>{contextHint}</span>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }

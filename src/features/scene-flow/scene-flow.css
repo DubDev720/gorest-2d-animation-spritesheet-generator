@@ -1,0 +1,185 @@
+.scene-flow-toolbar {
+  position: absolute;
+  right: 28px;
+  top: 76px;
+  display: flex;
+  gap: 8px;
+}
+.scene-flow-toolbar button {
+  border-radius: 0;
+}
+.scene-flow-canvas {
+  min-height: calc(100vh - 208px);
+  display: block;
+  position: relative;
+  overflow: auto;
+}
+.simple-workspace .scene-flow-canvas {
+  min-height: calc(100vh - 58px);
+  height: calc(100vh - 58px);
+  padding-top: 64px;
+  background:
+    linear-gradient(rgba(47, 52, 56, .045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 52, 56, .045) 1px, transparent 1px),
+    #f6f9fb;
+  background-size: 32px 32px;
+  overflow: auto;
+}
+.scene-flow-rail {
+  width: max(100%, 2400px);
+  min-height: max(calc(100vh - 208px), 1400px);
+  position: relative;
+  user-select: none;
+}
+.simple-workspace .scene-flow-rail {
+  width: max(100%, 2800px);
+  min-height: max(calc(100vh - 58px), 1600px);
+}
+.scene-flow-node {
+  position: absolute;
+  width: 18.3%;
+  min-width: 150px;
+  min-height: 154px;
+  display: block;
+  padding: 0;
+  border: 2px solid #333;
+  border-radius: 0;
+  background: #fff;
+  color: #2c2c2c;
+  text-align: center;
+  box-shadow: none;
+  transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease;
+  z-index: 2;
+}
+.scene-flow-node.selected {
+  background: #fff;
+  border-color: #2f2bb8;
+  box-shadow: inset 0 0 0 1px #2f2bb8;
+  z-index: 4;
+}
+.scene-flow-node.current:not(.selected) {
+  border-color: #222;
+}
+.scene-flow-node.moving {
+  box-shadow: inset 0 0 0 1px #2f2bb8, 0 14px 28px rgba(23, 32, 42, .18);
+  cursor: grabbing;
+  transform: scale(1.015);
+  z-index: 6;
+}
+.scene-flow-node.resizing {
+  border-color: #2f2bb8;
+  box-shadow: inset 0 0 0 1px #2f2bb8, 0 10px 22px rgba(23, 32, 42, .14);
+  z-index: 7;
+}
+.scene-flow-node.placeholder {
+  color: #575757;
+  background: #fafafa;
+  border-style: dashed;
+}
+.scene-flow-open {
+  width: 100%;
+  min-height: 150px;
+  display: grid;
+  grid-template-rows: 82px auto auto;
+  gap: 5px;
+  padding: 8px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  cursor: grab;
+  touch-action: none;
+}
+.scene-flow-open:hover {
+  transform: none;
+}
+.scene-flow-open:active {
+  cursor: grabbing;
+}
+.scene-node-preview {
+  display: block;
+  width: 100%;
+  height: 82px;
+  border: 1px solid #333;
+  background-size: cover;
+  background-position: center;
+  filter: saturate(.82) contrast(.95);
+}
+.scene-flow-node strong,
+.scene-flow-node span {
+  display: block;
+}
+.scene-flow-node strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.scene-flow-node span {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.scene-node-resize-handle {
+  display: none;
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  width: 14px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: transparent;
+  touch-action: none;
+  cursor: ew-resize;
+  z-index: 6;
+}
+.scene-node-resize-handle::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  bottom: 18px;
+  left: 6px;
+  width: 2px;
+  background: #5862f5;
+  opacity: .85;
+}
+.scene-node-resize-handle.left {
+  left: -9px;
+}
+.scene-node-resize-handle.right {
+  right: -9px;
+}
+.scene-flow-node.selected .scene-node-resize-handle,
+.scene-flow-node.resizing .scene-node-resize-handle,
+.scene-flow-node:hover .scene-node-resize-handle {
+  display: block;
+}
+.scene-node-resize-handle:hover::after,
+.scene-node-resize-handle:focus-visible::after {
+  width: 3px;
+  background: #4550ee;
+}
+.scene-flow-empty-note {
+  position: absolute;
+  left: 24px;
+  bottom: 18px;
+  color: #555;
+  font-size: 12px;
+}
+
+@media (max-width: 940px) {
+  .scene-flow-toolbar {
+    position: static;
+    justify-content: flex-end;
+  }
+  .scene-flow-canvas { min-height: 520px; overflow: auto; }
+  .scene-flow-rail { width: max(900px, 180vw); }
+}

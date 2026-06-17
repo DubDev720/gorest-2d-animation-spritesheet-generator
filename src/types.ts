@@ -7,6 +7,7 @@
   prompt?: string;
   frames: string[]; // Standard XML SVG strings
   createdTime: string;
+  updatedTime?: string;
   isPreset: boolean;
   spritesheetPng?: string;
   rawSpritesheetPng?: string;
@@ -14,6 +15,8 @@
   proportionPolicy?: string;
   normalization?: string;
   inputReferenceInvariant?: string;
+  fps?: number;
+  gridColumns?: number;
   cellSize?: number;
   frameSize?: number[];
   sheetSize?: number[];
@@ -41,6 +44,7 @@ export interface AnimationClip {
   sprite: AnimationSprite;
   binding?: ActionBinding;
   loop: boolean;
+  fps?: number;
 }
 
 export interface GameAsset {

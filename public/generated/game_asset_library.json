@@ -1,6 +1,412 @@
 {
   "assets": [
     {
+      "id": "asset_wei_yang_talking_to_camera_16f",
+      "name": "Wei Yang / Talking to Camera 16f",
+      "role": "player",
+      "confirmed": true,
+      "savedTime": "2026-06-17T16:35:35.912Z",
+      "updatedTime": "2026-06-17T16:35:35.912Z",
+      "sprite": {
+        "id": "sprite_wei_yang_talking_to_camera_16f",
+        "characterName": "Wei Yang / Talking to Camera 16f",
+        "description": "Transparent 16-frame close-up talking loop. Front-facing camera pose with stable shoulders and mouth-shape animation.",
+        "frameCount": 16,
+        "style": "polished anime close-up talking portrait, transparent PNG spritesheet",
+        "prompt": "Wei Yang faces the camera and talks with stable upper-body framing, natural mouth shapes, and a subtle serious expression.",
+        "frames": [
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"0 0 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"420 0 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"840 0 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"1260 0 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"0 420 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"420 420 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"840 420 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"1260 420 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"0 840 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"420 840 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"840 840 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"1260 840 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"0 1260 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"420 1260 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"840 1260 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"1260 1260 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>"
+        ],
+        "createdTime": "2026-06-17T16:35:35.912Z",
+        "updatedTime": "2026-06-17T16:35:35.912Z",
+        "isPreset": false,
+        "spritesheetPng": "/generated/wei_yang_talking_to_camera_sheet.png",
+        "rawSpritesheetPng": "/generated/wei_yang_talking_to_camera_sheet.png",
+        "generationMode": "imagegen_chroma_key_alpha_matte_talking_loop",
+        "proportionPolicy": "Fixed front-facing close-up. Background removed from #ff00ff chroma key with soft alpha matte; 4x4 grid normalized to 420x420 cells.",
+        "fps": 8,
+        "gridColumns": 4,
+        "frameSize": [
+          420,
+          420
+        ],
+        "sheetSize": [
+          1680,
+          1680
+        ],
+        "rootAnchorPolicy": "centered portrait frame; stable face and shoulder position across speech frames",
+        "adaptiveFramePolicy": "4x4 fixed grid, 16 frames, no per-frame crop changes"
+      },
+      "animations": [
+        {
+          "id": "clip_wei_yang_talk_to_camera_loop",
+          "name": "Talk to camera loop",
+          "actionName": "talk",
+          "direction": "none",
+          "sprite": {
+            "id": "sprite_wei_yang_talking_to_camera_16f",
+            "characterName": "Wei Yang / Talking to Camera 16f",
+            "description": "Transparent 16-frame close-up talking loop. Front-facing camera pose with stable shoulders and mouth-shape animation.",
+            "frameCount": 16,
+            "style": "polished anime close-up talking portrait, transparent PNG spritesheet",
+            "prompt": "Wei Yang faces the camera and talks with stable upper-body framing, natural mouth shapes, and a subtle serious expression.",
+            "frames": [
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"0 0 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"420 0 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"840 0 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"1260 0 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"0 420 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"420 420 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"840 420 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"1260 420 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"0 840 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"420 840 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"840 840 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"1260 840 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"0 1260 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"420 1260 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"840 1260 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"420\" viewBox=\"1260 1260 420 420\" overflow=\"hidden\"><image href=\"/generated/wei_yang_talking_to_camera_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"1680\" preserveAspectRatio=\"none\"/></svg>"
+            ],
+            "createdTime": "2026-06-17T16:35:35.912Z",
+            "updatedTime": "2026-06-17T16:35:35.912Z",
+            "isPreset": false,
+            "spritesheetPng": "/generated/wei_yang_talking_to_camera_sheet.png",
+            "rawSpritesheetPng": "/generated/wei_yang_talking_to_camera_sheet.png",
+            "generationMode": "imagegen_chroma_key_alpha_matte_talking_loop",
+            "proportionPolicy": "Fixed front-facing close-up. Background removed from #ff00ff chroma key with soft alpha matte; 4x4 grid normalized to 420x420 cells.",
+            "fps": 8,
+            "gridColumns": 4,
+            "frameSize": [
+              420,
+              420
+            ],
+            "sheetSize": [
+              1680,
+              1680
+            ],
+            "rootAnchorPolicy": "centered portrait frame; stable face and shoulder position across speech frames",
+            "adaptiveFramePolicy": "4x4 fixed grid, 16 frames, no per-frame crop changes"
+          },
+          "binding": {
+            "actionName": "talk",
+            "triggerType": "auto",
+            "triggerValue": "dialogue",
+            "gameState": "dialogue.talking",
+            "notes": "Loop this clip while the character is speaking directly to the camera."
+          },
+          "loop": true,
+          "fps": 8
+        }
+      ],
+      "defaultAnimationId": "clip_wei_yang_talk_to_camera_loop",
+      "binding": {
+        "actionName": "talk",
+        "triggerType": "auto",
+        "triggerValue": "dialogue",
+        "gameState": "dialogue.talking",
+        "notes": "Loop this clip while the character is speaking directly to the camera."
+      },
+      "tags": [
+        "wei-yang",
+        "talking",
+        "dialogue",
+        "camera-facing",
+        "transparent",
+        "spritesheet",
+        "16-frame"
+      ]
+    },
+    {
+      "id": "asset_torii_wei_yang_head_raise_closeup",
+      "name": "Wei Yang / Torii Gate Head Raise Close-up",
+      "role": "player",
+      "confirmed": true,
+      "savedTime": "2026-06-17T10:31:32.292Z",
+      "updatedTime": "2026-06-17T15:59:38.361Z",
+      "sprite": {
+        "id": "sprite_torii_wei_yang_head_raise_closeup_16f",
+        "characterName": "Wei Yang / Torii Gate Head Raise Close-up",
+        "description": "Close-up upper-body spritesheet for Wei Yang slowly lifting her head at a Shinto torii gate entrance.",
+        "frameCount": 16,
+        "style": "anime close-up, dusk Shinto shrine entrance lighting, subtle slow head raise",
+        "prompt": "Close-up girl slowly raises her head in front of a Shinto torii gate entrance.",
+        "frames": [
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"0 0 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"420 0 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"840 0 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"1260 0 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"0 560 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"420 560 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"840 560 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"1260 560 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"0 1120 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"420 1120 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"840 1120 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"1260 1120 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"0 1680 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"420 1680 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"840 1680 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"1260 1680 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>"
+        ],
+        "createdTime": "2026-06-17T10:31:32.292Z",
+        "updatedTime": "2026-06-17T15:59:38.361Z",
+        "isPreset": false,
+        "spritesheetPng": "/generated/torii_wei_yang_head_raise_closeup_sheet.png",
+        "rawSpritesheetPng": "/generated/torii_wei_yang_head_raise_closeup_sheet.png",
+        "generationMode": "imagegen_closeup_head_raise_16f_transparent_processed",
+        "proportionPolicy": "Approved close-up 4x4 head-raise spritesheet; local edge-connected gray background removal; transparent RGBA output; fixed 420x560 frame cells.",
+        "fps": 5,
+        "gridColumns": 4,
+        "frameSize": [
+          420,
+          560
+        ],
+        "sheetSize": [
+          1680,
+          2240
+        ],
+        "rootAnchorPolicy": "centered close-up; y-offset eases upward over 16 frames",
+        "adaptiveFramePolicy": "4x4 fixed grid, 16 frames"
+      },
+      "animations": [
+        {
+          "id": "clip_torii_wei_yang_head_raise",
+          "name": "Slow head raise close-up",
+          "actionName": "head_raise",
+          "direction": "none",
+          "sprite": {
+            "id": "sprite_torii_wei_yang_head_raise_closeup_16f",
+            "characterName": "Wei Yang / Torii Gate Head Raise Close-up",
+            "description": "Close-up upper-body spritesheet for Wei Yang slowly lifting her head at a Shinto torii gate entrance.",
+            "frameCount": 16,
+            "style": "anime close-up, dusk Shinto shrine entrance lighting, subtle slow head raise",
+            "prompt": "Close-up girl slowly raises her head in front of a Shinto torii gate entrance.",
+            "frames": [
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"0 0 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"420 0 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"840 0 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"1260 0 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"0 560 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"420 560 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"840 560 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"1260 560 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"0 1120 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"420 1120 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"840 1120 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"1260 1120 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"0 1680 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"420 1680 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"840 1680 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"420\" height=\"560\" viewBox=\"1260 1680 420 560\" overflow=\"hidden\"><image href=\"/generated/torii_wei_yang_head_raise_closeup_sheet.png\" x=\"0\" y=\"0\" width=\"1680\" height=\"2240\" preserveAspectRatio=\"none\"/></svg>"
+            ],
+            "createdTime": "2026-06-17T10:31:32.292Z",
+            "updatedTime": "2026-06-17T15:59:38.361Z",
+            "isPreset": false,
+            "spritesheetPng": "/generated/torii_wei_yang_head_raise_closeup_sheet.png",
+            "rawSpritesheetPng": "/generated/torii_wei_yang_head_raise_closeup_sheet.png",
+            "generationMode": "imagegen_closeup_head_raise_16f_transparent_processed",
+            "proportionPolicy": "Approved close-up 4x4 head-raise spritesheet; local edge-connected gray background removal; transparent RGBA output; fixed 420x560 frame cells.",
+            "fps": 5,
+            "gridColumns": 4,
+            "frameSize": [
+              420,
+              560
+            ],
+            "sheetSize": [
+              1680,
+              2240
+            ],
+            "rootAnchorPolicy": "centered close-up; y-offset eases upward over 16 frames",
+            "adaptiveFramePolicy": "4x4 fixed grid, 16 frames"
+          },
+          "binding": {
+            "actionName": "head_raise",
+            "triggerType": "auto",
+            "triggerValue": "scene-start",
+            "gameState": "torii.head_raise",
+            "notes": "Autoplay close-up: the supplied Wei Yang spritesheet is cropped to upper body and eased upward over 16 frames for a slow head-raise moment."
+          },
+          "loop": false,
+          "fps": 5
+        }
+      ],
+      "defaultAnimationId": "clip_torii_wei_yang_head_raise",
+      "binding": {
+        "actionName": "head_raise",
+        "triggerType": "auto",
+        "triggerValue": "scene-start",
+        "gameState": "torii.head_raise",
+        "notes": "Autoplay close-up: the supplied Wei Yang spritesheet is cropped to upper body and eased upward over 16 frames for a slow head-raise moment."
+      },
+      "tags": [
+        "wei-yang",
+        "torii",
+        "shinto-shrine",
+        "close-up",
+        "head-raise",
+        "spritesheet",
+        "autoplay"
+      ]
+    },
+    {
+      "id": "asset_wei_yang_front_idle_breathing_16f_walk_1781681346477",
+      "name": "Wei Yang - Front Idle Breathing 16f / walk",
+      "role": "player",
+      "confirmed": true,
+      "savedTime": "2026-06-17T07:29:06.477Z",
+      "updatedTime": "2026-06-17T07:29:06.480Z",
+      "sprite": {
+        "id": "codex_wei_yang_idle_front_breathe_16f_micro_fixedbox",
+        "characterName": "Wei Yang - Front Idle Breathing 16f",
+        "description": "16-frame front-facing idle breathing loop for the player standing still. Micro movement only, fixed 608x1055 frame, bottom anchored.",
+        "frameCount": 16,
+        "style": "HD anime front idle breathing spritesheet, transparent PNG, micro motion, fixed rectangular frames",
+        "prompt": "Use the confirmed standing front pose as the idle state. Generate only subtle breathing: tiny chest/body expansion, no walking, no pose drift, no foot movement, no per-frame crop.",
+        "frames": [
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"608 0 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1216 0 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1824 0 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 1055 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"608 1055 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1216 1055 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1824 1055 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 2110 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"608 2110 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1216 2110 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1824 2110 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 3165 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"608 3165 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1216 3165 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1824 3165 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>"
+        ],
+        "createdTime": "2026-06-10T20:50:00Z",
+        "isPreset": false,
+        "spritesheetPng": "/generated/wei_yang_idle_front_breathe_16f_sheet.png",
+        "rawSpritesheetPng": "/generated/wei_yang_idle_front_source_clean.png",
+        "generationMode": "codex_local_front_idle_micro_breathing_no_external_model",
+        "proportionPolicy": "uniform_scale_preserve_input_character_proportions",
+        "normalization": "fixed_608x1055_frame_box_no_per_frame_crop_no_nonuniform_scale_bottom_alpha_anchor_stable_micro_motion",
+        "inputReferenceInvariant": "static front standing pose is the not-moving player state; preserve character size, proportions, feet position, and center anchor across all 16 frames",
+        "cellSize": 608,
+        "frameSize": [
+          608,
+          1055
+        ],
+        "sheetSize": [
+          2432,
+          4220
+        ],
+        "rootAnchorPolicy": "bottom_alpha_foot_anchor_locked_feet_same_pixel_bottom_in_all_16_frames",
+        "adaptiveFramePolicy": "same 608x1055 animation frame as other Wei Yang clips; do not clamp to per-frame content bbox",
+        "continuityProtocol": "front_idle_breathing_16_frame_micro_loop_near_neighbor_frames_no_large_stride_or_pose_jump",
+        "sourceImage": "C:\\Users\\Zhang\\Downloads\\wei_yang_front_transparent.png",
+        "motionAmplitude": {
+          "horizontalScalePeak": 0.0032,
+          "verticalScalePeak": 0.0016,
+          "estimatedMaxPixelChange": "about 1-2 px; alpha foot bottom remains locked to the same pixel row"
+        }
+      },
+      "binding": {
+        "actionName": "walk",
+        "triggerType": "keyboard",
+        "triggerValue": "KeyD",
+        "gameState": "player.walk",
+        "notes": "Side-scroller character walks right with a compact stride."
+      },
+      "tags": [
+        "confirmed",
+        "side-scroller"
+      ]
+    },
+    {
+      "id": "asset_wei_yang_front_idle_breathing_16f_walk_1781681345304",
+      "name": "Wei Yang - Front Idle Breathing 16f / walk",
+      "role": "player",
+      "confirmed": true,
+      "savedTime": "2026-06-17T07:29:05.304Z",
+      "updatedTime": "2026-06-17T07:29:05.418Z",
+      "sprite": {
+        "id": "codex_wei_yang_idle_front_breathe_16f_micro_fixedbox",
+        "characterName": "Wei Yang - Front Idle Breathing 16f",
+        "description": "16-frame front-facing idle breathing loop for the player standing still. Micro movement only, fixed 608x1055 frame, bottom anchored.",
+        "frameCount": 16,
+        "style": "HD anime front idle breathing spritesheet, transparent PNG, micro motion, fixed rectangular frames",
+        "prompt": "Use the confirmed standing front pose as the idle state. Generate only subtle breathing: tiny chest/body expansion, no walking, no pose drift, no foot movement, no per-frame crop.",
+        "frames": [
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"608 0 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1216 0 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1824 0 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 1055 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"608 1055 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1216 1055 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1824 1055 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 2110 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"608 2110 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1216 2110 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1824 2110 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 3165 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"608 3165 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1216 3165 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"1824 3165 608 1055\" width=\"608\" height=\"1055\"><image href=\"/generated/wei_yang_idle_front_breathe_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2432\" height=\"4220\" preserveAspectRatio=\"none\"/></svg>"
+        ],
+        "createdTime": "2026-06-10T20:50:00Z",
+        "isPreset": false,
+        "spritesheetPng": "/generated/wei_yang_idle_front_breathe_16f_sheet.png",
+        "rawSpritesheetPng": "/generated/wei_yang_idle_front_source_clean.png",
+        "generationMode": "codex_local_front_idle_micro_breathing_no_external_model",
+        "proportionPolicy": "uniform_scale_preserve_input_character_proportions",
+        "normalization": "fixed_608x1055_frame_box_no_per_frame_crop_no_nonuniform_scale_bottom_alpha_anchor_stable_micro_motion",
+        "inputReferenceInvariant": "static front standing pose is the not-moving player state; preserve character size, proportions, feet position, and center anchor across all 16 frames",
+        "cellSize": 608,
+        "frameSize": [
+          608,
+          1055
+        ],
+        "sheetSize": [
+          2432,
+          4220
+        ],
+        "rootAnchorPolicy": "bottom_alpha_foot_anchor_locked_feet_same_pixel_bottom_in_all_16_frames",
+        "adaptiveFramePolicy": "same 608x1055 animation frame as other Wei Yang clips; do not clamp to per-frame content bbox",
+        "continuityProtocol": "front_idle_breathing_16_frame_micro_loop_near_neighbor_frames_no_large_stride_or_pose_jump",
+        "sourceImage": "C:\\Users\\Zhang\\Downloads\\wei_yang_front_transparent.png",
+        "motionAmplitude": {
+          "horizontalScalePeak": 0.0032,
+          "verticalScalePeak": 0.0016,
+          "estimatedMaxPixelChange": "about 1-2 px; alpha foot bottom remains locked to the same pixel row"
+        }
+      },
+      "binding": {
+        "actionName": "walk",
+        "triggerType": "keyboard",
+        "triggerValue": "KeyD",
+        "gameState": "player.walk",
+        "notes": "Side-scroller character walks right with a compact stride."
+      },
+      "tags": [
+        "confirmed",
+        "side-scroller"
+      ]
+    },
+    {
       "id": "asset_bedroom_old_fan",
       "name": "Chinese Horror Old Fan",
       "role": "prop",
@@ -1235,8 +1641,8 @@
   ],
   "scenes": [
     {
-      "id": "scene_cluttered_bedroom_horror_codex",
-      "name": "Cluttered Bedroom - Chinese Horror",
+      "id": "scene_copy_1781717497888_6hupwo",
+      "name": "Cluttered Bedroom - Chinese Horror - Complete Jun 17, 01:39 AM Copy 2",
       "width": 3840,
       "height": 720,
       "cameraX": 0,
@@ -1257,9 +1663,9 @@
           "name": "Chinese Horror Bedroom Background",
           "type": "background",
           "visible": true,
-          "locked": true,
+          "locked": false,
           "x": 0,
-          "y": 0,
+          "y": 720,
           "scale": 1,
           "zIndex": 0,
           "opacity": 1,
@@ -1267,7 +1673,9 @@
           "color": "#12100d",
           "imageUrl": "/generated/bedroom_chinese_horror_side_scroller_3840x720.png",
           "fit": "stretch",
-          "position": "left center"
+          "position": "left center",
+          "width": 3840,
+          "height": 720
         },
         {
           "id": "layer_bedroom_ground",
@@ -1671,17 +2079,113 @@
           }
         }
       ],
-      "savedTime": "2026-06-11T22:45:01Z",
-      "updatedTime": "2026-06-11T23:11:52Z",
+      "savedTime": "2026-06-17T17:31:37.888Z",
+      "updatedTime": "2026-06-17T17:31:37.893Z",
       "viewportWidth": 1280,
-      "viewportHeight": 720,
-      "viewportPreset": "desktop",
+      "viewportHeight": 718,
+      "viewportPreset": "custom",
       "state": {
         "has_key": false,
         "radio_on": false,
         "door_open": false,
         "visited_bedroom": true
       }
+    },
+    {
+      "id": "scene_torii_gate_head_raise",
+      "name": "Torii Gate - Slow Head Raise",
+      "width": 1920,
+      "height": 1080,
+      "viewportWidth": 1920,
+      "viewportHeight": 1080,
+      "viewportPreset": "custom",
+      "cameraX": 0,
+      "groundY": 1000,
+      "background": "torii_shrine_ground_topdown",
+      "lighting": {
+        "preset": "neon-station",
+        "brightness": 0.9,
+        "contrast": 1.08,
+        "saturate": 0.86,
+        "ambience": 0.24,
+        "vignette": 0.3,
+        "glow": 0.24
+      },
+      "state": {
+        "torii_head_raise_scene": true
+      },
+      "savedTime": "2026-06-17T10:31:32.292Z",
+      "updatedTime": "2026-06-17T16:06:15.040Z",
+      "layers": [
+        {
+          "id": "layer_torii_gate_background",
+          "name": "Horror Shinto Shrine Entrance Background",
+          "type": "background",
+          "visible": true,
+          "locked": true,
+          "x": 0,
+          "y": 1080,
+          "scale": 1,
+          "zIndex": 0,
+          "opacity": 1,
+          "parallax": 1,
+          "width": 1920,
+          "height": 1080,
+          "color": "#06111a",
+          "imageUrl": "/generated/horror_shinto_entrance_incense_1920x1080.png",
+          "fit": "stretch",
+          "position": "center center"
+        },
+        {
+          "id": "layer_torii_ground_reference",
+          "name": "Ground Reference",
+          "type": "ground",
+          "visible": false,
+          "locked": true,
+          "x": 0,
+          "y": 1000,
+          "scale": 1,
+          "zIndex": 10,
+          "opacity": 0.25,
+          "parallax": 1,
+          "color": "#25303b"
+        },
+        {
+          "id": "layer_torii_wei_yang_closeup",
+          "name": "Wei Yang Talking to Camera",
+          "type": "sprite",
+          "visible": true,
+          "locked": false,
+          "assetId": "asset_wei_yang_talking_to_camera_16f",
+          "activeAnimationId": "clip_wei_yang_talk_to_camera_loop",
+          "x": 590,
+          "y": 1050,
+          "scale": 1.78,
+          "zIndex": 70,
+          "opacity": 1,
+          "parallax": 1,
+          "shadow": {
+            "enabled": true,
+            "color": "rgba(0, 0, 0, 0.55)",
+            "opacity": 0.32,
+            "blur": 24,
+            "width": 0.78,
+            "height": 0.08,
+            "offsetX": 0,
+            "offsetY": 8
+          },
+          "lighting": {
+            "preset": "neon-station",
+            "brightness": 0.94,
+            "contrast": 1.06,
+            "saturate": 0.96,
+            "edgeLightColor": "#f0643a",
+            "edgeLightOpacity": 0.18,
+            "rimLightColor": "#6288d7",
+            "rimLightOpacity": 0.24
+          }
+        }
+      ]
     },
     {
       "id": "scene_side_scroller_demo",
@@ -1781,5 +2285,5 @@
       }
     }
   ],
-  "updatedTime": "2026-06-11T23:11:52Z"
+  "updatedTime": "2026-06-17T17:35:54.762Z"
 }
