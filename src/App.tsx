@@ -40,6 +40,7 @@ import {
 import { buildSceneFlowNodes, SceneFlowCanvas, type SceneFlowNode } from "./features/scene-flow";
 import { ModePicker } from "./features/mode-picker";
 import { buildSheetOnlyEntries, SheetOnlyGallery } from "./features/sheet-only-gallery";
+import { SpritesheetImporterPanel } from "./features/spritesheet-importer";
 import { fetchGameLibrary, fetchLatestSprite } from "./services/gameLibraryApi";
 import { fetchGeneratedAssets, type RepositoryGeneratedImage } from "./services/generatedAssetsApi";
 import {
@@ -2539,6 +2540,15 @@ export default function App() {
     if (triggerType === "auto") setImportLoop(true);
   };
 
+  const updateImportActionName = (nextActionName: string) => {
+    setImportActionName(nextActionName);
+    setImportGameState(prev =>
+      prev === defaultGameStateForTrigger(importTriggerType, importActionName)
+        ? defaultGameStateForTrigger(importTriggerType, nextActionName)
+        : prev
+    );
+  };
+
   const saveImportedSpritesheet = async (insertAfterSave = false) => {
     setError(null);
     if (!importSheetDataUrl) {
@@ -3559,95 +3569,40 @@ export default function App() {
             <button className="ghost-button full" onClick={insertActiveSprite}><Plus size={16} /> Insert Current Action into Scene</button>
           </section>
 
-          <section>
-            <div className="section-title"><Upload size={17} /> Import Spritesheet Animation</div>
-            <div className="binding-hint">
-              Add any complete spritesheet as a scene animation. Use Auto + Loop for ambient effects, or save mouse, keyboard, and state trigger metadata for later gameplay wiring.
-            </div>
-
-            <label>Spritesheet Image</label>
-            <input type="file" accept="image/png,image/webp,image/jpeg" onChange={handleImportFile} />
-            {importSheetSize && (
-              <div className="import-summary">
-                {importFileName || "Uploaded image"} / {importSheetSize[0]} x {importSheetSize[1]}px
-              </div>
-            )}
-
-            <label>Asset Name</label>
-            <input value={importAssetName} onChange={event => setImportAssetName(event.target.value)} />
-
-            <label>Action / Clip Name</label>
-            <input
-              value={importActionName}
-              onChange={event => {
-                const nextActionName = event.target.value;
-                setImportActionName(nextActionName);
-                setImportGameState(prev =>
-                  prev === defaultGameStateForTrigger(importTriggerType, importActionName)
-                    ? defaultGameStateForTrigger(importTriggerType, nextActionName)
-                    : prev
-                );
-              }}
-              placeholder="Example: steam_loop / door_open"
-            />
-
-            <div className="two-col">
-              <div>
-                <label>Frame Count</label>
-                <input type="number" min="1" value={importFrameCount} onChange={event => setImportFrameCount(Math.max(1, Number(event.target.value)))} />
-              </div>
-              <div>
-                <label>Columns</label>
-                <input type="number" min="1" value={importColumns} onChange={event => setImportColumns(Math.max(1, Number(event.target.value)))} />
-              </div>
-            </div>
-
-            <div className="two-col">
-              <div>
-                <label>Frame Width</label>
-                <input type="number" min="1" value={importFrameWidth} onChange={event => setImportFrameWidth(Math.max(1, Number(event.target.value)))} />
-              </div>
-              <div>
-                <label>Frame Height</label>
-                <input type="number" min="1" value={importFrameHeight} onChange={event => setImportFrameHeight(Math.max(1, Number(event.target.value)))} />
-              </div>
-            </div>
-            <button className="ghost-button full" type="button" onClick={() => inferImportedFrameSize()}>Infer Frame Size from Sheet</button>
-
-            <div className="two-col">
-              <div>
-                <label>Asset Role</label>
-                <select value={importRole} onChange={event => setImportRole(event.target.value as AssetRole)}>
-                  {Object.entries(roleLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                </select>
-              </div>
-              <div>
-                <label>Trigger Type</label>
-                <select value={importTriggerType} onChange={event => updateImportTriggerType(event.target.value as ActionTriggerType)}>
-                  {Object.entries(triggerLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                </select>
-              </div>
-            </div>
-
-            <label>Trigger Value</label>
-            <input value={importTriggerValue} onChange={event => setImportTriggerValue(event.target.value)} placeholder="auto / click / KeyF / state key" />
-
-            <label>Game State</label>
-            <input value={importGameState} onChange={event => setImportGameState(event.target.value)} />
-
-            <label>Tags</label>
-            <input value={importTagsText} onChange={event => setImportTagsText(event.target.value)} />
-
-            <label className="checkbox-line">
-              <input type="checkbox" checked={importLoop} onChange={event => setImportLoop(event.target.checked)} />
-              Loop this animation
-            </label>
-
-            <div className="button-row">
-              <button className="ghost-button" type="button" onClick={() => saveImportedSpritesheet(false)}><CheckCircle2 size={16} /> Save</button>
-              <button className="primary-button" type="button" onClick={() => saveImportedSpritesheet(true)}><Plus size={16} /> Save & Insert</button>
-            </div>
-          </section>
+          <SpritesheetImporterPanel
+            actionName={importActionName}
+            assetName={importAssetName}
+            columns={importColumns}
+            fileName={importFileName}
+            frameCount={importFrameCount}
+            frameHeight={importFrameHeight}
+            frameWidth={importFrameWidth}
+            gameState={importGameState}
+            importLoop={importLoop}
+            role={importRole}
+            roleLabels={roleLabels}
+            sheetSize={importSheetSize}
+            tagsText={importTagsText}
+            triggerLabels={triggerLabels}
+            triggerType={importTriggerType}
+            triggerValue={importTriggerValue}
+            onActionNameChange={updateImportActionName}
+            onAssetNameChange={setImportAssetName}
+            onColumnsChange={setImportColumns}
+            onFileChange={handleImportFile}
+            onFrameCountChange={setImportFrameCount}
+            onFrameHeightChange={setImportFrameHeight}
+            onFrameWidthChange={setImportFrameWidth}
+            onGameStateChange={setImportGameState}
+            onInferFrameSize={() => inferImportedFrameSize()}
+            onLoopChange={setImportLoop}
+            onRoleChange={setImportRole}
+            onSave={() => saveImportedSpritesheet(false)}
+            onSaveAndInsert={() => saveImportedSpritesheet(true)}
+            onTagsTextChange={setImportTagsText}
+            onTriggerTypeChange={updateImportTriggerType}
+            onTriggerValueChange={setImportTriggerValue}
+          />
 
           <section>
             <div className="section-title"><MousePointer2 size={17} /> Trigger Test</div>
