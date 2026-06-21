@@ -10,15 +10,12 @@ import {
   Keyboard,
   Layers,
   Lock,
-  Monitor,
   Map as MapIcon,
   Pause,
   Play,
   Plus,
   Save,
   Scissors,
-  Smartphone,
-  Tablet,
   Trash2,
   Unlock,
   Upload,
@@ -41,7 +38,7 @@ import { ModePicker } from "./features/mode-picker";
 import { buildSheetOnlyEntries, SheetOnlyGallery } from "./features/sheet-only-gallery";
 import { SpritesheetImporterPanel } from "./features/spritesheet-importer";
 import { WorkspaceStageHeader } from "./features/workspace-stage-header";
-import { GlobalSceneLightingPanel, MotionSpeedPanel } from "./features/workspace-right-panel";
+import { GlobalSceneLightingPanel, MotionSpeedPanel, SimulationScreenPanel } from "./features/workspace-right-panel";
 import { TriggerTestPanel, WorkspaceMessages } from "./features/workspace-sidebar";
 import { WorkspaceTopbar } from "./features/workspace-topbar";
 import { fetchGameLibrary, fetchLatestSprite } from "./services/gameLibraryApi";
@@ -335,12 +332,6 @@ function formatViewportRatio(width: number, height: number) {
   if (!width || !height) return "custom";
   const ratio = width / height;
   return ratio >= 1 ? `${ratio.toFixed(2)}:1` : `1:${(height / width).toFixed(2)}`;
-}
-
-function ViewportPresetIconView({ icon }: { icon: ViewportPresetIcon }) {
-  if (icon === "phone") return <Smartphone size={15} />;
-  if (icon === "tablet") return <Tablet size={15} />;
-  return <Monitor size={15} />;
 }
 
 function rgbaColor(hex: string, opacity: number) {
@@ -4874,53 +4865,21 @@ export default function App() {
             </section>
           )}
 
-          <section>
-            <div className="section-title"><Monitor size={17} /> Simulation Screen</div>
-            <div className="screen-frame-summary">
-              <strong>{Math.round(viewportWidth)} x {Math.round(viewportHeight)}</strong>
-              <span>{selectedViewportPreset?.label || "Custom"} / {viewportRatioLabel}</span>
-            </div>
-            <div className="device-preset-grid">
-              {VIEWPORT_PRESETS.map(preset => (
-                <button
-                  key={preset.id}
-                  type="button"
-                  className={scene.viewportPreset === preset.id ? "active" : ""}
-                  onClick={() => updateSceneFrame({ viewportWidth: preset.width, viewportHeight: preset.height, viewportPreset: preset.id })}
-                >
-                  <span className="device-preset-title"><ViewportPresetIconView icon={preset.icon} /> {preset.label}</span>
-                  <span className="device-preset-meta">{preset.width} x {preset.height} / {preset.note}</span>
-                </button>
-              ))}
-            </div>
-            <div className="two-col">
-              <div>
-                <label>Frame Width</label>
-                <input type="number" min="240" value={Math.round(viewportWidth)} onChange={event => updateSceneFrame({ viewportWidth: Number(event.target.value), viewportPreset: "custom" })} />
-              </div>
-              <div>
-                <label>Frame Height</label>
-                <input type="number" min="240" value={Math.round(viewportHeight)} onChange={event => updateSceneFrame({ viewportHeight: Number(event.target.value), viewportPreset: "custom" })} />
-              </div>
-            </div>
-            <label>Background Fit</label>
-            <select
-              value={backgroundLayer?.fit || "stretch"}
-              onChange={event => backgroundLayer && updateSceneLayer(backgroundLayer.id, { fit: event.target.value as SceneLayer["fit"] })}
-            >
-              <option value="stretch">Stretch to world</option>
-              <option value="cover">Cover frame</option>
-              <option value="contain">Contain frame</option>
-              <option value="tile">Tile</option>
-            </select>
-            <label>Background Position</label>
-            <input
-              value={backgroundLayer?.position || "left center"}
-              onChange={event => backgroundLayer && updateSceneLayer(backgroundLayer.id, { position: event.target.value })}
-              placeholder="left center / center center / 40% 50%"
-            />
-            <div className="control-hint">The scene world can stay wide while this frame controls the visible screen size for desktop, tablet, and phone previews.</div>
-          </section>
+          <SimulationScreenPanel
+            backgroundFit={backgroundLayer?.fit}
+            backgroundPosition={backgroundLayer?.position}
+            selectedViewportPresetLabel={selectedViewportPreset?.label || "Custom"}
+            viewportHeight={viewportHeight}
+            viewportPreset={scene.viewportPreset}
+            viewportPresets={VIEWPORT_PRESETS}
+            viewportRatioLabel={viewportRatioLabel}
+            viewportWidth={viewportWidth}
+            onBackgroundFitChange={fit => backgroundLayer && updateSceneLayer(backgroundLayer.id, { fit })}
+            onBackgroundPositionChange={position => backgroundLayer && updateSceneLayer(backgroundLayer.id, { position })}
+            onViewportHeightChange={height => updateSceneFrame({ viewportHeight: height, viewportPreset: "custom" })}
+            onViewportPresetChange={preset => updateSceneFrame({ viewportWidth: preset.width, viewportHeight: preset.height, viewportPreset: preset.id })}
+            onViewportWidthChange={width => updateSceneFrame({ viewportWidth: width, viewportPreset: "custom" })}
+          />
 
           <section>
             <div className="section-title"><Layers size={17} /> Layers</div>
