@@ -10,7 +10,7 @@ import {
   spriteGridRows,
 } from "./domain/sprites/spriteUtils";
 import { CurrentActionPanel } from "./features/current-action";
-import { SceneLightingStrip, SceneToolbar } from "./features/scene-editor";
+import { SceneGlobalControls, SceneLightingStrip, SceneToolbar } from "./features/scene-editor";
 import {
   SceneInspectorAvatarSection,
   SceneInspectorHeader,
@@ -3961,28 +3961,14 @@ export default function App() {
                     </button>
                   )}
                     </div>
-                    <div ref={sceneGlobalControlsRef} className="scene-global-controls" aria-label="Scene global controls">
-                      <label>
-                        <span>Camera X {Math.round(scene.cameraX)} / {cameraMax}</span>
-                        <input type="range" min="0" max={cameraMax} step="1" value={scene.cameraX} onChange={event => setScene(prev => ({ ...prev, cameraX: Number(event.target.value) }))} />
-                      </label>
-                      <label>
-                        <span>Global Brightness {sceneLight.brightness.toFixed(2)}</span>
-                        <input type="range" min="0.45" max="1.35" step="0.01" value={sceneLight.brightness} onChange={event => updateSceneLighting({ brightness: Number(event.target.value) })} />
-                      </label>
-                      <label>
-                        <span>Magenta Ambience {Math.round(sceneLight.ambience * 100)}%</span>
-                        <input type="range" min="0" max="1" step="0.01" value={sceneLight.ambience} onChange={event => updateSceneLighting({ ambience: Number(event.target.value) })} />
-                      </label>
-                      <label>
-                        <span>Glow {sceneLight.glow.toFixed(2)}</span>
-                        <input type="range" min="0.5" max="1.8" step="0.01" value={sceneLight.glow} onChange={event => updateSceneLighting({ glow: Number(event.target.value) })} />
-                      </label>
-                      <label>
-                        <span>Vignette {Math.round(sceneLight.vignette * 100)}%</span>
-                        <input type="range" min="0" max="1" step="0.01" value={sceneLight.vignette} onChange={event => updateSceneLighting({ vignette: Number(event.target.value) })} />
-                      </label>
-                    </div>
+                    <SceneGlobalControls
+                      ref={sceneGlobalControlsRef}
+                      cameraMax={cameraMax}
+                      cameraX={scene.cameraX}
+                      lighting={sceneLight}
+                      onCameraXChange={value => setScene(prev => ({ ...prev, cameraX: value }))}
+                      onLightingChange={updateSceneLighting}
+                    />
                   </div>
                   <button
                     type="button"
