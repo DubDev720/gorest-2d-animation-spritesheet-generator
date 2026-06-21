@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent, type 
 import { PRESET_SPRITES } from "./presets";
 import { isEditingTextTarget } from "./app/domEvents";
 import { downloadDataUrl, downloadJson, downloadUrl } from "./app/downloads";
+import { loadImageSize, readFileAsDataUrl } from "./app/fileInput";
 import type { AppMode, BackgroundMode, SheetOnlySelectionKind, WorkspaceTab } from "./app/types";
 import {
   DEFAULT_WALK_SPEED,
@@ -1116,7 +1117,7 @@ export default function App() {
     setNotice(`Inserted layer: ${asset.name}`);
   };
 
-  const handleLayerImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleLayerImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.currentTarget.value = "";
     if (!file) return;
@@ -1126,36 +1127,24 @@ export default function App() {
     }
 
     setError(null);
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = String(reader.result || "");
-      const image = new Image();
-      image.onload = async () => {
-        const width = Math.max(1, image.naturalWidth || image.width || 256);
-        const height = Math.max(1, image.naturalHeight || image.height || 256);
-        const { asset, sprite } = createUploadedStaticObjectAsset({
-          dataUrl,
-          fileName: file.name,
-          width,
-          height,
-        });
-
-        try {
-          const data = await saveGameAsset(asset, "Failed to save uploaded object");
-          const savedAsset = data.library.assets.find((item: GameAsset) => item.id === asset.id) || asset;
-          setAssets(data.library.assets);
-          setSprites(prev => [sprite, ...prev.filter(item => item.id !== sprite.id)]);
-          insertAssetLayer(savedAsset);
-          setNotice(`Uploaded and inserted: ${savedAsset.name}`);
-        } catch (err: any) {
-          setError(err.message || "Failed to save uploaded object");
-        }
-      };
-      image.onerror = () => setError("Could not read the uploaded image size.");
-      image.src = dataUrl;
-    };
-    reader.onerror = () => setError("Could not read the uploaded image.");
-    reader.readAsDataURL(file);
+    try {
+      const dataUrl = await readFileAsDataUrl(file, "Could not read the uploaded image.");
+      const [width, height] = await loadImageSize(dataUrl);
+      const { asset, sprite } = createUploadedStaticObjectAsset({
+        dataUrl,
+        fileName: file.name,
+        width,
+        height,
+      });
+      const data = await saveGameAsset(asset, "Failed to save uploaded object");
+      const savedAsset = data.library.assets.find((item: GameAsset) => item.id === asset.id) || asset;
+      setAssets(data.library.assets);
+      setSprites(prev => [sprite, ...prev.filter(item => item.id !== sprite.id)]);
+      insertAssetLayer(savedAsset);
+      setNotice(`Uploaded and inserted: ${savedAsset.name}`);
+    } catch (err: any) {
+      setError(err.message || "Failed to save uploaded object");
+    }
   };
 
   const insertActiveSprite = () => {
@@ -1268,28 +1257,22 @@ export default function App() {
     setImportFrameHeight(Math.max(1, Math.floor(sheetSize[1] / rows)));
   };
 
-  const handleImportFile = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImportFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     setError(null);
-    const reader = new FileReader();
-    reader.onload = () => {
-      const dataUrl = String(reader.result || "");
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
       setImportSheetDataUrl(dataUrl);
       setImportFileName(file.name);
       const baseName = file.name.replace(/\.[^.]+$/, "");
       setImportAssetName(prev => (!prev.trim() || prev === "Imported Animation" ? baseName : prev));
-      const image = new Image();
-      image.onload = () => {
-        const sheetSize: [number, number] = [image.naturalWidth || image.width, image.naturalHeight || image.height];
-        setImportSheetSize(sheetSize);
-        inferImportedFrameSize(sheetSize);
-      };
-      image.onerror = () => setError("Could not read the uploaded image size.");
-      image.src = dataUrl;
-    };
-    reader.onerror = () => setError("Could not read the uploaded file.");
-    reader.readAsDataURL(file);
+      const sheetSize = await loadImageSize(dataUrl);
+      setImportSheetSize(sheetSize);
+      inferImportedFrameSize(sheetSize);
+    } catch (err: any) {
+      setError(err.message || "Could not read the uploaded file.");
+    }
   };
 
   const updateImportTriggerType = (triggerType: ActionTriggerType) => {
