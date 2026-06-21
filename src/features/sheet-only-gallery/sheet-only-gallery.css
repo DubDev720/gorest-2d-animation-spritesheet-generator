@@ -211,7 +211,7 @@
 
 .sheet-only-controls input[type="range"] {
   width: 100%;
-  accent-color: #222;
+  accent-color: var(--range-fill);
 }
 
 .sheet-only-icon-button {

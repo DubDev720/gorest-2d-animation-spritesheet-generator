@@ -1,4 +1,4 @@
-import { Film, Map as MapIcon, Monitor, Play } from "lucide-react";
+import { ArrowLeft, Film, Map as MapIcon, Monitor, Play, Plus, Save } from "lucide-react";
 import type { WorkspaceTab } from "../../app/types";
 
 type ViewportPresetOption = {
@@ -10,12 +10,14 @@ type ViewportPresetOption = {
 
 type WorkspaceStageHeaderProps = {
   activeTab: WorkspaceTab;
-  title: string;
   viewportHeight: number;
   viewportPreset: string;
   viewportPresets: ViewportPresetOption[];
   viewportWidth: number;
+  onBack: () => void;
   onOpenSheet: () => void | Promise<void>;
+  onSaveScene: () => void;
+  onStartNewScene: () => void;
   onTabChange: (tab: WorkspaceTab) => void;
   onViewportHeightChange: (height: number) => void;
   onViewportPresetChange: (presetId: string) => void;
@@ -24,12 +26,14 @@ type WorkspaceStageHeaderProps = {
 
 export function WorkspaceStageHeader({
   activeTab,
-  title,
   viewportHeight,
   viewportPreset,
   viewportPresets,
   viewportWidth,
+  onBack,
   onOpenSheet,
+  onSaveScene,
+  onStartNewScene,
   onTabChange,
   onViewportHeightChange,
   onViewportPresetChange,
@@ -37,10 +41,9 @@ export function WorkspaceStageHeader({
 }: WorkspaceStageHeaderProps) {
   return (
     <div className="stage-header">
-      <div>
-        <p className="eyebrow">Scene Composer</p>
-        <h2>{title}</h2>
-      </div>
+      <button type="button" className="mode-back-button stage-back-button" onClick={onBack}>
+        <ArrowLeft size={16} /> Back
+      </button>
       <div className="workspace-tabs">
         <div className="tabs primary-tabs">
           <button className={activeTab === "scenes" ? "active" : ""} onClick={() => onTabChange("scenes")}><MapIcon size={15} /> 2D Canvas</button>
@@ -73,6 +76,10 @@ export function WorkspaceStageHeader({
           <button className={activeTab === "sheet" ? "active" : ""} onClick={() => void onOpenSheet()}>Sheet</button>
           <button className={activeTab === "blueprint" ? "active" : ""} onClick={() => onTabChange("blueprint")}>Blueprint</button>
         </div>
+      </div>
+      <div className="stage-header-actions">
+        <button type="button" className="ghost-button" onClick={onSaveScene}><Save size={15} /> Save Scene</button>
+        <button type="button" className="ghost-button" onClick={onStartNewScene}><Plus size={15} /> New Scene</button>
       </div>
     </div>
   );

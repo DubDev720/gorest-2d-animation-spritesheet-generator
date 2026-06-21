@@ -101,7 +101,6 @@ import {
 } from "./features/workspace-right-panel";
 import { ActionPreviewPanel, BlueprintPanel, FramesGridPanel, SheetPreviewPanel } from "./features/workspace-stage-views";
 import { TriggerTestPanel, WorkspaceMessages } from "./features/workspace-sidebar";
-import { WorkspaceTopbar } from "./features/workspace-topbar";
 import {
   deleteGameAsset,
   deleteGameScene,
@@ -1907,18 +1906,6 @@ export default function App() {
   return (
     <Fragment>
       <div className={`blueprint-app ${tab === "scenes" || tab === "scene" ? "core-mode" : ""}`}>
-      <WorkspaceTopbar
-        isPlaying={isPlaying}
-        onBack={returnToModePicker}
-        onDownloadSheet={downloadSheet}
-        onOpenScenes={() => setTab("scenes")}
-        onSaveAsset={saveAsset}
-        onSaveComplete={saveCompletedScene}
-        onSaveScene={saveScene}
-        onStartNewScene={startNewScene}
-        onTogglePlay={() => setIsPlaying(!isPlaying)}
-      />
-
       <main className={`game-workspace ${tab === "scenes" || tab === "scene" ? "simple-workspace" : ""}`}>
         <aside className="panel left-panel utility-panel">
           <CurrentActionPanel
@@ -1982,15 +1969,17 @@ export default function App() {
           <div className="blueprint-grid">
             <WorkspaceStageHeader
               activeTab={tab}
-              title={tab === "scenes" ? "Scene Library" : tab === "spritesheets" ? "Scene Spritesheets" : scene.name}
               viewportHeight={viewportHeight}
               viewportPreset={scene.viewportPreset}
               viewportPresets={VIEWPORT_PRESETS}
               viewportWidth={viewportWidth}
+              onBack={returnToModePicker}
               onOpenSheet={async () => {
                 setTab("sheet");
                 if (!activeSprite.spritesheetPng && !sheetDataUrl) await compileSheet();
               }}
+              onSaveScene={saveScene}
+              onStartNewScene={startNewScene}
               onTabChange={setTab}
               onViewportHeightChange={height => updateSceneFrame({ viewportHeight: height, viewportPreset: "custom" })}
               onViewportPresetChange={presetId => {
