@@ -75,6 +75,7 @@ import {
   createSceneLayerInstance,
   disableLayerInteraction,
   replaceBackgroundLayerSettings,
+  reorderSceneLayerStack,
   type SceneObjectTarget,
 } from "./domain/scene/sceneLayerOperations";
 import {
@@ -1204,20 +1205,7 @@ export default function App() {
   };
 
   const reorderLayerStack = (sourceId: string, targetId: string) => {
-    if (sourceId === targetId) return;
-    setScene(prev => {
-      const topFirst = [...prev.layers].sort((a, b) => b.zIndex - a.zIndex);
-      const sourceIndex = topFirst.findIndex(layer => layer.id === sourceId);
-      const targetIndex = topFirst.findIndex(layer => layer.id === targetId);
-      if (sourceIndex < 0 || targetIndex < 0) return prev;
-      const [source] = topFirst.splice(sourceIndex, 1);
-      topFirst.splice(targetIndex, 0, source);
-      const nextZ = new Map(topFirst.map((layer, index) => [layer.id, (topFirst.length - index) * 10]));
-      return {
-        ...prev,
-        layers: prev.layers.map(layer => ({ ...layer, zIndex: nextZ.get(layer.id) ?? layer.zIndex })),
-      };
-    });
+    setScene(prev => reorderSceneLayerStack(prev, sourceId, targetId));
   };
 
   const finishLayerPointerReorder = (clientX: number, clientY: number) => {

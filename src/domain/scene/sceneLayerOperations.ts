@@ -1,4 +1,4 @@
-import type { SceneLayer } from "../../types";
+import type { GameScene, SceneLayer } from "../../types";
 import { cloneSceneLayer } from "./sceneHistory";
 
 export type SceneLayerCopyLabel = "copy" | "paste";
@@ -52,5 +52,20 @@ export function disableLayerInteraction(layer: SceneLayer): SceneLayer {
   return {
     ...layer,
     interaction: layer.interaction ? { ...layer.interaction, enabled: false } : layer.interaction,
+  };
+}
+
+export function reorderSceneLayerStack(scene: GameScene, sourceId: string, targetId: string): GameScene {
+  if (sourceId === targetId) return scene;
+  const topFirst = [...scene.layers].sort((a, b) => b.zIndex - a.zIndex);
+  const sourceIndex = topFirst.findIndex(layer => layer.id === sourceId);
+  const targetIndex = topFirst.findIndex(layer => layer.id === targetId);
+  if (sourceIndex < 0 || targetIndex < 0) return scene;
+  const [source] = topFirst.splice(sourceIndex, 1);
+  topFirst.splice(targetIndex, 0, source);
+  const nextZ = new Map(topFirst.map((layer, index) => [layer.id, (topFirst.length - index) * 10]));
+  return {
+    ...scene,
+    layers: scene.layers.map(layer => ({ ...layer, zIndex: nextZ.get(layer.id) ?? layer.zIndex })),
   };
 }
