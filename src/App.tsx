@@ -28,7 +28,7 @@ import {
   spritesheetFrameThumbStyle,
 } from "./domain/sprites/spriteUtils";
 import { CurrentActionPanel } from "./features/current-action";
-import { LayerStackList } from "./features/scene-layers";
+import { BackgroundLayerControls, LayerStackList } from "./features/scene-layers";
 import { buildSceneFlowNodes, SceneFlowCanvas, type SceneFlowNode } from "./features/scene-flow";
 import { SceneContextMenu } from "./features/scene-context-menu";
 import { ModePicker } from "./features/mode-picker";
@@ -4905,65 +4905,12 @@ export default function App() {
                 <input type="range" min="0" max="1.25" step="0.01" value={selectedLayer.parallax ?? 1} onChange={event => updateSceneLayer(selectedLayer.id, { parallax: Number(event.target.value) })} disabled={selectedLayer.locked} />
                 <div className="control-hint">Use 1 for normal world objects. Use 0 for fixed HUD/UI layers.</div>
                 {selectedLayer.type === "background" && (
-                  <>
-                    <div className="two-col">
-                      <div>
-                        <label>Source Width</label>
-                        <input
-                          type="number"
-                          min="1"
-                          value={Math.round(selectedLayer.width || scene.width)}
-                          onChange={event => updateSceneLayer(selectedLayer.id, { width: Math.max(1, Number(event.target.value)) })}
-                          disabled={selectedLayer.locked}
-                        />
-                      </div>
-                      <div>
-                        <label>Source Height</label>
-                        <input
-                          type="number"
-                          min="1"
-                          value={Math.round(selectedLayer.height || scene.height)}
-                          onChange={event => updateSceneLayer(selectedLayer.id, { height: Math.max(1, Number(event.target.value)) })}
-                          disabled={selectedLayer.locked}
-                        />
-                      </div>
-                    </div>
-                    <label>Background Fit</label>
-                    <select
-                      value={selectedLayer.fit || "stretch"}
-                      onChange={event => updateSceneLayer(selectedLayer.id, { fit: event.target.value as SceneLayer["fit"] })}
-                      disabled={selectedLayer.locked}
-                    >
-                      <option value="stretch">Stretch to layer box</option>
-                      <option value="cover">Cover layer box</option>
-                      <option value="contain">Contain layer box</option>
-                      <option value="tile">Tile</option>
-                    </select>
-                    <label>Background Position</label>
-                    <input
-                      value={selectedLayer.position || "left center"}
-                      onChange={event => updateSceneLayer(selectedLayer.id, { position: event.target.value })}
-                      placeholder="left center / center center / 40% 50%"
-                      disabled={selectedLayer.locked}
-                    />
-                    <button
-                      type="button"
-                      className="ghost-button full"
-                      onClick={() => updateSceneLayer(selectedLayer.id, {
-                        x: 0,
-                        y: scene.height,
-                        width: scene.width,
-                        height: scene.height,
-                        scale: 1,
-                        fit: "stretch",
-                        position: "left center",
-                      })}
-                      disabled={selectedLayer.locked}
-                    >
-                      Fill Scene World
-                    </button>
-                    <div className="control-hint">Select the background layer, then drag the box or pull any corner handle to frame it like other objects.</div>
-                  </>
+                  <BackgroundLayerControls
+                    sceneHeight={scene.height}
+                    sceneWidth={scene.width}
+                    selectedLayer={selectedLayer}
+                    onUpdateLayer={updateSceneLayer}
+                  />
                 )}
                 {!selectedLayer.locked && <div className="control-hint">You can also drag the selected layer's corner handles on the canvas to resize proportionally.</div>}
                 {isSceneVisualLayer(selectedLayer) && !selectedLayer.locked && (
