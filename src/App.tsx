@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent, type MouseEvent, type PointerEvent } from "react";
 import {
-  Copy,
   Download,
   Eye,
   EyeOff,
@@ -11,7 +10,6 @@ import {
   Play,
   Plus,
   Save,
-  Trash2,
   Unlock,
   Upload,
   X,
@@ -28,6 +26,7 @@ import {
   spritesheetFrameThumbStyle,
 } from "./domain/sprites/spriteUtils";
 import { CurrentActionPanel } from "./features/current-action";
+import { SceneLightingStrip, SceneToolbar } from "./features/scene-editor";
 import {
   BackgroundLayerControls,
   LayerInteractionControls,
@@ -4525,29 +4524,26 @@ export default function App() {
                     </div>
                   </aside>
                 </div>
-                <div className="scene-toolbar">
-                  <input
-                    className="scene-name-input"
-                    value={scene.name}
-                    onChange={event => setScene(prev => ({ ...prev, name: event.target.value }))}
-                    aria-label="Scene name"
-                  />
-                  <button className="ghost-button" onClick={insertActiveSprite}><Plus size={16} /> Insert Current Action</button>
-                  <button className="ghost-button" onClick={duplicateSelectedLayer}><Copy size={16} /> Duplicate Layer</button>
-                  <button className="ghost-button" onClick={removeSelectedLayer}><Trash2 size={16} /> Delete Layer</button>
-                  <button className="ghost-button" onClick={() => downloadJson(scenePayload, `scene_${safeName(scene.name)}.json`)}><Download size={16} /> Export Scene JSON</button>
-                </div>
-                <div className="lighting-strip">
-                  <label>Global Brightness {sceneLight.brightness.toFixed(2)}<input type="range" min="0.45" max="1.35" step="0.01" value={sceneLight.brightness} onChange={event => updateSceneLighting({ brightness: Number(event.target.value) })} /></label>
-                  <label>Magenta Ambience {Math.round(sceneLight.ambience * 100)}%<input type="range" min="0" max="1" step="0.01" value={sceneLight.ambience} onChange={event => updateSceneLighting({ ambience: Number(event.target.value) })} /></label>
-                  <label>Camera X {Math.round(scene.cameraX)} / {cameraMax}<input type="range" min="0" max={cameraMax} step="1" value={scene.cameraX} onChange={event => setScene(prev => ({ ...prev, cameraX: Number(event.target.value) }))} /></label>
-                  {selectedLayer && isSceneVisualLayer(selectedLayer) && !selectedLayer.locked && (
-                    <>
-                      <label>Character Brightness {selectedLayerLight.brightness.toFixed(2)}<input type="range" min="0.25" max="1.35" step="0.01" value={selectedLayerLight.brightness} onChange={event => updateSelectedLayerLighting({ brightness: Number(event.target.value), preset: "neon-station" })} /></label>
-                      <label>Contact Shadow {Math.round(selectedLayerShadow.opacity * 100)}%<input type="range" min="0" max="1" step="0.01" value={selectedLayerShadow.opacity} onChange={event => updateSelectedLayerShadow({ opacity: Number(event.target.value), enabled: Number(event.target.value) > 0 })} /></label>
-                    </>
-                  )}
-                </div>
+                <SceneToolbar
+                  sceneName={scene.name}
+                  onDuplicateSelectedLayer={duplicateSelectedLayer}
+                  onExportScene={() => downloadJson(scenePayload, `scene_${safeName(scene.name)}.json`)}
+                  onInsertActiveSprite={insertActiveSprite}
+                  onRemoveSelectedLayer={removeSelectedLayer}
+                  onSceneNameChange={name => setScene(prev => ({ ...prev, name }))}
+                />
+                <SceneLightingStrip
+                  cameraMax={cameraMax}
+                  cameraX={scene.cameraX}
+                  hasUnlockedVisualLayer={Boolean(selectedLayer && isSceneVisualLayer(selectedLayer) && !selectedLayer.locked)}
+                  layerLighting={selectedLayerLight}
+                  layerShadow={selectedLayerShadow}
+                  sceneLighting={sceneLight}
+                  onCameraXChange={value => setScene(prev => ({ ...prev, cameraX: value }))}
+                  onLayerLightingChange={updateSelectedLayerLighting}
+                  onLayerShadowChange={updateSelectedLayerShadow}
+                  onSceneLightingChange={updateSceneLighting}
+                />
               </div>
             )}
 
