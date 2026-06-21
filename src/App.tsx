@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent, type MouseEvent, type PointerEvent } from "react";
 import { PRESET_SPRITES } from "./presets";
+import { downloadDataUrl, downloadJson, downloadUrl } from "./app/downloads";
 import type { AppMode, BackgroundMode, SheetOnlySelectionKind, WorkspaceTab } from "./app/types";
 import {
   BOARDING_TRAIN_ASSET_ID,
@@ -43,6 +44,7 @@ import {
   spriteGridColumns,
   spriteGridRows,
 } from "./domain/sprites/spriteUtils";
+import { drawSvgFrame } from "./domain/sprites/spriteCanvas";
 import { CurrentActionPanel } from "./features/current-action";
 import { SceneBackgroundLayer, SceneGlobalControls, SceneLightingStrip, SceneStageCanvas, SceneStageEnvironment, SceneStageOverlays, SceneToolbar, SceneVisualLayerStack } from "./features/scene-editor";
 import { SceneInspectorPanel } from "./features/scene-inspector";
@@ -260,61 +262,6 @@ function clampLayerScale(value: number) {
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
-}
-
-function downloadUrl(url: string, filename: string) {
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
-function downloadDataUrl(dataUrl: string, filename: string) {
-  const link = document.createElement("a");
-  link.href = dataUrl;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
-function downloadJson(value: unknown, filename: string) {
-  const blob = new Blob([JSON.stringify(value, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  downloadUrl(url, filename);
-  URL.revokeObjectURL(url);
-}
-
-function blobUrlFromSvg(svg: string) {
-  return URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }));
-}
-
-async function drawSvgFrame(ctx: CanvasRenderingContext2D, svg: string, x: number, y: number, w: number, h: number) {
-  const imgMatch = svg.match(/<img[^>]+src=["']([^"']+)["']/i);
-  if (imgMatch?.[1]) {
-    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const image = new Image();
-      image.onload = () => resolve(image);
-      image.onerror = () => reject(new Error("Failed to render PNG frame"));
-      image.src = imgMatch[1];
-    });
-    ctx.drawImage(img, x, y, w, h);
-    return;
-  }
-  const url = blobUrlFromSvg(svg);
-  try {
-    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const image = new Image();
-      image.onload = () => resolve(image);
-      image.onerror = () => reject(new Error("Failed to render SVG frame"));
-      image.src = url;
-    });
-    ctx.drawImage(img, x, y, w, h);
-  } finally {
-    URL.revokeObjectURL(url);
-  }
 }
 
 function createAsset(sprite: AnimationSprite, role: AssetRole, binding: ActionBinding, tagsText: string): GameAsset {
