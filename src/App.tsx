@@ -2,12 +2,10 @@ import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent, type 
 import {
   Download,
   Film,
-  Lock,
   Map as MapIcon,
   Pause,
   Play,
   Save,
-  Unlock,
 } from "lucide-react";
 import { PRESET_SPRITES } from "./presets";
 import type { AppMode, BackgroundMode, SheetOnlySelectionKind, WorkspaceTab } from "./app/types";
@@ -22,6 +20,7 @@ import {
 } from "./domain/sprites/spriteUtils";
 import { CurrentActionPanel } from "./features/current-action";
 import { SceneLightingStrip, SceneToolbar } from "./features/scene-editor";
+import { SceneInspectorHeader } from "./features/scene-inspector";
 import {
   BackgroundLayerControls,
   LayerInteractionControls,
@@ -3995,34 +3994,17 @@ export default function App() {
                   />
                   <aside className="scene-mini-panel inspector-rail">
                     <div className="compact-inspector">
-                      <strong>
-                        {selectedInteractionZoneLayer
-                          ? "Interaction Zone"
-                          : selectedLayer ? (selectedLayerIsAvatar ? "Avatar Inspector" : "Item Inspector") : scene.name}
-                      </strong>
-                      <span>
-                        {selectedInteractionZoneLayer
-                          ? `Owner: ${selectedInteractionZoneLayer.name}`
-                          : selectedLayer ? `${selectedLayer.name} / ${selectedLayerAsset ? roleLabels[selectedLayerAsset.role] : selectedLayer.type} / z${selectedLayer.zIndex}` : `${scene.layers.length} layers`}
-                      </span>
-                      <button
-                        type="button"
-                        className="inspector-primary-action"
-                        onClick={downloadSelectedSceneItem}
-                        disabled={!selectedLayer}
-                      >
-                        <Download size={15} /> Download Selected Item
-                      </button>
-                      {selectedLayer && (
-                        <button
-                          type="button"
-                          className="inspector-secondary-action"
-                          onClick={() => updateSceneLayer(selectedLayer.id, { locked: !selectedLayer.locked })}
-                        >
-                          {selectedLayer.locked ? <Unlock size={15} /> : <Lock size={15} />}
-                          {selectedLayer.locked ? "Unlock Layer" : "Lock Layer"}
-                        </button>
-                      )}
+                      <SceneInspectorHeader
+                        layerCount={scene.layers.length}
+                        roleLabels={roleLabels}
+                        sceneName={scene.name}
+                        selectedInteractionZoneLayer={selectedInteractionZoneLayer}
+                        selectedLayer={selectedLayer}
+                        selectedLayerAsset={selectedLayerAsset}
+                        selectedLayerIsAvatar={selectedLayerIsAvatar}
+                        onDownloadSelectedItem={downloadSelectedSceneItem}
+                        onToggleSelectedLayerLock={() => selectedLayer && updateSceneLayer(selectedLayer.id, { locked: !selectedLayer.locked })}
+                      />
                       {selectedLayer && (
                         <>
                           <div className="compact-inspector-section">

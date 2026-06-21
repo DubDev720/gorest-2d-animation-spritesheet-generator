@@ -1,0 +1,1 @@
+export { SceneInspectorHeader } from "./SceneInspectorHeader";
