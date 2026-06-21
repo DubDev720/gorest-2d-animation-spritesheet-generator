@@ -10,7 +10,7 @@ import {
   spriteGridRows,
 } from "./domain/sprites/spriteUtils";
 import { CurrentActionPanel } from "./features/current-action";
-import { SceneBackgroundLayer, SceneGlobalControls, SceneLightingStrip, SceneToolbar } from "./features/scene-editor";
+import { SceneBackgroundLayer, SceneGlobalControls, SceneLightingStrip, SceneStageEnvironment, SceneToolbar } from "./features/scene-editor";
 import {
   SceneInspectorAvatarSection,
   SceneInspectorHeader,
@@ -3704,24 +3704,13 @@ export default function App() {
                       }}
                     />
                   )}
-                  {backgroundLayer?.visible && sceneLight.preset !== "none" && (
-                    <>
-                      <div
-                        className="scene-lighting-overlay"
-                        style={{
-                          opacity: sceneLight.ambience,
-                          filter: `saturate(${sceneLight.glow}) brightness(${sceneLight.brightness})`,
-                        }}
-                      />
-                      <div className="scene-vignette-overlay" style={{ opacity: sceneLight.vignette }} />
-                    </>
-                  )}
-                  {groundLayer?.visible && (
-                    <>
-                      <div className="ground-band" style={{ top: `${scene.groundY * stageScaleY}px`, backgroundColor: groundLayer.color, opacity: groundLayer.opacity }} />
-                      <div className="ground-line" style={{ top: `${scene.groundY * stageScaleY}px` }} />
-                    </>
-                  )}
+                  <SceneStageEnvironment
+                    groundLayer={groundLayer}
+                    groundY={scene.groundY}
+                    lighting={sceneLight}
+                    showLightingOverlay={Boolean(backgroundLayer?.visible && sceneLight.preset !== "none")}
+                    stageScaleY={stageScaleY}
+                  />
                   {scene.layers
                     .filter(layer => layer.visible && isSceneVisualLayer(layer))
                     .sort((a, b) => a.zIndex - b.zIndex)
