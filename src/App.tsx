@@ -80,7 +80,7 @@ import {
 } from "./domain/sprites/spriteUtils";
 import { compileSpritesheetImage } from "./domain/sprites/spriteCanvas";
 import { CurrentActionPanel } from "./features/current-action";
-import { SceneBackgroundLayer, SceneGlobalControls, SceneLightingStrip, SceneStageCanvas, SceneStageEnvironment, SceneStageOverlays, SceneToolbar, SceneVisualLayerStack, useSceneHistory } from "./features/scene-editor";
+import { SceneBackgroundLayer, SceneGlobalControls, SceneLightingStrip, SceneStageCanvas, SceneStageEnvironment, SceneStageOverlays, SceneToolbar, SceneVisualLayerStack, useSceneHistory, useSceneStageLayout } from "./features/scene-editor";
 import { SceneInspectorPanel } from "./features/scene-inspector";
 import { SceneLayerControlsPanel, SceneLayerRail, useSceneLayerClipboard } from "./features/scene-layers";
 import { buildSceneFlowNodes, SceneFlowCanvas, type SceneFlowNode } from "./features/scene-flow";
@@ -191,8 +191,6 @@ export default function App() {
   const [layerDropTargetId, setLayerDropTargetId] = useState<string | null>(null);
   const [expandedSpritesheetKey, setExpandedSpritesheetKey] = useState<string | null>(null);
   const [scenePanelWidths, setScenePanelWidths] = useState({ layers: 120, inspector: 220 });
-  const [stageShellSize, setStageShellSize] = useState({ width: 0, height: 0 });
-  const [sceneControlsHeight, setSceneControlsHeight] = useState(0);
   const [sceneContextMenu, setSceneContextMenu] = useState<SceneContextMenuState | null>(null);
   const [isLayerLibraryOpen, setIsLayerLibraryOpen] = useState(false);
   const [sheetOnlyHasSelection, setSheetOnlyHasSelection] = useState(false);
@@ -209,9 +207,7 @@ export default function App() {
   const layerDragRef = useRef<string | null>(null);
   const zoneDragRef = useRef<{ id: string; startPointerX: number; startPointerY: number; startOffsetX: number; startOffsetY: number } | null>(null);
   const zoneResizeRef = useRef<{ id: string; handle: ResizeHandle; anchorWorldX: number; anchorWorldY: number } | null>(null);
-  const stageShellRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const sceneGlobalControlsRef = useRef<HTMLDivElement | null>(null);
   const sceneStateRef = useRef<GameScene>(scene);
   const selectedLayerIdRef = useRef(selectedLayerId);
   const nearbyInteractionRef = useRef<any>(null);
@@ -246,6 +242,16 @@ export default function App() {
     setSceneContextMenu,
     setSelectedInteractionZoneLayerId,
     setSelectedLayerId,
+  });
+  const {
+    sceneControlsHeight,
+    sceneGlobalControlsRef,
+    stageShellRef,
+    stageShellSize,
+  } = useSceneStageLayout({
+    inspectorWidth: scenePanelWidths.inspector,
+    layerWidth: scenePanelWidths.layers,
+    tab,
   });
 
   const frames = activeSprite.frames || [];
@@ -442,28 +448,6 @@ export default function App() {
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [sceneContextMenu]);
-
-  useEffect(() => {
-    const element = stageShellRef.current;
-    const controls = sceneGlobalControlsRef.current;
-    if (!element) return;
-    const updateStageShellSize = () => {
-      setStageShellSize({
-        width: element.clientWidth,
-        height: element.clientHeight,
-      });
-      setSceneControlsHeight(controls?.offsetHeight || 0);
-    };
-    updateStageShellSize();
-    const observer = new ResizeObserver(updateStageShellSize);
-    observer.observe(element);
-    if (controls) observer.observe(controls);
-    window.addEventListener("resize", updateStageShellSize);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", updateStageShellSize);
-    };
-  }, [tab, scenePanelWidths.layers, scenePanelWidths.inspector]);
 
   useEffect(() => {
     const handleMove = (event: globalThis.PointerEvent) => {
