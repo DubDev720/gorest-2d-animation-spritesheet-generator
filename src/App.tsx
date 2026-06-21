@@ -1,11 +1,10 @@
-import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent, type DragEvent, type MouseEvent, type PointerEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent, type MouseEvent, type PointerEvent } from "react";
 import {
   Copy,
   Download,
   Eye,
   EyeOff,
   Film,
-  Layers,
   Lock,
   Map as MapIcon,
   Pause,
@@ -29,6 +28,7 @@ import {
   spritesheetFrameThumbStyle,
 } from "./domain/sprites/spriteUtils";
 import { CurrentActionPanel } from "./features/current-action";
+import { LayerStackList } from "./features/scene-layers";
 import { buildSceneFlowNodes, SceneFlowCanvas, type SceneFlowNode } from "./features/scene-flow";
 import { SceneContextMenu } from "./features/scene-context-menu";
 import { ModePicker } from "./features/mode-picker";
@@ -4869,57 +4869,21 @@ export default function App() {
           />
 
           <section>
-            <div className="section-title"><Layers size={17} /> Layers</div>
-            <div className="control-hint">Drag unlocked layer rows to decide what renders above or below. Top rows render in front.</div>
-            <div className="layer-list">
-              {scene.layers
-                .slice()
-                .sort((a, b) => b.zIndex - a.zIndex)
-                .map(layer => {
-                  const canDragLayer = !layer.locked;
-                  return (
-                    <button
-                      key={layer.id}
-                      type="button"
-                      draggable={canDragLayer}
-                      className={`${layer.id === selectedLayerId ? "layer-row active" : "layer-row"} ${draggedLayerId === layer.id ? "dragging" : ""}`}
-                      onClick={() => {
-                        setSelectedLayerId(layer.id);
-                        setSelectedInteractionZoneLayerId(null);
-                        const layerAsset = layer.assetId ? assetById.get(layer.assetId) : undefined;
-                        const layerSprite = resolveAssetSprite(layerAsset, layer);
-                        if (layerSprite) setActiveSprite(layerSprite);
-                      }}
-                      onDragStart={(event: DragEvent<HTMLButtonElement>) => {
-                        if (!canDragLayer) {
-                          event.preventDefault();
-                          return;
-                        }
-                        event.dataTransfer.effectAllowed = "move";
-                        event.dataTransfer.setData("text/plain", layer.id);
-                        setDraggedLayerId(layer.id);
-                      }}
-                      onDragOver={event => {
-                        if (!draggedLayerId || !canDragLayer || draggedLayerId === layer.id) return;
-                        event.preventDefault();
-                        event.dataTransfer.dropEffect = "move";
-                      }}
-                      onDrop={event => {
-                        event.preventDefault();
-                        const sourceId = event.dataTransfer.getData("text/plain") || draggedLayerId;
-                        if (sourceId && canDragLayer) reorderLayerStack(sourceId, layer.id);
-                        setDraggedLayerId(null);
-                      }}
-                      onDragEnd={() => setDraggedLayerId(null)}
-                    >
-                      <span className="drag-grip" title={canDragLayer ? "Drag to reorder" : "Locked layer"}>{canDragLayer ? "::" : "--"}</span>
-                      <span>{layer.visible ? <Eye size={15} /> : <EyeOff size={15} />}</span>
-                      <strong>{layer.name}</strong>
-                      <em>{layer.type} / z{layer.zIndex}</em>
-                    </button>
-                  );
-                })}
-            </div>
+            <LayerStackList
+              draggedLayerId={draggedLayerId}
+              layers={scene.layers}
+              selectedLayerId={selectedLayerId}
+              onDragLayerEnd={() => setDraggedLayerId(null)}
+              onDragLayerStart={setDraggedLayerId}
+              onReorderLayer={reorderLayerStack}
+              onSelectLayer={layer => {
+                setSelectedLayerId(layer.id);
+                setSelectedInteractionZoneLayerId(null);
+                const layerAsset = layer.assetId ? assetById.get(layer.assetId) : undefined;
+                const layerSprite = resolveAssetSprite(layerAsset, layer);
+                if (layerSprite) setActiveSprite(layerSprite);
+              }}
+            />
 
             {selectedLayer && (
               <div className="layer-controls">
