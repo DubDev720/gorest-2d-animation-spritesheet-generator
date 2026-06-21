@@ -316,13 +316,21 @@ public/generated/ Generated PNG assets and local game library data
 
 The source code in this repository is released under the [MIT License](LICENSE).
 
-Media assets, brand assets, generated images, character artwork, scene backgrounds, spritesheets, screenshots, and example files under `public/` and `docs/` are provided for demonstration and project preview purposes only. These assets are not CC0 and are not released under the MIT License unless explicitly stated otherwise.
-
-`The Horror Notes` (《惊魂笔记》) is an original side-scrolling horror narrative game by Heroza. `The Horror Notes` (《惊魂笔记》) and related characters, scenes, logos, demo images, and spritesheets are copyrighted works by Heroza.
-
-You may run this project locally and view these assets as part of the demo. You may also share official images or videos released by Heroza for `The Horror Notes` (《惊魂笔记》), as long as the work is credited as `The Horror Notes` (《惊魂笔记》) by Heroza and the sharing does not imply a separate asset license.
-
-You may not extract, reuse, redistribute, sell, train models on, or publish repository media assets separately without written permission from the rights holder. See [`public/ASSET_LICENSE.md`](public/ASSET_LICENSE.md) for the asset-specific notice.
+<table>
+  <tr>
+    <td width="58%" valign="top">
+      <p>Media assets, brand assets, generated images, character artwork, scene backgrounds, spritesheets, screenshots, and example files under <code>public/</code> and <code>docs/</code> are provided for demonstration and project preview purposes only. These assets are not CC0 and are not released under the MIT License unless explicitly stated otherwise.</p>
+      <p><strong>The Horror Notes</strong> (《惊魂笔记》) is an original side-scrolling horror narrative game by Heroza. <strong>The Horror Notes</strong> (《惊魂笔记》) and related characters, scenes, logos, demo images, and spritesheets are copyrighted works by Heroza.</p>
+      <p>You may run this project locally and view these assets as part of the demo. You may also share official images or videos released by Heroza for <strong>The Horror Notes</strong> (《惊魂笔记》), as long as the work is credited as <strong>The Horror Notes</strong> (《惊魂笔记》) by Heroza and the sharing does not imply a separate asset license.</p>
+      <p>You may not extract, reuse, redistribute, sell, train models on, or publish repository media assets separately without written permission from the rights holder. See <a href="public/ASSET_LICENSE.md"><code>public/ASSET_LICENSE.md</code></a> for the asset-specific notice.</p>
+    </td>
+    <td width="42%" valign="top" align="center">
+      <img src="./docs/readme/the-horror-notes-official-preview.jpg" alt="The Horror Notes official preview by Heroza" width="360" />
+      <br />
+      <sub>Official image from <strong>The Horror Notes</strong> (《惊魂笔记》) by Heroza. Demo/IP material, not CC0.</sub>
+    </td>
+  </tr>
+</table>
 
 ## Notes
 
