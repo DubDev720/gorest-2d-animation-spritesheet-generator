@@ -20,7 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { PRESET_SPRITES } from "./presets";
-import type { AppMode, SheetOnlySelectionKind, WorkspaceTab } from "./app/types";
+import type { AppMode, BackgroundMode, SheetOnlySelectionKind, WorkspaceTab } from "./app/types";
 import {
   buildSpritesheetFrames,
   getFrameSize,
@@ -44,6 +44,7 @@ import {
   ReusableSceneKitPanel,
   SimulationScreenPanel,
 } from "./features/workspace-right-panel";
+import { ActionPreviewPanel, BlueprintPanel, FramesGridPanel, SheetPreviewPanel } from "./features/workspace-stage-views";
 import { TriggerTestPanel, WorkspaceMessages } from "./features/workspace-sidebar";
 import { WorkspaceTopbar } from "./features/workspace-topbar";
 import { fetchGameLibrary, fetchLatestSprite } from "./services/gameLibraryApi";
@@ -63,7 +64,6 @@ import {
   SceneLayer,
 } from "./types";
 
-type BackgroundMode = "checker" | "dark" | "light" | "green";
 type ResizeHandle = "nw" | "ne" | "sw" | "se";
 type ScenePanelResizeHandle = "layers" | "inspector";
 type ResizeState = {
@@ -4773,65 +4773,55 @@ export default function App() {
             )}
 
             {tab === "preview" && (
-              <div className="simulator-row">
-                <div className={bgClass}>
-                  {currentFrame ? (
-                    <div
-                      className={`sprite-render ${isTallFrame ? "tall" : ""}`}
-                      style={{ aspectRatio: frameRatio }}
-                      dangerouslySetInnerHTML={{ __html: currentFrame }}
-                    />
-                  ) : <span>No frames</span>}
-                </div>
-                <div className="timeline-panel">
-                  <div className="big-frame">{String(activeSpriteFrameIndex + 1).padStart(2, "0")}<span>/{frames.length}</span></div>
-                  <input type="range" min="0" max={Math.max(0, frames.length - 1)} value={activeSpriteFrameIndex} onChange={event => { setIsPlaying(false); setActiveFrame(Number(event.target.value)); }} />
-                  <div className="player-controls">
-                    <button onClick={() => setActiveFrame(value => (value === 0 ? frames.length - 1 : value - 1))}>Previous Frame</button>
-                    <button onClick={() => setIsPlaying(value => !value)}>{isPlaying ? "Pause" : "Play"}</button>
-                    <button onClick={() => setActiveFrame(value => (value + 1) % frames.length)}>Next Frame</button>
-                  </div>
-                  <div className="bg-buttons">
-                    <button className={bgMode === "checker" ? "active" : ""} onClick={() => setBgMode("checker")}>Grid</button>
-                    <button className={bgMode === "dark" ? "active" : ""} onClick={() => setBgMode("dark")}>Dark</button>
-                    <button className={bgMode === "light" ? "active" : ""} onClick={() => setBgMode("light")}>Light</button>
-                    <button className={bgMode === "green" ? "active" : ""} onClick={() => setBgMode("green")}>Green</button>
-                  </div>
-                </div>
-              </div>
+              <ActionPreviewPanel
+                activeFrameIndex={activeSpriteFrameIndex}
+                backgroundClassName={bgClass}
+                backgroundMode={bgMode}
+                frameCount={frames.length}
+                frameRatio={frameRatio}
+                isPlaying={isPlaying}
+                isTallFrame={isTallFrame}
+                svgFrame={currentFrame}
+                onBackgroundModeChange={setBgMode}
+                onNextFrame={() => setActiveFrame(value => (value + 1) % frames.length)}
+                onPreviousFrame={() => setActiveFrame(value => (value === 0 ? frames.length - 1 : value - 1))}
+                onSelectFrame={frameIndex => {
+                  setIsPlaying(false);
+                  setActiveFrame(frameIndex);
+                }}
+                onTogglePlay={() => setIsPlaying(value => !value)}
+              />
             )}
 
             {tab === "frames" && (
-              <div className="frames-grid">
-                {frames.map((svg, idx) => (
-                  <button key={idx} className={`frame-tile ${idx === activeSpriteFrameIndex ? "active" : ""}`} onClick={() => { setActiveFrame(idx); setIsPlaying(false); }}>
-                    <div className="frame-canvas" style={{ ...checkerStyle, aspectRatio: frameRatio }}><div dangerouslySetInnerHTML={{ __html: svg }} /></div>
-                    <div className="frame-meta"><span>Frame {idx + 1}</span></div>
-                  </button>
-                ))}
-              </div>
+              <FramesGridPanel
+                activeFrameIndex={activeSpriteFrameIndex}
+                checkerStyle={checkerStyle}
+                frameRatio={frameRatio}
+                frames={frames}
+                onSelectFrame={frameIndex => {
+                  setActiveFrame(frameIndex);
+                  setIsPlaying(false);
+                }}
+              />
             )}
 
             {tab === "sheet" && (
-              <div className="sheet-panel">
-                {sheetDataUrl ? (
-                  <>
-                    <div className="sheet-info">{activeSprite.sheetSize?.join(" x ") || `${frameW * sheetColumns} x ${frameH * Math.ceil(activeSprite.frames.length / sheetColumns)}`} / frame {frameW} x {frameH}px / {activeSprite.frames.length} frames</div>
-                    <img src={sheetDataUrl} alt="spritesheet" />
-                  </>
-                ) : <button onClick={compileSheet}>Generate Sheet Preview</button>}
-              </div>
+              <SheetPreviewPanel
+                sheetDataUrl={sheetDataUrl}
+                sheetInfo={`${activeSprite.sheetSize?.join(" x ") || `${frameW * sheetColumns} x ${frameH * Math.ceil(activeSprite.frames.length / sheetColumns)}`} / frame ${frameW} x ${frameH}px / ${activeSprite.frames.length} frames`}
+                onGenerateSheet={() => void compileSheet()}
+              />
             )}
 
             {tab === "blueprint" && (
-              <div className="source-panel">
-                <div><strong>Asset Library:</strong> {assets.length} confirmed assets, {scenes.length} saved scenes.</div>
-                <div><strong>Current Action:</strong> {activeSprite.characterName} / {activeSprite.frames.length} frames / {frameW} x {frameH}</div>
-                <div><strong>Action Binding:</strong> {triggerLabels[binding.triggerType]} / {binding.triggerValue} / {binding.gameState}</div>
-                <div><strong>Layer Rules:</strong> Background, ground, character, effects, and foreground are separated into layers; character and effect layers can be dragged, resized, sorted, and hidden.</div>
-                <div><strong>Save Path:</strong> D:\2d-animation-spritesheet-generator\public\generated\game_asset_library.json</div>
-                <button className="ghost-button" onClick={() => downloadJson({ assets, scenes: [scene] }, "game_asset_library_export.json")}><Download size={16} /> Export Full Library JSON</button>
-              </div>
+              <BlueprintPanel
+                actionBindingText={`${triggerLabels[binding.triggerType]} / ${binding.triggerValue} / ${binding.gameState}`}
+                assetCount={assets.length}
+                currentActionText={`${activeSprite.characterName} / ${activeSprite.frames.length} frames / ${frameW} x ${frameH}`}
+                sceneCount={scenes.length}
+                onExportLibrary={() => downloadJson({ assets, scenes: [scene] }, "game_asset_library_export.json")}
+              />
             )}
           </div>
         </section>
