@@ -70,7 +70,7 @@ import {
   spriteGridColumns,
   spriteGridRows,
 } from "./domain/sprites/spriteUtils";
-import { drawSvgFrame } from "./domain/sprites/spriteCanvas";
+import { compileSpritesheetImage } from "./domain/sprites/spriteCanvas";
 import { CurrentActionPanel } from "./features/current-action";
 import { SceneBackgroundLayer, SceneGlobalControls, SceneLightingStrip, SceneStageCanvas, SceneStageEnvironment, SceneStageOverlays, SceneToolbar, SceneVisualLayerStack } from "./features/scene-editor";
 import { SceneInspectorPanel } from "./features/scene-inspector";
@@ -2013,19 +2013,8 @@ export default function App() {
   };
 
   const compileSheet = async () => {
-    if (!activeSprite.frames.length) return null;
-    const columns = Math.min(sheetColumns, activeSprite.frames.length);
-    const rows = Math.ceil(activeSprite.frames.length / columns);
-    const canvas = document.createElement("canvas");
-    canvas.width = columns * frameW;
-    canvas.height = rows * frameH;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("Unable to create export canvas");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < activeSprite.frames.length; i++) {
-      await drawSvgFrame(ctx, activeSprite.frames[i], (i % columns) * frameW, Math.floor(i / columns) * frameH, frameW, frameH);
-    }
-    const url = canvas.toDataURL("image/png");
+    const url = await compileSpritesheetImage(activeSprite, sheetColumns);
+    if (!url) return null;
     setSheetDataUrl(url);
     return url;
   };
