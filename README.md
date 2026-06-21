@@ -7,6 +7,10 @@ We open-sourced this 2D platform to make game creation simpler, and we will keep
 > **Tip for Codex users:** You do not need to connect an extra API to customize this tool. Open this repo in Codex and point it at this document or the codebase, then describe what you want to change. Codex can update the software directly.
 >
 > This is a combination of dynamic software and a no-UI workflow: instead of operating fixed controls inside an interface, you describe the tool or workflow you need, and the agent changes the tool to match.
+>
+> For durable agent instructions and prompt templates, see [`AGENTS.md`](./AGENTS.md) and [`docs/AGENT_WORKFLOW.md`](./docs/AGENT_WORKFLOW.md).
+>
+> **Recommended model:** use GPT-5.5 (`gpt-5.5`) for this workflow. It is a strong fit for coding-heavy, tool-heavy, long-context agent work like generating assets, editing scene metadata, and modifying the app itself.
 
 <p align="center">
   <img src="./public/brand/gorest-logo.png" alt="Gorest logo" width="480" />
@@ -308,9 +312,17 @@ server.ts         Express API, Vite middleware, local spritesheet endpoints
 public/generated/ Generated PNG assets and local game library data
 ```
 
-## License
+## License Notice
 
-Gorest 2D Animation Spritesheet Generator is open source under the [MIT License](LICENSE).
+The source code in this repository is released under the [MIT License](LICENSE).
+
+Media assets, brand assets, generated images, character artwork, scene backgrounds, spritesheets, screenshots, and example files under `public/` and `docs/` are provided for demonstration and project preview purposes only. These assets are not CC0 and are not released under the MIT License unless explicitly stated otherwise.
+
+`The Horror Notes` (《惊魂笔记》) is an original side-scrolling horror narrative game by Heroza. `The Horror Notes` (《惊魂笔记》) and related characters, scenes, logos, demo images, and spritesheets are copyrighted works by Heroza.
+
+You may run this project locally and view these assets as part of the demo. You may also share official images or videos released by Heroza for `The Horror Notes` (《惊魂笔记》), as long as the work is credited as `The Horror Notes` (《惊魂笔记》) by Heroza and the sharing does not imply a separate asset license.
+
+You may not extract, reuse, redistribute, sell, train models on, or publish repository media assets separately without written permission from the rights holder. See [`public/ASSET_LICENSE.md`](public/ASSET_LICENSE.md) for the asset-specific notice.
 
 ## Notes
 
@@ -338,7 +350,7 @@ Thank you for your contributions!
 A: Follow the 'Quick Start' section in the README to install Node.js, clone the repository, and install dependencies.
 
 **Q: Can I use this project for commercial purposes?**  
-A: Yes, the project is open-source under the MIT License, which allows for commercial use.
+A: The source code is available under the MIT License. The included media assets are demo/project preview materials and are not licensed for separate commercial reuse unless explicitly stated otherwise.
 
 **Q: How can I report a bug?**  
 A: Please open an issue in the GitHub repository with a detailed description of the bug and steps to reproduce it.

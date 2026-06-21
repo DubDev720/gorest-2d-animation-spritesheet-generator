@@ -38,7 +38,7 @@ export function SheetOnlyGallery({
 
   return (
     <main className="sheet-only-screen">
-      <button type="button" className="mode-back-button sheet-only-back" onClick={onBack}>
+      <button type="button" className="mode-back-button sheet-only-back" onClick={hasSelection ? onShowAll : onBack}>
         <ArrowLeft size={16} /> Back
       </button>
       {hasSelection && (

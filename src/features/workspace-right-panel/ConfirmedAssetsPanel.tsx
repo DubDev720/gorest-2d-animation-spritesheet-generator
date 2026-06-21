@@ -32,6 +32,11 @@ export function ConfirmedAssetsPanel({
       <div className="sprite-list">
         {assets.map(asset => {
           const previewSprite = getAssetPreviewSprite(asset);
+          const clipCount = asset.animations?.length || 0;
+          const clipText = clipCount > 0 ? `${clipCount} clip${clipCount === 1 ? "" : "s"}` : "static";
+          const triggerText = asset.binding
+            ? `${triggerLabels[asset.binding.triggerType]} ${asset.binding.triggerValue}`
+            : "No trigger";
           return (
             <div key={asset.id} className="sprite-card asset-card">
               <button type="button" className="mini-preview" style={checkerStyle} onClick={() => onPreviewSprite(previewSprite)}>
@@ -39,7 +44,7 @@ export function ConfirmedAssetsPanel({
               </button>
               <div>
                 <strong>{asset.name}</strong>
-                <span>{roleLabels[asset.role]} / {asset.animations?.length || 1} clips / {triggerLabels[asset.binding.triggerType]} {asset.binding.triggerValue}</span>
+                <span>{roleLabels[asset.role]} / {clipText} / {triggerText}</span>
                 <div className="asset-actions">
                   <button type="button" onClick={() => onInsertAsset(asset)}><Plus size={13} /> Insert</button>
                   <button type="button" onClick={() => onPreviewSprite(previewSprite)}><Play size={13} /> Preview</button>

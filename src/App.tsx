@@ -713,7 +713,7 @@ export default function App() {
 
       const matched = assets.find(asset =>
         !asset.animations?.length &&
-        asset.binding.triggerType === "keyboard" &&
+        asset.binding?.triggerType === "keyboard" &&
         asset.binding.triggerValue.toLowerCase() === event.code.toLowerCase()
       );
       if (!matched) return;
@@ -722,7 +722,7 @@ export default function App() {
       setActiveSprite(matched.sprite);
       setActiveFrame(0);
       setIsPlaying(true);
-      setNotice(`Keyboard ${matched.binding.triggerValue} triggered action: ${matched.binding.actionName}`);
+      setNotice(`Keyboard ${matched.binding?.triggerValue || event.code} triggered action: ${matched.binding?.actionName || matched.name}`);
     };
 
     const onKeyUp = (event: KeyboardEvent) => {
@@ -1053,8 +1053,9 @@ export default function App() {
     const [, assetHeight] = assetSprite ? getFrameSize(assetSprite) : [256, 256];
     const targetHeight = asset.role === "effect" ? 150 : asset.role === "player" ? 300 : 220;
     const defaultScale = clampLayerScale(targetHeight / Math.max(1, assetHeight));
+    const layerActionName = asset.binding?.actionName || asset.name;
     const layer: SceneLayer = {
-      id: `layer_${safeName(asset.binding.actionName)}_${Date.now()}`,
+      id: `layer_${safeName(layerActionName)}_${Date.now()}`,
       name: asset.name,
       type: asset.role === "effect" ? "effect" : "sprite",
       visible: true,
@@ -1629,7 +1630,7 @@ export default function App() {
       .map(asset => {
         const clip = asset.animations?.find(item => item.binding?.triggerType === "mouse");
         if (clip) return { asset, clip };
-        return asset.binding.triggerType === "mouse" ? { asset, clip: undefined } : null;
+        return asset.binding?.triggerType === "mouse" ? { asset, clip: undefined } : null;
       })
       .find(Boolean);
     if (!matched) {
@@ -1645,7 +1646,7 @@ export default function App() {
     setActiveSprite(matched.clip?.sprite || resolveAssetSprite(matched.asset) || matched.asset.sprite);
     setActiveFrame(0);
     setIsPlaying(true);
-    setNotice(`Mouse triggered action: ${matched.clip?.name || matched.asset.binding.actionName}`);
+    setNotice(`Mouse triggered action: ${matched.clip?.name || matched.asset.binding?.actionName || matched.asset.name}`);
   };
 
   const clearSceneSelection = () => {

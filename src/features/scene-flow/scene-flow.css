@@ -174,6 +174,69 @@
   color: #555;
   font-size: 12px;
 }
+.scene-flow-context-menu {
+  position: fixed;
+  z-index: 1000;
+  width: min(250px, calc(100vw - 16px));
+  display: grid;
+  gap: 2px;
+  padding: 7px;
+  border: 1px solid #20242a;
+  background: rgba(255, 255, 255, .96);
+  box-shadow: 0 12px 28px rgba(23, 32, 42, .22);
+}
+.scene-flow-context-title {
+  padding: 3px 6px 5px;
+  border-bottom: 1px solid #d8e0e8;
+  color: #566272;
+  font-size: 11px;
+  font-weight: 850;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.scene-flow-context-menu button {
+  min-height: 32px;
+  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #17202a;
+  font-size: 12px;
+  font-weight: 850;
+  text-align: left;
+}
+.scene-flow-context-menu button:hover {
+  background: rgba(23, 32, 42, .1);
+  transform: none;
+}
+.scene-flow-context-menu button:disabled {
+  color: #8a95a1;
+  background: transparent;
+}
+.scene-flow-context-menu button.danger {
+  color: #9f1d1d;
+}
+.scene-flow-context-menu kbd {
+  align-self: center;
+  padding: 2px 0;
+  color: #7a8491;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.scene-flow-context-separator {
+  height: 1px;
+  margin: 4px 4px;
+  background: #d8e0e8;
+}
 
 @media (max-width: 940px) {
   .scene-flow-toolbar {

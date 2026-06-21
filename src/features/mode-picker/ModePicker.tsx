@@ -9,7 +9,7 @@ const WEBSITE_URL = "https://gorest.ai/";
 export function ModePicker({ onOpenGame, onOpenSheetOnly }: ModePickerProps) {
   return (
     <main className="mode-picker-page">
-      <section className="mode-picker-shell" aria-labelledby="mode-picker-title">
+      <section className="mode-picker-shell" aria-label="Choose Gorest workspace mode">
         <header className="mode-picker-brand">
           <img className="mode-picker-logo" src="/brand/gorest-logo-black.png" alt="Gorest" />
           <div className="mode-picker-actions">
@@ -24,7 +24,6 @@ export function ModePicker({ onOpenGame, onOpenSheetOnly }: ModePickerProps) {
 
         <div className="mode-picker-copy">
           <p className="mode-picker-kicker">Open-source No-UI 2D Game / Animation Generative Platform</p>
-          <h1 id="mode-picker-title">We are infinite.</h1>
           <p>
             Turn ideas, references, and spritesheets into game-ready 2D assets.
           </p>

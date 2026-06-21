@@ -213,7 +213,7 @@ export function defaultInteractionText(asset?: GameAsset) {
   if (asset.id === BOARDING_TRAIN_ASSET_ID) return "Board";
   if (asset.id === "asset_scene_ticket_machine") return "Use";
   if (asset.id === INSPECT_TRIGGER_ASSET_ID) return "Inspect";
-  return asset.binding.actionName === "interact" ? "Interact" : asset.name;
+  return asset.binding?.actionName === "interact" ? "Interact" : asset.name;
 }
 
 export function layerInteractionSettings(layer: SceneLayer, asset?: GameAsset): LayerInteractionSettings | null {
@@ -225,7 +225,7 @@ export function layerInteractionSettings(layer: SceneLayer, asset?: GameAsset): 
   if (!assetIsInteractable && !layer.interaction) return null;
   return {
     ...DEFAULT_INTERACTION_SETTINGS,
-    promptKey: keyLabelFromBinding(asset?.binding.triggerValue),
+    promptKey: keyLabelFromBinding(asset?.binding?.triggerValue),
     promptText: defaultInteractionText(asset),
     ...layer.interaction,
   };
