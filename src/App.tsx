@@ -1,6 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState, type ChangeEvent, type DragEvent, type MouseEvent, type PointerEvent } from "react";
 import {
-  ArrowLeft,
   CheckCircle2,
   Clipboard,
   Copy,
@@ -42,6 +41,7 @@ import { buildSceneFlowNodes, SceneFlowCanvas, type SceneFlowNode } from "./feat
 import { ModePicker } from "./features/mode-picker";
 import { buildSheetOnlyEntries, SheetOnlyGallery } from "./features/sheet-only-gallery";
 import { SpritesheetImporterPanel } from "./features/spritesheet-importer";
+import { WorkspaceTopbar } from "./features/workspace-topbar";
 import { fetchGameLibrary, fetchLatestSprite } from "./services/gameLibraryApi";
 import { fetchGeneratedAssets, type RepositoryGeneratedImage } from "./services/generatedAssetsApi";
 import {
@@ -3506,26 +3506,17 @@ export default function App() {
 
   return (
     <div className={`blueprint-app ${tab === "scenes" || tab === "scene" ? "core-mode" : ""}`}>
-      <header className="topbar">
-        <button type="button" className="mode-back-button" onClick={returnToModePicker}>
-          <ArrowLeft size={16} /> Back
-        </button>
-        <div className="topbar-title">
-          <p className="eyebrow">2D Side-Scroller Asset Studio</p>
-          <h1>Spritesheet Game Asset Pipeline</h1>
-        </div>
-        <div className="top-actions">
-          <button onClick={() => setTab("scenes")} className="ghost-button"><MapIcon size={16} /> Scenes</button>
-          <button onClick={() => setIsPlaying(!isPlaying)} className="ghost-button">
-            {isPlaying ? <Pause size={16} /> : <Play size={16} />} {isPlaying ? "Pause" : "Play"}
-          </button>
-          <button onClick={saveAsset} className="ghost-button"><CheckCircle2 size={16} /> Confirm Asset</button>
-          <button onClick={saveScene} className="ghost-button"><Save size={16} /> Save Scene</button>
-          <button onClick={saveCompletedScene} className="ghost-button"><CheckCircle2 size={16} /> Save Complete</button>
-          <button onClick={startNewScene} className="ghost-button"><Plus size={16} /> New Scene</button>
-          <button onClick={downloadSheet} className="primary-button"><Download size={16} /> Download Sheet</button>
-        </div>
-      </header>
+      <WorkspaceTopbar
+        isPlaying={isPlaying}
+        onBack={returnToModePicker}
+        onDownloadSheet={downloadSheet}
+        onOpenScenes={() => setTab("scenes")}
+        onSaveAsset={saveAsset}
+        onSaveComplete={saveCompletedScene}
+        onSaveScene={saveScene}
+        onStartNewScene={startNewScene}
+        onTogglePlay={() => setIsPlaying(!isPlaying)}
+      />
 
       <main className={`game-workspace ${tab === "scenes" || tab === "scene" ? "simple-workspace" : ""}`}>
         <aside className="panel left-panel utility-panel">
