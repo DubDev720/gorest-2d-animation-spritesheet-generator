@@ -25,6 +25,7 @@ import {
   SceneInspectorHeader,
   SceneInspectorInteractionZoneSection,
   SceneInspectorItemSection,
+  SceneInspectorLightingSection,
   SceneInspectorTransformSection,
 } from "./features/scene-inspector";
 import {
@@ -4332,23 +4333,14 @@ export default function App() {
                           )}
 
                           {isSceneVisualLayer(selectedLayer) && !selectedLayer.locked && (
-                            <div className="compact-inspector-section">
-                              <em>Lighting</em>
-                              <div className="compact-action-row">
-                                <button type="button" onClick={applyNeonLightingToSelectedLayer}>Neon</button>
-                                <button type="button" onClick={clearLightingFromSelectedLayer}>Off</button>
-                              </div>
-                              <label>Brightness {selectedLayerLight.brightness.toFixed(2)}</label>
-                              <input type="range" min="0.25" max="1.35" step="0.01" value={selectedLayerLight.brightness} onChange={event => updateSelectedLayerLighting({ brightness: Number(event.target.value), preset: "neon-station" })} />
-                              <label>Contrast {selectedLayerLight.contrast.toFixed(2)}</label>
-                              <input type="range" min="0.55" max="1.55" step="0.01" value={selectedLayerLight.contrast} onChange={event => updateSelectedLayerLighting({ contrast: Number(event.target.value), preset: "neon-station" })} />
-                              <label>Saturation {selectedLayerLight.saturate.toFixed(2)}</label>
-                              <input type="range" min="0.25" max="1.5" step="0.01" value={selectedLayerLight.saturate} onChange={event => updateSelectedLayerLighting({ saturate: Number(event.target.value), preset: "neon-station" })} />
-                              <label>Edge Light {Math.round(selectedLayerLight.edgeLightOpacity * 100)}%</label>
-                              <input type="range" min="0" max="0.75" step="0.01" value={selectedLayerLight.edgeLightOpacity} onChange={event => updateSelectedLayerLighting({ edgeLightOpacity: Number(event.target.value), preset: "neon-station" })} />
-                              <label>Contact Shadow {Math.round(selectedLayerShadow.opacity * 100)}%</label>
-                              <input type="range" min="0" max="1" step="0.01" value={selectedLayerShadow.opacity} onChange={event => updateSelectedLayerShadow({ opacity: Number(event.target.value), enabled: Number(event.target.value) > 0 })} />
-                            </div>
+                            <SceneInspectorLightingSection
+                              lighting={selectedLayerLight}
+                              shadow={selectedLayerShadow}
+                              onApplyNeonLighting={applyNeonLightingToSelectedLayer}
+                              onClearLighting={clearLightingFromSelectedLayer}
+                              onUpdateLighting={updateSelectedLayerLighting}
+                              onUpdateShadow={updateSelectedLayerShadow}
+                            />
                           )}
                         </>
                       )}
