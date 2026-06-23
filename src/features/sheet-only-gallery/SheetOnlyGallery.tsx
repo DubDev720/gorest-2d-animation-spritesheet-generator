@@ -68,7 +68,7 @@ export function SheetOnlyGallery({
             >
               <span className="sheet-only-thumb" style={checkerStyle}>
                 {entry.imageUrl ? (
-                  <img src={entry.imageUrl} alt="" />
+                  <img src={entry.imageUrl} alt="" loading="lazy" decoding="async" />
                 ) : entry.sprite ? (
                   <span dangerouslySetInnerHTML={{ __html: spriteFrame(entry.sprite, 0) }} />
                 ) : null}

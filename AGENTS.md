@@ -1,30 +1,38 @@
 # Gorest Agent Instructions
 
-This repo is a no-UI 2D game and animation generative platform. The user should be able to describe a scene, asset, spritesheet, or editor workflow in natural language, and the agent should update the project files directly instead of asking the user to operate UI controls manually.
+Gorest is a no-UI 2D game and animation generative platform. The user describes the target scene, asset, spritesheet, or editor workflow in natural language; the agent creates assets, wires metadata, and verifies the browser-visible result.
 
-## Start Here
+## Read First
 
-- Read `README.md` and `docs/AGENT_WORKFLOW.md` before making product or asset changes.
-- Recommended model: GPT-5.5 (`gpt-5.5`) for coding-heavy, tool-heavy, long-context workflows in this repo.
-- Keep work aligned with the existing React feature structure and the asset library in `public/generated/game_asset_library.json`.
+- For normal asset/scene work, this file is the required entry point.
+- Read `SPRITESHEET_GENERATION_POLICY.md` only when creating, editing, or debugging character/creature/mascot spritesheets.
+- Read `docs/AGENT_WORKFLOW.md` only for larger end-to-end scene workflows or when the project structure is unclear.
+- Read `README.md` only for product background, onboarding, or user-facing documentation changes.
+
+## Core Rules
+
+- Keep work aligned with the existing React structure and `public/generated/game_asset_library.json`.
 - Store generated app assets under `public/generated/` unless the asset is a brand/logo asset.
-- App logo usage should stay black in the application. The colored Gorest logo is for README/community presentation.
+- Add reusable visual assets and scenes to `public/generated/game_asset_library.json` with deterministic descriptive IDs.
+- One-frame sprites are static images. Do not configure them as auto-playing animations unless asked.
+- Multi-frame spritesheets need consistent frame size, sheet size, grid columns, fps, frames, and a reusable animation clip.
+- App logo usage should stay black in the app. The colored Gorest logo is for README/community presentation.
 
-## Asset Library Rules
+## Character Art Rules
 
-- Add reusable visual assets to `public/generated/game_asset_library.json`.
-- Add scenes to the same file under `scenes`.
-- Use deterministic, descriptive IDs for generated assets and scenes.
-- A one-frame sprite is a static image. Do not configure it as an auto-playing animation unless the user explicitly asks for that behavior.
-- Multi-frame spritesheets should include consistent `frameSize`, `sheetSize`, `gridColumns`, `fps`, `frames`, and a reusable animation clip.
-- For exact visible text, prefer code-assisted rendering over pure image generation so the final asset uses the requested wording.
+- Character, portrait, facial-expression, creature, and mascot spritesheets must use finely drawn image-generation/diffusion-style art as the visible source.
+- Do not use SVG, Canvas, PIL, CSS, or procedural overlays as the final drawing for eyes, tears, mouths, hair, clothes, limbs, or expression changes.
+- Code may only post-process drawn art: background removal, alpha cleanup, fixed-frame cropping, anchor/scale normalization, spritesheet packing, preview generation, and metadata wiring.
+- Require very high clarity: sharp eyes, hair strands, tears, mouth shapes, accessories, fabric texture, and clean alpha edges.
+- Prefer high-detail source art and downsample into the final frame size. Do not upscale blurry frames and call them final.
+- For exact visible text, prefer code-assisted text rendering over pure image generation.
 
 ## Product Rules
 
-- Favor no-UI flows: the browser is the visual result surface, while Codex handles asset creation, JSON wiring, metadata, and code changes.
-- Keep controls and layout restrained, readable, and practical. Avoid marketing-heavy language in app UI.
+- The browser is the result surface; Codex handles generation, JSON wiring, metadata, and code changes.
+- Keep app controls restrained, readable, and practical. Avoid marketing-heavy UI copy.
 - Maintain right-click and keyboard workflows on the 2D Canvas.
-- Keep `Spritesheet Only` detail back navigation returning to the `Spritesheet Only` gallery, not the home page.
+- Keep `Spritesheet Only` detail back navigation returning to the `Spritesheet Only` gallery.
 
 ## License Boundary
 

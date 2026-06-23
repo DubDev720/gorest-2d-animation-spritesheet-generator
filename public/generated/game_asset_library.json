@@ -1,6 +1,1579 @@
 {
   "assets": [
     {
+      "id": "asset_tree_dog_guardian_weapon_swing_pseudo3d_16f",
+      "name": "Tree-Dog Guardian / Pseudo-3D Weapon Swing",
+      "role": "player",
+      "confirmed": true,
+      "savedTime": "2026-06-23T00:59:43.987Z",
+      "updatedTime": "2026-06-23T00:59:43.987Z",
+      "sprite": {
+        "id": "sprite_tree_dog_guardian_weapon_swing_pseudo3d_16f",
+        "characterName": "Tree-Dog Guardian / Pseudo-3D Weapon Swing 16f",
+        "description": "16-frame pseudo-3D weapon swing spritesheet for the supplied tree-dog guardian reference: 4x4 grid, 256x256 transparent frames, fixed root anchor, row-major loop from ready stance through overhead/side/rear follow-through and recovery.",
+        "frameCount": 16,
+        "style": "polished high-detail painterly 3D-to-2D game sprite, golden bark-fur tree-dog mascot, leafy branch antlers, teal-and-gold magical staff, transparent PNG spritesheet",
+        "prompt": "Create one complete 4x4 spritesheet for a cute fantasy tree-dog guardian mascot swinging a teal-and-gold magical staff weapon in a pseudo-3D arc. Use the supplied front, side, and rear reference images as identity and turnaround guidance. Preserve the rounded golden-brown dog face, glossy black eyes, blush cheeks, bark/fur body, root-like feet, branch antlers with green leaves, and faceted teal-and-gold staff. Frame order: ready front 3/4, wind-up, overhead swing, side/rear follow-through, recovery back to ready. Use a flat #ff00ff chroma-key background, no text, no watermark, no shadow, and keep a stable full-body root anchor.",
+        "frames": [
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"256 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"512 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"768 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 256 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"256 256 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"512 256 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"768 256 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 512 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"256 512 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"512 512 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"768 512 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 768 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"256 768 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"512 768 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"768 768 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>"
+        ],
+        "createdTime": "2026-06-23T00:59:43.987Z",
+        "updatedTime": "2026-06-23T00:59:43.987Z",
+        "isPreset": false,
+        "spritesheetPng": "/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png",
+        "rawSpritesheetPng": "/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png",
+        "generationMode": "codex_image_redraw_spritesheet",
+        "artSourcePolicy": "Visible character art was generated/redrawn as a full 4x4 sheet from the supplied front, side, and rear raster references. Code only removed chroma key, normalized frame scale/anchor, packed transparent frames, created preview media, and wrote metadata.",
+        "proportionPolicy": "uniform_scale_preserve_input_character_proportions",
+        "normalization": "global_uniform_scale_fixed_root_anchor_auto_grid_no_nonuniform_scaling",
+        "inputReferenceInvariant": "Preserve the supplied tree-dog guardian identity from the three reference PNGs in C:/Users/Zhang/Downloads: front view image (1), side view image (2), and rear view image (3). Keep the rounded dog face, golden bark-fur body, leafy branch antlers, root feet, and teal-gold geometric staff weapon.",
+        "fps": 10,
+        "gridColumns": 4,
+        "frameSize": [
+          256,
+          256
+        ],
+        "sheetSize": [
+          1024,
+          1024
+        ],
+        "sourceSize": [
+          1254,
+          1254
+        ],
+        "sourceCells": [
+          [
+            12,
+            15,
+            320,
+            319
+          ],
+          [
+            326,
+            15,
+            625,
+            319
+          ],
+          [
+            631,
+            15,
+            936,
+            319
+          ],
+          [
+            942,
+            15,
+            1251,
+            319
+          ],
+          [
+            12,
+            325,
+            320,
+            624
+          ],
+          [
+            326,
+            325,
+            625,
+            624
+          ],
+          [
+            631,
+            325,
+            936,
+            624
+          ],
+          [
+            942,
+            325,
+            1251,
+            624
+          ],
+          [
+            12,
+            630,
+            320,
+            926
+          ],
+          [
+            326,
+            630,
+            625,
+            926
+          ],
+          [
+            631,
+            630,
+            936,
+            926
+          ],
+          [
+            942,
+            630,
+            1251,
+            926
+          ],
+          [
+            12,
+            932,
+            320,
+            1235
+          ],
+          [
+            326,
+            932,
+            625,
+            1235
+          ],
+          [
+            631,
+            932,
+            936,
+            1235
+          ],
+          [
+            942,
+            932,
+            1251,
+            1235
+          ]
+        ],
+        "frameBboxes": [
+          [
+            20,
+            4,
+            217,
+            244
+          ],
+          [
+            24,
+            4,
+            207,
+            238
+          ],
+          [
+            22,
+            4,
+            216,
+            237
+          ],
+          [
+            23,
+            4,
+            190,
+            242
+          ],
+          [
+            23,
+            20,
+            217,
+            204
+          ],
+          [
+            49,
+            4,
+            176,
+            221
+          ],
+          [
+            22,
+            4,
+            230,
+            218
+          ],
+          [
+            40,
+            4,
+            212,
+            214
+          ],
+          [
+            57,
+            4,
+            195,
+            202
+          ],
+          [
+            26,
+            4,
+            226,
+            203
+          ],
+          [
+            34,
+            4,
+            218,
+            205
+          ],
+          [
+            18,
+            4,
+            234,
+            203
+          ],
+          [
+            35,
+            4,
+            217,
+            222
+          ],
+          [
+            30,
+            4,
+            222,
+            220
+          ],
+          [
+            33,
+            4,
+            212,
+            223
+          ],
+          [
+            29,
+            4,
+            203,
+            224
+          ]
+        ],
+        "rootAnchors": [
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ],
+          [
+            128,
+            78.08
+          ]
+        ],
+        "rootAnchorPolicy": "fixed_upper_body_centroid_anchor_character_position_stable",
+        "gridPolicy": "auto_detect_grid_from_sprite_distances_then_fallback_proportional",
+        "gridDetection": {
+          "mode": "auto_detected",
+          "xRuns": [
+            [
+              34,
+              298
+            ],
+            [
+              340,
+              619
+            ],
+            [
+              636,
+              918
+            ],
+            [
+              962,
+              1241
+            ]
+          ],
+          "yRuns": [
+            [
+              19,
+              313
+            ],
+            [
+              348,
+              610
+            ],
+            [
+              652,
+              897
+            ],
+            [
+              948,
+              1219
+            ]
+          ],
+          "xBounds": [
+            9,
+            323,
+            628,
+            939,
+            1254
+          ],
+          "yBounds": [
+            12,
+            322,
+            627,
+            929,
+            1238
+          ]
+        },
+        "adaptiveFramePolicy": "Use as a full 16-frame pseudo-3D action animation; do not crop by per-frame content bbox during playback.",
+        "qualityPolicy": "Raw generated sheet is 1254x1254. Final exported sheet is normalized to 1024x1024 with 256x256 frames using global uniform scale and high-quality resampling; no procedural drawing was used for character or weapon details.",
+        "thumbnail": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+        "spritesheetSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1024\" height=\"1024\" viewBox=\"0 0 1024 1024\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>"
+      },
+      "animations": [
+        {
+          "id": "clip_tree_dog_guardian_weapon_swing_pseudo3d_16f",
+          "name": "Pseudo-3D Weapon Swing",
+          "actionName": "weapon_swing",
+          "direction": "none",
+          "sprite": {
+            "id": "sprite_tree_dog_guardian_weapon_swing_pseudo3d_16f",
+            "characterName": "Tree-Dog Guardian / Pseudo-3D Weapon Swing 16f",
+            "description": "16-frame pseudo-3D weapon swing spritesheet for the supplied tree-dog guardian reference: 4x4 grid, 256x256 transparent frames, fixed root anchor, row-major loop from ready stance through overhead/side/rear follow-through and recovery.",
+            "frameCount": 16,
+            "style": "polished high-detail painterly 3D-to-2D game sprite, golden bark-fur tree-dog mascot, leafy branch antlers, teal-and-gold magical staff, transparent PNG spritesheet",
+            "prompt": "Create one complete 4x4 spritesheet for a cute fantasy tree-dog guardian mascot swinging a teal-and-gold magical staff weapon in a pseudo-3D arc. Use the supplied front, side, and rear reference images as identity and turnaround guidance. Preserve the rounded golden-brown dog face, glossy black eyes, blush cheeks, bark/fur body, root-like feet, branch antlers with green leaves, and faceted teal-and-gold staff. Frame order: ready front 3/4, wind-up, overhead swing, side/rear follow-through, recovery back to ready. Use a flat #ff00ff chroma-key background, no text, no watermark, no shadow, and keep a stable full-body root anchor.",
+            "frames": [
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"256 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"512 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"768 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 256 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"256 256 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"512 256 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"768 256 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 512 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"256 512 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"512 512 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"768 512 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 768 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"256 768 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"512 768 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"768 768 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>"
+            ],
+            "createdTime": "2026-06-23T00:59:43.987Z",
+            "updatedTime": "2026-06-23T00:59:43.987Z",
+            "isPreset": false,
+            "spritesheetPng": "/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png",
+            "rawSpritesheetPng": "/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png",
+            "generationMode": "codex_image_redraw_spritesheet",
+            "artSourcePolicy": "Visible character art was generated/redrawn as a full 4x4 sheet from the supplied front, side, and rear raster references. Code only removed chroma key, normalized frame scale/anchor, packed transparent frames, created preview media, and wrote metadata.",
+            "proportionPolicy": "uniform_scale_preserve_input_character_proportions",
+            "normalization": "global_uniform_scale_fixed_root_anchor_auto_grid_no_nonuniform_scaling",
+            "inputReferenceInvariant": "Preserve the supplied tree-dog guardian identity from the three reference PNGs in C:/Users/Zhang/Downloads: front view image (1), side view image (2), and rear view image (3). Keep the rounded dog face, golden bark-fur body, leafy branch antlers, root feet, and teal-gold geometric staff weapon.",
+            "fps": 10,
+            "gridColumns": 4,
+            "frameSize": [
+              256,
+              256
+            ],
+            "sheetSize": [
+              1024,
+              1024
+            ],
+            "sourceSize": [
+              1254,
+              1254
+            ],
+            "sourceCells": [
+              [
+                12,
+                15,
+                320,
+                319
+              ],
+              [
+                326,
+                15,
+                625,
+                319
+              ],
+              [
+                631,
+                15,
+                936,
+                319
+              ],
+              [
+                942,
+                15,
+                1251,
+                319
+              ],
+              [
+                12,
+                325,
+                320,
+                624
+              ],
+              [
+                326,
+                325,
+                625,
+                624
+              ],
+              [
+                631,
+                325,
+                936,
+                624
+              ],
+              [
+                942,
+                325,
+                1251,
+                624
+              ],
+              [
+                12,
+                630,
+                320,
+                926
+              ],
+              [
+                326,
+                630,
+                625,
+                926
+              ],
+              [
+                631,
+                630,
+                936,
+                926
+              ],
+              [
+                942,
+                630,
+                1251,
+                926
+              ],
+              [
+                12,
+                932,
+                320,
+                1235
+              ],
+              [
+                326,
+                932,
+                625,
+                1235
+              ],
+              [
+                631,
+                932,
+                936,
+                1235
+              ],
+              [
+                942,
+                932,
+                1251,
+                1235
+              ]
+            ],
+            "frameBboxes": [
+              [
+                20,
+                4,
+                217,
+                244
+              ],
+              [
+                24,
+                4,
+                207,
+                238
+              ],
+              [
+                22,
+                4,
+                216,
+                237
+              ],
+              [
+                23,
+                4,
+                190,
+                242
+              ],
+              [
+                23,
+                20,
+                217,
+                204
+              ],
+              [
+                49,
+                4,
+                176,
+                221
+              ],
+              [
+                22,
+                4,
+                230,
+                218
+              ],
+              [
+                40,
+                4,
+                212,
+                214
+              ],
+              [
+                57,
+                4,
+                195,
+                202
+              ],
+              [
+                26,
+                4,
+                226,
+                203
+              ],
+              [
+                34,
+                4,
+                218,
+                205
+              ],
+              [
+                18,
+                4,
+                234,
+                203
+              ],
+              [
+                35,
+                4,
+                217,
+                222
+              ],
+              [
+                30,
+                4,
+                222,
+                220
+              ],
+              [
+                33,
+                4,
+                212,
+                223
+              ],
+              [
+                29,
+                4,
+                203,
+                224
+              ]
+            ],
+            "rootAnchors": [
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ],
+              [
+                128,
+                78.08
+              ]
+            ],
+            "rootAnchorPolicy": "fixed_upper_body_centroid_anchor_character_position_stable",
+            "gridPolicy": "auto_detect_grid_from_sprite_distances_then_fallback_proportional",
+            "gridDetection": {
+              "mode": "auto_detected",
+              "xRuns": [
+                [
+                  34,
+                  298
+                ],
+                [
+                  340,
+                  619
+                ],
+                [
+                  636,
+                  918
+                ],
+                [
+                  962,
+                  1241
+                ]
+              ],
+              "yRuns": [
+                [
+                  19,
+                  313
+                ],
+                [
+                  348,
+                  610
+                ],
+                [
+                  652,
+                  897
+                ],
+                [
+                  948,
+                  1219
+                ]
+              ],
+              "xBounds": [
+                9,
+                323,
+                628,
+                939,
+                1254
+              ],
+              "yBounds": [
+                12,
+                322,
+                627,
+                929,
+                1238
+              ]
+            },
+            "adaptiveFramePolicy": "Use as a full 16-frame pseudo-3D action animation; do not crop by per-frame content bbox during playback.",
+            "qualityPolicy": "Raw generated sheet is 1254x1254. Final exported sheet is normalized to 1024x1024 with 256x256 frames using global uniform scale and high-quality resampling; no procedural drawing was used for character or weapon details.",
+            "thumbnail": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" width=\"256\" height=\"256\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" x=\"0\" y=\"0\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>",
+            "spritesheetSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1024\" height=\"1024\" viewBox=\"0 0 1024 1024\"><image href=\"/generated/tree_dog_guardian_weapon_swing_pseudo3d_16f_sheet.png\" width=\"1024\" height=\"1024\" preserveAspectRatio=\"none\"/></svg>"
+          },
+          "binding": {
+            "actionName": "weapon_swing",
+            "triggerType": "keyboard",
+            "triggerValue": "Space",
+            "gameState": "combat",
+            "notes": "Loopable pseudo-3D weapon swing using a fixed root anchor; suitable for a player or NPC attack action."
+          },
+          "loop": true,
+          "fps": 10
+        }
+      ],
+      "defaultAnimationId": "clip_tree_dog_guardian_weapon_swing_pseudo3d_16f",
+      "binding": {
+        "actionName": "weapon_swing",
+        "triggerType": "keyboard",
+        "triggerValue": "Space",
+        "gameState": "combat",
+        "notes": "Loopable pseudo-3D weapon swing using a fixed root anchor; suitable for a player or NPC attack action."
+      },
+      "tags": [
+        "tree-dog",
+        "guardian",
+        "weapon-swing",
+        "pseudo-3d",
+        "combat",
+        "staff",
+        "16f"
+      ]
+    },
+    {
+      "id": "asset_gui_chuan_ying_tears_diffusion_16f",
+      "name": "Gui Chuan Ying / Crying Close-up P2-size 16f",
+      "role": "npc",
+      "confirmed": true,
+      "savedTime": "2026-06-22T22:33:26.611Z",
+      "updatedTime": "2026-06-23T01:08:16.618Z",
+      "sprite": {
+        "id": "sprite_gui_chuan_ying_tears_diffusion_16f",
+        "characterName": "Gui Chuan Ying / Crying Close-up P2-size 16f",
+        "description": "High-resolution Gui Chuan Ying crying close-up spritesheet, rebuilt from P1 by segmenting the 16 real character blocks instead of assuming an even grid, then face-locking every frame to remove Y bounce.",
+        "frameCount": 16,
+        "style": "painterly anime horror-drama close-up portrait, maroon red hair, green eyes, black shirt, transparent PNG spritesheet, P2-size 512px frames",
+        "prompt": "User-supplied P1 sheet processed to P2 sheet dimensions. No code-drawn expression changes; code only split grid, removed green, despilled edges, sharpened lightly, and packed transparent frames.",
+        "frames": [
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+        ],
+        "createdTime": "2026-06-22T22:33:26.611Z",
+        "updatedTime": "2026-06-23T01:08:16.618Z",
+        "isPreset": false,
+        "spritesheetPng": "/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png",
+        "rawSpritesheetPng": "/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png",
+        "generationMode": "postprocess_p1_to_p2size_spritesheet",
+        "artSourcePolicy": "The character art and expression are from the supplied P1 raster sheet. Code only post-processed grid split, chroma-key removal, edge despill, restrained sharpening, transparent packing, preview, and metadata.",
+        "proportionPolicy": "No adaptive per-frame crop. Keep every source cell as a full 512 frame, then translate the whole finished frame until the same face anchor reaches the same X/Y position.",
+        "normalization": "Source P1 was detected as 16 separate foreground components on green, not a mathematically even 4x4 grid. Each component is cropped with 8px source padding, scaled by 1.42, and placed on a 512x512 frame with the face center locked to (256, 278). Frames 13-16 had a truncated lower torso in P1, so the missing lower torso area below y=325 is softly extended from frames 9-12 in the same columns. Frames 13-16 are additionally normalized to the median head center and head height from frames 1-12, preventing a small-head pop on the final row.",
+        "inputReferenceInvariant": "Preserve the supplied maroon-haired anime boy identity, green eyes, pale face, black shirt with red trim, black necklace, and restrained horror-drama expression style from C:/Users/Zhang/Desktop/惊魂笔记/鬼川营.png.",
+        "fps": 8,
+        "gridColumns": 4,
+        "frameSize": [
+          512,
+          512
+        ],
+        "sheetSize": [
+          2048,
+          2048
+        ],
+        "sourceSize": [
+          1254,
+          1254
+        ],
+        "sourceCrops": [
+          [
+            0,
+            0,
+            314,
+            314
+          ],
+          [
+            314,
+            0,
+            627,
+            314
+          ],
+          [
+            627,
+            0,
+            940,
+            314
+          ],
+          [
+            940,
+            0,
+            1254,
+            314
+          ],
+          [
+            0,
+            314,
+            314,
+            627
+          ],
+          [
+            314,
+            314,
+            627,
+            627
+          ],
+          [
+            627,
+            314,
+            940,
+            627
+          ],
+          [
+            940,
+            314,
+            1254,
+            627
+          ],
+          [
+            0,
+            627,
+            314,
+            940
+          ],
+          [
+            314,
+            627,
+            627,
+            940
+          ],
+          [
+            627,
+            627,
+            940,
+            940
+          ],
+          [
+            940,
+            627,
+            1254,
+            940
+          ],
+          [
+            0,
+            940,
+            314,
+            1254
+          ],
+          [
+            314,
+            940,
+            627,
+            1254
+          ],
+          [
+            627,
+            940,
+            940,
+            1254
+          ],
+          [
+            940,
+            940,
+            1254,
+            1254
+          ]
+        ],
+        "fixedSourceCropSize": null,
+        "rootAnchorPolicy": "iterative full-frame face-anchor alignment; target face anchor=(256,333); no per-frame bbox crop",
+        "adaptiveFramePolicy": "Use as a full 16-frame animation; do not crop frames by per-frame content bbox.",
+        "thumbnail": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+        "spritesheetSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"2048\" height=\"2048\" viewBox=\"0 0 2048 2048\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+        "qualityPolicy": "P2-size alignment/cleanup of the supplied P1 raster. This preserves the drawing while correcting visible X/Y frame drift.",
+        "sourceFrameSizeApprox": [
+          313.5,
+          313.5
+        ],
+        "recropPolicy": "Horizontal crop is centered on a detected skin/face anchor so the face lands at x=256 in every 512px frame. Vertical crop is bottom-locked to the original cell so the bust cut stays at the frame bottom instead of floating. Adjacent cells are never sampled; out-of-cell areas are padded with chroma green and keyed out.",
+        "faceAnchorXInFrame": [
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256,
+          256
+        ],
+        "alignmentPolicy": "The source P1 sheet is not an even 4x4 grid. It is segmented into 16 real character components, each component is cropped with 8px source padding, uniformly scaled by 1.42, and registered to the same face-center anchor at (256, 278) in a 512x512 frame. This removes row/column mis-cuts and the visible Y bounce from the earlier grid-based crop. Frames 13-16 had a truncated lower torso in P1, so the missing lower torso area below y=325 is softly extended from frames 9-12 in the same columns. Frames 13-16 are additionally normalized to the median head center and head height from frames 1-12, preventing a small-head pop on the final row.",
+        "frameTranslations": [
+          [
+            60.04,
+            13.17
+          ],
+          [
+            61.46,
+            13.88
+          ],
+          [
+            60.04,
+            12.46
+          ],
+          [
+            60.04,
+            13.88
+          ],
+          [
+            62.88,
+            15.3
+          ],
+          [
+            62.88,
+            15.3
+          ],
+          [
+            62.88,
+            13.88
+          ],
+          [
+            61.46,
+            15.3
+          ],
+          [
+            61.46,
+            15.3
+          ],
+          [
+            61.46,
+            16.72
+          ],
+          [
+            62.88,
+            16.72
+          ],
+          [
+            61.46,
+            16.72
+          ],
+          [
+            81.34,
+            29.5
+          ],
+          [
+            82.76,
+            29.5
+          ],
+          [
+            82.76,
+            28.08
+          ],
+          [
+            84.18,
+            30.92
+          ]
+        ],
+        "registrationScores": [
+          0.873338,
+          0.892669,
+          0.8795,
+          0.861298,
+          0.944462,
+          1,
+          0.955973,
+          0.937321,
+          0.868942,
+          0.913801,
+          0.882605,
+          0.864937,
+          0.766257,
+          0.789436,
+          0.778661,
+          0.758503
+        ],
+        "faceAnchorAfter": [
+          [
+            255,
+            332
+          ],
+          [
+            256,
+            333
+          ],
+          [
+            256,
+            332
+          ],
+          [
+            255,
+            333
+          ],
+          [
+            256,
+            333
+          ],
+          [
+            256,
+            333
+          ],
+          [
+            256,
+            333
+          ],
+          [
+            256,
+            333
+          ],
+          [
+            257,
+            334
+          ],
+          [
+            257,
+            333
+          ],
+          [
+            257,
+            334
+          ],
+          [
+            256,
+            334
+          ],
+          [
+            256,
+            333
+          ],
+          [
+            257,
+            333
+          ],
+          [
+            256,
+            333
+          ],
+          [
+            257,
+            333
+          ]
+        ],
+        "name": "Gui Chuan Ying Crying Close-up",
+        "frameWidth": 512,
+        "frameHeight": 512,
+        "columns": 4,
+        "rows": 4,
+        "totalFrames": 16,
+        "spriteFrames": [
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+        ],
+        "targetFaceCenter": [
+          256,
+          278
+        ],
+        "sourceComponentPadding": 8,
+        "torsoExtensionPolicy": "Frames 13-16 were truncated at the bottom in the provided P1 source. Their missing lower torso is softly extended from frames 9-12 in the same columns, below y=325 only, preserving the generated crying faces while preventing a bottom-row height jump.",
+        "headSizeNormalizationPolicy": "Frames 13-16 were slightly smaller/lower than frames 1-12. They are isotropically scaled and translated so the color-based head box matches the median head center and height of frames 1-12, preventing a one-frame head-size pop.",
+        "headSizeTarget": {
+          "targetCenter": [
+            238,
+            194.5
+          ],
+          "targetSize": [
+            232,
+            317
+          ]
+        }
+      },
+      "animations": [
+        {
+          "id": "clip_gui_chuan_ying_tears_diffusion_loop",
+          "name": "Gui Chuan Ying diffusion tears loop",
+          "actionName": "cry",
+          "direction": "none",
+          "sprite": {
+            "id": "sprite_gui_chuan_ying_tears_diffusion_16f",
+            "characterName": "Gui Chuan Ying / Crying Close-up P2-size 16f",
+            "description": "High-resolution Gui Chuan Ying crying close-up spritesheet, rebuilt from P1 by segmenting the 16 real character blocks instead of assuming an even grid, then face-locking every frame to remove Y bounce.",
+            "frameCount": 16,
+            "style": "painterly anime horror-drama close-up portrait, maroon red hair, green eyes, black shirt, transparent PNG spritesheet, P2-size 512px frames",
+            "prompt": "User-supplied P1 sheet processed to P2 sheet dimensions. No code-drawn expression changes; code only split grid, removed green, despilled edges, sharpened lightly, and packed transparent frames.",
+            "frames": [
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+            ],
+            "createdTime": "2026-06-22T22:33:26.611Z",
+            "updatedTime": "2026-06-23T01:08:16.618Z",
+            "isPreset": false,
+            "spritesheetPng": "/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png",
+            "rawSpritesheetPng": "/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png",
+            "generationMode": "postprocess_p1_to_p2size_spritesheet",
+            "artSourcePolicy": "The character art and expression are from the supplied P1 raster sheet. Code only post-processed grid split, chroma-key removal, edge despill, restrained sharpening, transparent packing, preview, and metadata.",
+            "proportionPolicy": "No adaptive per-frame crop. Keep every source cell as a full 512 frame, then translate the whole finished frame until the same face anchor reaches the same X/Y position.",
+            "normalization": "Source P1 was detected as 16 separate foreground components on green, not a mathematically even 4x4 grid. Each component is cropped with 8px source padding, scaled by 1.42, and placed on a 512x512 frame with the face center locked to (256, 278). Frames 13-16 had a truncated lower torso in P1, so the missing lower torso area below y=325 is softly extended from frames 9-12 in the same columns. Frames 13-16 are additionally normalized to the median head center and head height from frames 1-12, preventing a small-head pop on the final row.",
+            "inputReferenceInvariant": "Preserve the supplied maroon-haired anime boy identity, green eyes, pale face, black shirt with red trim, black necklace, and restrained horror-drama expression style from C:/Users/Zhang/Desktop/惊魂笔记/鬼川营.png.",
+            "fps": 8,
+            "gridColumns": 4,
+            "frameSize": [
+              512,
+              512
+            ],
+            "sheetSize": [
+              2048,
+              2048
+            ],
+            "sourceSize": [
+              1254,
+              1254
+            ],
+            "sourceCrops": [
+              [
+                0,
+                0,
+                314,
+                314
+              ],
+              [
+                314,
+                0,
+                627,
+                314
+              ],
+              [
+                627,
+                0,
+                940,
+                314
+              ],
+              [
+                940,
+                0,
+                1254,
+                314
+              ],
+              [
+                0,
+                314,
+                314,
+                627
+              ],
+              [
+                314,
+                314,
+                627,
+                627
+              ],
+              [
+                627,
+                314,
+                940,
+                627
+              ],
+              [
+                940,
+                314,
+                1254,
+                627
+              ],
+              [
+                0,
+                627,
+                314,
+                940
+              ],
+              [
+                314,
+                627,
+                627,
+                940
+              ],
+              [
+                627,
+                627,
+                940,
+                940
+              ],
+              [
+                940,
+                627,
+                1254,
+                940
+              ],
+              [
+                0,
+                940,
+                314,
+                1254
+              ],
+              [
+                314,
+                940,
+                627,
+                1254
+              ],
+              [
+                627,
+                940,
+                940,
+                1254
+              ],
+              [
+                940,
+                940,
+                1254,
+                1254
+              ]
+            ],
+            "fixedSourceCropSize": null,
+            "rootAnchorPolicy": "iterative full-frame face-anchor alignment; target face anchor=(256,333); no per-frame bbox crop",
+            "adaptiveFramePolicy": "Use as a full 16-frame animation; do not crop frames by per-frame content bbox.",
+            "thumbnail": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+            "spritesheetSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"2048\" height=\"2048\" viewBox=\"0 0 2048 2048\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+            "qualityPolicy": "P2-size alignment/cleanup of the supplied P1 raster. This preserves the drawing while correcting visible X/Y frame drift.",
+            "sourceFrameSizeApprox": [
+              313.5,
+              313.5
+            ],
+            "recropPolicy": "Horizontal crop is centered on a detected skin/face anchor so the face lands at x=256 in every 512px frame. Vertical crop is bottom-locked to the original cell so the bust cut stays at the frame bottom instead of floating. Adjacent cells are never sampled; out-of-cell areas are padded with chroma green and keyed out.",
+            "faceAnchorXInFrame": [
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256,
+              256
+            ],
+            "alignmentPolicy": "The source P1 sheet is not an even 4x4 grid. It is segmented into 16 real character components, each component is cropped with 8px source padding, uniformly scaled by 1.42, and registered to the same face-center anchor at (256, 278) in a 512x512 frame. This removes row/column mis-cuts and the visible Y bounce from the earlier grid-based crop. Frames 13-16 had a truncated lower torso in P1, so the missing lower torso area below y=325 is softly extended from frames 9-12 in the same columns. Frames 13-16 are additionally normalized to the median head center and head height from frames 1-12, preventing a small-head pop on the final row.",
+            "frameTranslations": [
+              [
+                60.04,
+                13.17
+              ],
+              [
+                61.46,
+                13.88
+              ],
+              [
+                60.04,
+                12.46
+              ],
+              [
+                60.04,
+                13.88
+              ],
+              [
+                62.88,
+                15.3
+              ],
+              [
+                62.88,
+                15.3
+              ],
+              [
+                62.88,
+                13.88
+              ],
+              [
+                61.46,
+                15.3
+              ],
+              [
+                61.46,
+                15.3
+              ],
+              [
+                61.46,
+                16.72
+              ],
+              [
+                62.88,
+                16.72
+              ],
+              [
+                61.46,
+                16.72
+              ],
+              [
+                81.34,
+                29.5
+              ],
+              [
+                82.76,
+                29.5
+              ],
+              [
+                82.76,
+                28.08
+              ],
+              [
+                84.18,
+                30.92
+              ]
+            ],
+            "registrationScores": [
+              0.873338,
+              0.892669,
+              0.8795,
+              0.861298,
+              0.944462,
+              1,
+              0.955973,
+              0.937321,
+              0.868942,
+              0.913801,
+              0.882605,
+              0.864937,
+              0.766257,
+              0.789436,
+              0.778661,
+              0.758503
+            ],
+            "faceAnchorAfter": [
+              [
+                255,
+                332
+              ],
+              [
+                256,
+                333
+              ],
+              [
+                256,
+                332
+              ],
+              [
+                255,
+                333
+              ],
+              [
+                256,
+                333
+              ],
+              [
+                256,
+                333
+              ],
+              [
+                256,
+                333
+              ],
+              [
+                256,
+                333
+              ],
+              [
+                257,
+                334
+              ],
+              [
+                257,
+                333
+              ],
+              [
+                257,
+                334
+              ],
+              [
+                256,
+                334
+              ],
+              [
+                256,
+                333
+              ],
+              [
+                257,
+                333
+              ],
+              [
+                256,
+                333
+              ],
+              [
+                257,
+                333
+              ]
+            ],
+            "name": "Gui Chuan Ying Crying Close-up",
+            "frameWidth": 512,
+            "frameHeight": 512,
+            "columns": 4,
+            "rows": 4,
+            "totalFrames": 16,
+            "spriteFrames": [
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+            ],
+            "targetFaceCenter": [
+              256,
+              278
+            ],
+            "sourceComponentPadding": 8,
+            "torsoExtensionPolicy": "Frames 13-16 were truncated at the bottom in the provided P1 source. Their missing lower torso is softly extended from frames 9-12 in the same columns, below y=325 only, preserving the generated crying faces while preventing a bottom-row height jump.",
+            "headSizeNormalizationPolicy": "Frames 13-16 were slightly smaller/lower than frames 1-12. They are isotropically scaled and translated so the color-based head box matches the median head center and height of frames 1-12, preventing a one-frame head-size pop.",
+            "headSizeTarget": {
+              "targetCenter": [
+                238,
+                194.5
+              ],
+              "targetSize": [
+                232,
+                317
+              ]
+            }
+          },
+          "binding": {
+            "actionName": "cry",
+            "triggerType": "auto",
+            "triggerValue": "preview-loop",
+            "gameState": "dialogue.gui_chuan_ying_tears_diffusion",
+            "notes": "Preview loop for the diffusion-redrawn Gui Chuan Ying tearing/crying portrait."
+          },
+          "loop": true,
+          "fps": 8,
+          "updatedTime": "2026-06-23T01:08:16.618Z",
+          "spritesheetPng": "/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png",
+          "rawSpritesheetPng": "/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png"
+        }
+      ],
+      "defaultAnimationId": "clip_gui_chuan_ying_tears_diffusion_loop",
+      "binding": {
+        "actionName": "cry",
+        "triggerType": "auto",
+        "triggerValue": "preview-loop",
+        "gameState": "dialogue.gui_chuan_ying_tears_diffusion",
+        "notes": "Preview loop for the diffusion-redrawn Gui Chuan Ying tearing/crying portrait."
+      },
+      "tags": [
+        "gui-chuan-ying",
+        "crying",
+        "tears",
+        "close-up",
+        "diffusion-redraw",
+        "anime",
+        "horror-drama",
+        "transparent",
+        "spritesheet",
+        "16-frame"
+      ],
+      "thumbnail": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+      "spritesheetSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"2048\" height=\"2048\" viewBox=\"0 0 2048 2048\"><image href=\"/generated/gui_chuan_ying_crying_closeup_p2size_16f_sheet.png\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+      "description": "Gui Chuan Ying crying close-up spritesheet rebuilt at 2048x2048 with clean chroma-key alpha and stable face-locked 512x512 frames. Fixes the earlier Y bounce caused by treating P1 as an even grid."
+    },
+    {
       "id": "asset_horror_note_novel_pen_ink",
       "name": "The Horror Note Novel, Pen, and Ink",
       "role": "prop",
@@ -2110,9 +3683,253 @@
       ],
       "thumbnail": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/wei_yang_crying_closeup_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
       "spritesheetSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"2048\" height=\"2048\" viewBox=\"0 0 2048 2048\"><image href=\"/generated/wei_yang_crying_closeup_16f_sheet.png\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+    },
+    {
+      "id": "asset_gorest_dog_turntable_16f",
+      "name": "Gorest Tree-Dog Mascot / Turntable 16f",
+      "role": "npc",
+      "confirmed": true,
+      "savedTime": "2026-06-23T01:01:44.172Z",
+      "updatedTime": "2026-06-23T01:06:05.026Z",
+      "sprite": {
+        "id": "sprite_gorest_dog_turntable_16f",
+        "characterName": "Gorest Tree-Dog Mascot / Turntable 16f",
+        "description": "16-frame pseudo-3D self-rotation spritesheet for the supplied Gorest tree-dog mascot references. 4x4 grid, 512x512 transparent frames, stable full-body framing, clockwise turntable loop from front to side to back and back to front.",
+        "frameCount": 16,
+        "style": "polished high-detail 2D game mascot render, golden Shiba-like tree dog, leafy branch antlers, root feet, transparent PNG spritesheet",
+        "prompt": "Use the supplied front, side, and back Gorest dog mascot references as identity anchors. Create a clean 4x4 pseudo-3D 360-degree self-rotation spritesheet on flat #ff00ff chroma key, with full-body padding, stable scale, stable root/feet contact, and the GOREST belly mark visible only on front and near-front frames.",
+        "frames": [
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+        ],
+        "createdTime": "2026-06-23T01:01:44.172Z",
+        "updatedTime": "2026-06-23T01:06:05.026Z",
+        "isPreset": false,
+        "spritesheetPng": "/generated/gorest_dog_turntable_16f_sheet.png",
+        "rawSpritesheetPng": "/generated/gorest_dog_turntable_16f_sheet.png",
+        "generationMode": "imagegen_reference_turntable_chroma_key_postprocess",
+        "artSourcePolicy": "Visible character art was generated/redrawn as one full 4x4 sheet from the supplied front, side, and rear raster references. Code only removed chroma key, split fixed cells, resized frames, packed transparent PNG, created preview media, and wrote metadata.",
+        "proportionPolicy": "full-cell proportional split; preserve source sheet proportions without per-frame bbox recrop",
+        "normalization": "generated 1254x1254 4x4 magenta sheet -> helper chroma-key alpha/despill -> proportional cell split -> 512x512 full-cell resize -> 2048x2048 transparent sheet",
+        "inputReferenceInvariant": "Preserve the supplied Gorest tree-dog mascot identity: rounded golden dog face, glossy black eyes, blush cheeks, bark/fur body, GOREST belly mark on front views, branch antlers with green leaves, extended small arms, and root-like feet. References: C:/Users/Zhang/Downloads/ChatGPT Image 2026?6?22? 15_13_51 (1).png, C:/Users/Zhang/Downloads/ChatGPT Image 2026?6?22? 15_13_51 (2).png, C:/Users/Zhang/Downloads/ChatGPT Image 2026?6?22? 14_55_37.png.",
+        "fps": 8,
+        "gridColumns": 4,
+        "frameSize": [
+          512,
+          512
+        ],
+        "sheetSize": [
+          2048,
+          2048
+        ],
+        "sourceSize": [
+          1254,
+          1254
+        ],
+        "rootAnchorPolicy": "fixed full-cell frame with stable feet/root contact and consistent bottom placement from generated source grid",
+        "adaptiveFramePolicy": "do not crop by per-frame content bbox; use the full 512x512 cells for playback so turntable framing remains stable",
+        "thumbnail": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+        "spritesheetSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"2048\" height=\"2048\" viewBox=\"0 0 2048 2048\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+      },
+      "animations": [
+        {
+          "id": "clip_gorest_dog_turntable_spin_loop",
+          "name": "Gorest dog turntable spin loop",
+          "actionName": "turntable_spin",
+          "direction": "clockwise",
+          "sprite": {
+            "id": "sprite_gorest_dog_turntable_16f",
+            "characterName": "Gorest Tree-Dog Mascot / Turntable 16f",
+            "description": "16-frame pseudo-3D self-rotation spritesheet for the supplied Gorest tree-dog mascot references. 4x4 grid, 512x512 transparent frames, stable full-body framing, clockwise turntable loop from front to side to back and back to front.",
+            "frameCount": 16,
+            "style": "polished high-detail 2D game mascot render, golden Shiba-like tree dog, leafy branch antlers, root feet, transparent PNG spritesheet",
+            "prompt": "Use the supplied front, side, and back Gorest dog mascot references as identity anchors. Create a clean 4x4 pseudo-3D 360-degree self-rotation spritesheet on flat #ff00ff chroma key, with full-body padding, stable scale, stable root/feet contact, and the GOREST belly mark visible only on front and near-front frames.",
+            "frames": [
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 512 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1024 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"512 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1024 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"1536 1536 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+            ],
+            "createdTime": "2026-06-23T01:01:44.172Z",
+            "updatedTime": "2026-06-23T01:06:05.026Z",
+            "isPreset": false,
+            "spritesheetPng": "/generated/gorest_dog_turntable_16f_sheet.png",
+            "rawSpritesheetPng": "/generated/gorest_dog_turntable_16f_sheet.png",
+            "generationMode": "imagegen_reference_turntable_chroma_key_postprocess",
+            "artSourcePolicy": "Visible character art was generated/redrawn as one full 4x4 sheet from the supplied front, side, and rear raster references. Code only removed chroma key, split fixed cells, resized frames, packed transparent PNG, created preview media, and wrote metadata.",
+            "proportionPolicy": "full-cell proportional split; preserve source sheet proportions without per-frame bbox recrop",
+            "normalization": "generated 1254x1254 4x4 magenta sheet -> helper chroma-key alpha/despill -> proportional cell split -> 512x512 full-cell resize -> 2048x2048 transparent sheet",
+            "inputReferenceInvariant": "Preserve the supplied Gorest tree-dog mascot identity: rounded golden dog face, glossy black eyes, blush cheeks, bark/fur body, GOREST belly mark on front views, branch antlers with green leaves, extended small arms, and root-like feet. References: C:/Users/Zhang/Downloads/ChatGPT Image 2026?6?22? 15_13_51 (1).png, C:/Users/Zhang/Downloads/ChatGPT Image 2026?6?22? 15_13_51 (2).png, C:/Users/Zhang/Downloads/ChatGPT Image 2026?6?22? 14_55_37.png.",
+            "fps": 8,
+            "gridColumns": 4,
+            "frameSize": [
+              512,
+              512
+            ],
+            "sheetSize": [
+              2048,
+              2048
+            ],
+            "sourceSize": [
+              1254,
+              1254
+            ],
+            "rootAnchorPolicy": "fixed full-cell frame with stable feet/root contact and consistent bottom placement from generated source grid",
+            "adaptiveFramePolicy": "do not crop by per-frame content bbox; use the full 512x512 cells for playback so turntable framing remains stable",
+            "thumbnail": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"512\" height=\"512\" viewBox=\"0 0 512 512\" overflow=\"hidden\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" x=\"0\" y=\"0\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>",
+            "spritesheetSvg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"2048\" height=\"2048\" viewBox=\"0 0 2048 2048\"><image href=\"/generated/gorest_dog_turntable_16f_sheet.png\" width=\"2048\" height=\"2048\" preserveAspectRatio=\"none\"/></svg>"
+          },
+          "binding": {
+            "actionName": "turntable_spin",
+            "triggerType": "auto",
+            "triggerValue": "auto",
+            "gameState": "mascot.gorestDog.turntableSpin",
+            "notes": "Auto looping pseudo-3D 360-degree mascot rotation."
+          },
+          "loop": true
+        }
+      ]
     }
   ],
   "scenes": [
+    {
+      "id": "scene_cluttered_bedroom_wei_yang_crying_closeup",
+      "name": "Cluttered Bedroom - Wei Yang Crying Close-up",
+      "width": 3840,
+      "height": 720,
+      "viewportWidth": 1280,
+      "viewportHeight": 720,
+      "viewportPreset": "custom",
+      "cameraX": 2357,
+      "groundY": 700,
+      "background": "chinese_horror_bedroom",
+      "lighting": {
+        "preset": "neon-station",
+        "brightness": 0.82,
+        "contrast": 1.08,
+        "saturate": 0.72,
+        "ambience": 0.18,
+        "vignette": 0.38,
+        "glow": 0.24
+      },
+      "state": {
+        "visited_bedroom": true,
+        "wei_yang_crying_closeup": true,
+        "dialogue.wei_yang_crying": true
+      },
+      "savedTime": "2026-06-21T17:36:16.063Z",
+      "updatedTime": "2026-06-23T01:25:56.257Z",
+      "layers": [
+        {
+          "id": "layer_crying_bedroom_background",
+          "name": "Chinese Horror Bedroom Background",
+          "type": "background",
+          "visible": true,
+          "locked": false,
+          "x": 119,
+          "y": 1701,
+          "scale": 2.41,
+          "zIndex": 0,
+          "opacity": 1,
+          "parallax": 1,
+          "width": 3840,
+          "height": 720,
+          "color": "#12100d",
+          "imageUrl": "/generated/bedroom_chinese_horror_side_scroller_3840x720.png",
+          "fit": "stretch",
+          "position": "left center"
+        },
+        {
+          "id": "layer_crying_ground_reference",
+          "name": "Ground Reference",
+          "type": "ground",
+          "visible": false,
+          "locked": true,
+          "x": 0,
+          "y": 700,
+          "scale": 1,
+          "zIndex": 10,
+          "opacity": 0.25,
+          "parallax": 1,
+          "color": "#201914"
+        },
+        {
+          "id": "layer_wei_yang_crying_closeup",
+          "name": "Wei Yang Crying Close-up",
+          "type": "sprite",
+          "visible": true,
+          "locked": false,
+          "assetId": "asset_wei_yang_crying_closeup_16f",
+          "activeAnimationId": "clip_wei_yang_crying_closeup_loop",
+          "x": 320,
+          "y": 710,
+          "scale": 1.25,
+          "zIndex": 70,
+          "opacity": 1,
+          "parallax": 1,
+          "shadow": {
+            "enabled": true,
+            "color": "rgba(0, 0, 0, 0.72)",
+            "opacity": 0.38,
+            "blur": 28,
+            "width": 0.72,
+            "height": 0.08,
+            "offsetX": 0,
+            "offsetY": 10
+          },
+          "lighting": {
+            "preset": "neon-station",
+            "brightness": 0.9,
+            "contrast": 1.06,
+            "saturate": 0.92,
+            "edgeLightColor": "#6d85a8",
+            "edgeLightOpacity": 0.18,
+            "rimLightColor": "#0f151f",
+            "rimLightOpacity": 0.2
+          }
+        },
+        {
+          "id": "layer_cry_1782177778707",
+          "name": "Gui Chuan Ying / Crying Close-up P2-size 16f",
+          "type": "sprite",
+          "visible": true,
+          "assetId": "asset_gui_chuan_ying_tears_diffusion_16f",
+          "activeAnimationId": "clip_gui_chuan_ying_tears_diffusion_loop",
+          "x": 2665,
+          "y": 931,
+          "scale": 1.971,
+          "zIndex": 30,
+          "opacity": 1,
+          "parallax": 1
+        }
+      ]
+    },
     {
       "id": "scene_copy_1782036509473_rwsdlf",
       "name": "Cluttered Bedroom - Chinese Horror - Complete Jun 17, 01:39 AM Copy 2 Copy Copy",
@@ -2698,6 +4515,176 @@
       ]
     },
     {
+      "id": "scene_horror_note_torii_temple_fire_gui_chuan_ying_closeup",
+      "name": "The Horror Note - Torii Temple Fire / Gui Chuan Ying Close-up",
+      "width": 1920,
+      "height": 1080,
+      "viewportWidth": 1920,
+      "viewportHeight": 1080,
+      "viewportPreset": "custom",
+      "cameraX": 0,
+      "groundY": 1012,
+      "background": "horror_note_torii_temple_fire",
+      "lighting": {
+        "preset": "neon-station",
+        "brightness": 0.88,
+        "contrast": 1.08,
+        "saturate": 0.82,
+        "ambience": 0.22,
+        "vignette": 0.34,
+        "glow": 0.3
+      },
+      "state": {
+        "horror_note_scene": true,
+        "ui.horrorNoteTitle": true,
+        "guiChuanYingCryingCloseup": true,
+        "scene2Copy": true
+      },
+      "savedTime": "2026-06-22T23:31:05.881Z",
+      "updatedTime": "2026-06-22T23:31:05.881Z",
+      "layers": [
+        {
+          "id": "layer_horror_note_background",
+          "name": "Torii Temple Fire Background",
+          "type": "background",
+          "visible": true,
+          "locked": false,
+          "x": 0,
+          "y": 1080,
+          "scale": 1,
+          "zIndex": 0,
+          "opacity": 1,
+          "parallax": 1,
+          "width": 1920,
+          "height": 1080,
+          "color": "#05070a",
+          "imageUrl": "/generated/horror_note_torii_temple_fire_background_1920x1080.png",
+          "fit": "stretch",
+          "position": "center center"
+        },
+        {
+          "id": "layer_horror_note_ground_reference",
+          "name": "Ground Reference",
+          "type": "ground",
+          "visible": false,
+          "locked": true,
+          "x": 0,
+          "y": 1012,
+          "scale": 1,
+          "zIndex": 10,
+          "opacity": 0.25,
+          "parallax": 1,
+          "color": "#20242b"
+        },
+        {
+          "id": "layer_horror_note_title_ui",
+          "name": "Jing Hun Bi Ji / The Horror Note Title UI",
+          "type": "effect",
+          "visible": true,
+          "locked": false,
+          "assetId": "asset_horror_note_title_ui",
+          "activeAnimationId": "clip_horror_note_title_ui_loop",
+          "x": 254,
+          "y": 851,
+          "scale": 0.82,
+          "zIndex": 80,
+          "opacity": 1,
+          "parallax": 1,
+          "shadow": {
+            "enabled": true,
+            "color": "rgba(90, 0, 0, 0.6)",
+            "opacity": 0.34,
+            "blur": 26,
+            "width": 0.8,
+            "height": 0.08,
+            "offsetX": 0,
+            "offsetY": 8
+          },
+          "lighting": {
+            "preset": "neon-station",
+            "brightness": 1,
+            "contrast": 1.08,
+            "saturate": 0.95,
+            "edgeLightColor": "#c42b21",
+            "edgeLightOpacity": 0.26,
+            "rimLightColor": "#d8c097",
+            "rimLightOpacity": 0.18
+          }
+        },
+        {
+          "id": "layer_horror_note_novel_prop",
+          "name": "The Horror Note Novel, Pen, and Ink",
+          "type": "foreground",
+          "visible": true,
+          "locked": false,
+          "assetId": "asset_horror_note_novel_pen_ink",
+          "x": 960,
+          "y": 970,
+          "scale": 0.56,
+          "zIndex": 55,
+          "opacity": 1,
+          "parallax": 1,
+          "shadow": {
+            "enabled": true,
+            "color": "rgba(0, 0, 0, 0.7)",
+            "opacity": 0.42,
+            "blur": 30,
+            "width": 0.82,
+            "height": 0.1,
+            "offsetX": 0,
+            "offsetY": 12
+          },
+          "lighting": {
+            "preset": "neon-station",
+            "brightness": 0.96,
+            "contrast": 1.08,
+            "saturate": 0.9,
+            "edgeLightColor": "#cf4a26",
+            "edgeLightOpacity": 0.18,
+            "rimLightColor": "#d8c097",
+            "rimLightOpacity": 0.14
+          }
+        },
+        {
+          "id": "layer_scene2_gui_chuan_ying_crying_closeup",
+          "name": "Gui Chuan Ying Crying Close-up",
+          "type": "sprite",
+          "visible": true,
+          "locked": false,
+          "assetId": "asset_gui_chuan_ying_tears_diffusion_16f",
+          "activeAnimationId": "clip_gui_chuan_ying_tears_diffusion_loop",
+          "x": 1180,
+          "y": 1060,
+          "scale": 1.26,
+          "zIndex": 72,
+          "opacity": 1,
+          "parallax": 1,
+          "shadow": {
+            "enabled": true,
+            "color": "rgba(0, 0, 0, 0.72)",
+            "opacity": 0.44,
+            "blur": 34,
+            "width": 0.76,
+            "height": 0.08,
+            "offsetX": 0,
+            "offsetY": 14
+          },
+          "lighting": {
+            "preset": "neon-station",
+            "brightness": 0.86,
+            "contrast": 1.08,
+            "saturate": 0.82,
+            "edgeLightColor": "#c42b21",
+            "edgeLightOpacity": 0.2,
+            "rimLightColor": "#d8c097",
+            "rimLightOpacity": 0.16
+          },
+          "updatedTime": "2026-06-23T01:08:16.618Z",
+          "notes": "Uses the component-segmented, face-locked 512px-frame sheet to avoid vertical jumping."
+        }
+      ]
+    },
+    {
       "id": "scene_torii_gate_head_raise",
       "name": "Torii Gate - Slow Head Raise",
       "width": 1920,
@@ -2889,105 +4876,7 @@
         "door_open": false,
         "visited_bedroom": true
       }
-    },
-    {
-      "id": "scene_cluttered_bedroom_wei_yang_crying_closeup",
-      "name": "Cluttered Bedroom - Wei Yang Crying Close-up",
-      "width": 3840,
-      "height": 720,
-      "viewportWidth": 1280,
-      "viewportHeight": 720,
-      "viewportPreset": "custom",
-      "cameraX": 0,
-      "groundY": 700,
-      "background": "chinese_horror_bedroom",
-      "lighting": {
-        "preset": "neon-station",
-        "brightness": 0.82,
-        "contrast": 1.08,
-        "saturate": 0.72,
-        "ambience": 0.18,
-        "vignette": 0.38,
-        "glow": 0.24
-      },
-      "state": {
-        "visited_bedroom": true,
-        "wei_yang_crying_closeup": true,
-        "dialogue.wei_yang_crying": true
-      },
-      "savedTime": "2026-06-21T17:36:16.063Z",
-      "updatedTime": "2026-06-21T17:36:16.063Z",
-      "layers": [
-        {
-          "id": "layer_crying_bedroom_background",
-          "name": "Chinese Horror Bedroom Background",
-          "type": "background",
-          "visible": true,
-          "locked": true,
-          "x": 0,
-          "y": 720,
-          "scale": 1,
-          "zIndex": 0,
-          "opacity": 1,
-          "parallax": 1,
-          "width": 3840,
-          "height": 720,
-          "color": "#12100d",
-          "imageUrl": "/generated/bedroom_chinese_horror_side_scroller_3840x720.png",
-          "fit": "stretch",
-          "position": "left center"
-        },
-        {
-          "id": "layer_crying_ground_reference",
-          "name": "Ground Reference",
-          "type": "ground",
-          "visible": false,
-          "locked": true,
-          "x": 0,
-          "y": 700,
-          "scale": 1,
-          "zIndex": 10,
-          "opacity": 0.25,
-          "parallax": 1,
-          "color": "#201914"
-        },
-        {
-          "id": "layer_wei_yang_crying_closeup",
-          "name": "Wei Yang Crying Close-up",
-          "type": "sprite",
-          "visible": true,
-          "locked": false,
-          "assetId": "asset_wei_yang_crying_closeup_16f",
-          "activeAnimationId": "clip_wei_yang_crying_closeup_loop",
-          "x": 320,
-          "y": 710,
-          "scale": 1.25,
-          "zIndex": 70,
-          "opacity": 1,
-          "parallax": 1,
-          "shadow": {
-            "enabled": true,
-            "color": "rgba(0, 0, 0, 0.72)",
-            "opacity": 0.38,
-            "blur": 28,
-            "width": 0.72,
-            "height": 0.08,
-            "offsetX": 0,
-            "offsetY": 10
-          },
-          "lighting": {
-            "preset": "neon-station",
-            "brightness": 0.9,
-            "contrast": 1.06,
-            "saturate": 0.92,
-            "edgeLightColor": "#6d85a8",
-            "edgeLightOpacity": 0.18,
-            "rimLightColor": "#0f151f",
-            "rimLightOpacity": 0.2
-          }
-        }
-      ]
     }
   ],
-  "updatedTime": "2026-06-21T17:36:16.063Z"
+  "updatedTime": "2026-06-23T01:25:56.259Z"
 }

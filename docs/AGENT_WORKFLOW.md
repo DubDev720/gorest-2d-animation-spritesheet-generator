@@ -1,85 +1,54 @@
 # Gorest Agent Workflow Guide
 
-Gorest combines dynamic software with a no-UI workflow: the user describes the result they want, and the agent updates the tool, generated assets, scene data, and metadata directly.
+Use this guide for larger end-to-end scene workflows. For routine edits, `AGENTS.md` is enough; for character spritesheets, also read `SPRITESHEET_GENERATION_POLICY.md`.
 
-The browser should show the result. The user should not need to click through fixed UI steps to build the result by hand.
+Gorest uses a no-UI workflow: the user describes the result, and the agent creates assets, updates metadata, and verifies the browser-visible output.
 
-## Recommended Model
+## Standard Flow
 
-Use GPT-5.5 (`gpt-5.5`) for this workflow. It is recommended for coding-heavy, tool-heavy, long-context tasks such as reading the app structure, generating assets, wiring scene metadata, editing spritesheet clips, and verifying the final result.
-
-Start with balanced reasoning for normal scene and documentation edits. Use higher reasoning for full asset-library rewrites, multi-file architecture changes, or complex debugging.
-
-## How To Handle A User Prompt
-
-When the user describes a new scene or asset, treat it as an end-to-end production request.
-
-1. Create or import the required visual assets.
-2. Put finished assets in `public/generated/`.
-3. Add reusable assets to `public/generated/game_asset_library.json`.
-4. Add or update the scene in the same asset library.
-5. Configure layer order, scale, opacity, lighting, and animation metadata.
+1. Understand the requested scene, asset, spritesheet, or editor behavior.
+2. Create or import finished visual assets.
+3. Save project assets under `public/generated/`.
+4. Add reusable assets, animation clips, and scenes to `public/generated/game_asset_library.json`.
+5. Configure layer order, scale, opacity, lighting, animation IDs, trigger metadata, and preview behavior.
 6. Keep one-frame sprites static.
-7. Run verification and report what changed.
+7. Run verification and report the changed files/assets.
 
 ## Output Contract
 
-A complete workflow usually produces:
+A complete workflow may produce:
 
-- A background image.
-- One or more props, characters, effects, or UI elements.
-- A spritesheet when the asset is animated.
-- Scene metadata with layers wired to the right asset IDs.
-- Clip metadata for each reusable animation.
-- Short documentation when the workflow teaches future agents how to repeat it.
+- background image
+- foreground props, characters, effects, or UI elements
+- spritesheet and preview when animated
+- scene metadata with layers wired to asset IDs
+- reusable animation clip metadata
+- short notes only when they help future agents repeat the workflow
 
-## Prompt Template
+## Prompt Shape
+
+The user can stay natural. A useful full-scene prompt usually contains:
 
 ```text
-Create a new scene in the asset library.
-
 Scene mood:
-[Describe genre, lighting, cultural setting, camera framing, and background elements.]
+[genre, lighting, cultural setting, camera framing]
 
 Background:
-[Describe the environment. Include whether it should be 16:9, side-scroller, close-up, or long horizontal.]
+[environment, aspect ratio, side-scroller/close-up/long horizontal]
 
 Foreground props:
-[List props and where they should sit.]
+[objects and placement]
 
 Spritesheets:
-[Describe each animated asset, frame count, grid, frame size, fps, title text if any, and loop behavior.]
+[animated assets, frame count, grid, frame size, fps, loop behavior]
 
 Scene wiring:
-[Describe layer order, static vs animated assets, metadata, trigger type, game state, and any preview behavior.]
-
-Do not rely on manual UI operation. Generate the assets, wire the scene into the local asset library, and keep one-frame assets static.
-```
-
-## Example: The Horror Note
-
-This is the kind of prompt a user may give while completing a full Gorest workflow:
-
-```text
-Create a new Chinese-horror scene.
-
-Background:
-Make a dark East Asian shrine courtyard with a weathered torii gate, old temple, ritual fire, moonlight, smoke, and a clear central ground area for foreground objects.
-
-Foreground props:
-Place a thick horror notebook / novel in front of the scene. The cover title should read `惊魂笔记` with `The Horror Note` underneath. Add a brush pen, ink bottle, ink stone, and ink marks around the book.
-
-Spritesheet:
-Create a dynamic title UI spritesheet with `惊魂笔记` on the top line and `The Horror Note` on the bottom line. Use a subtle red glow and scratch flicker. Make it a 16-frame 4 x 4 sheet, looped at 8 fps.
-
-Scene wiring:
-Add the new background as a locked background layer. Add the title UI as an animated effect layer. Add the notebook, pen, and ink as a static foreground prop layer. Save everything into public/generated/game_asset_library.json so the scene appears in the app.
+[layer order, static vs animated assets, game state, preview behavior]
 ```
 
 ## Authoring Notes
 
-- If generated text may be inaccurate, render the exact text with code after image generation.
-- Chroma-key generation is useful for props: generate on a flat green background, remove the green, then crop the transparent PNG.
-- Use static sprite metadata for one-frame props, even if the image is stored in the same sprite structure as animated assets.
-- Use spritesheet SVG frame wrappers that reference the full PNG sheet for consistent playback.
-- Keep the user's prompt style natural. The user should describe the desired game result, not low-level editor operations.
+- If generated text may be inaccurate, render exact text with code after image generation.
+- Chroma-key generation is useful for props: generate on a flat key color, remove it locally, then crop transparent PNG.
+- Character spritesheets must use drawn bitmap art first; scripts only clean, crop, anchor, pack, preview, and wire metadata.
+- Use spritesheet SVG frame wrappers only to slice the finished PNG sheet for playback; wrappers are not the artwork.
