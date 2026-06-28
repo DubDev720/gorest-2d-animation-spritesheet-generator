@@ -31,6 +31,8 @@ type SheetOnlySpritesheetPreviewProps = {
   onGeneratePreview: () => void;
 };
 
+const SOURCE_PREVIEW_MAX_HEIGHT = 296;
+
 function clampFrameSize(value: number, max: number) {
   if (!Number.isFinite(value)) return 1;
   return Math.max(1, Math.min(Math.round(value), Math.max(1, max)));
@@ -144,6 +146,16 @@ function sourceActiveFrameBoxStyle(
     left: `${x / sheetSize.width * 100}%`,
     top: `${y / sheetSize.height * 100}%`,
     width: `${width / sheetSize.width * 100}%`,
+  };
+}
+
+function sourcePreviewSizeStyle(sheetSize: SheetSize | null): CSSProperties | undefined {
+  if (!sheetSize) return undefined;
+  const ratio = sheetSize.width / sheetSize.height;
+  if (!Number.isFinite(ratio) || ratio <= 0) return undefined;
+  return {
+    aspectRatio: `${sheetSize.width} / ${sheetSize.height}`,
+    width: `min(100%, ${Math.round(SOURCE_PREVIEW_MAX_HEIGHT * ratio)}px)`,
   };
 }
 
@@ -349,7 +361,7 @@ export function SheetOnlySpritesheetPreview({
             className="sheet-only-source-preview"
             style={{
               ...checkerStyle,
-              aspectRatio: sheetSize ? `${sheetSize.width} / ${sheetSize.height}` : undefined,
+              ...sourcePreviewSizeStyle(sheetSize),
             }}
           >
             <img src={sheetDataUrl} alt={`${title} source spritesheet`} />
